@@ -4,6 +4,7 @@ import { CssBaseline, createTheme } from '@mui/material'
 import { Layout } from './layout/Layout';
 import { ModalProvider } from './Providers/ModalProvider';
 import { DrawerProvider } from './Providers/DrawerProvider';
+import { SnackbarProvider } from './Providers/SnackbarProvider';
 const darkTheme = createTheme({
   palette: {
     mode: 'dark',
@@ -15,11 +16,13 @@ function App() {
 
     <ThemeProvider theme={darkTheme}>
       <CssBaseline />
-      <DrawerProvider>
-        <ModalProvider>
-          <Layout />
-        </ModalProvider>
-      </DrawerProvider>
+      <SnackbarProvider>
+        <DrawerProvider>
+          <ModalProvider>
+            <Layout />
+          </ModalProvider>
+        </DrawerProvider>
+      </SnackbarProvider>
     </ThemeProvider>
 
 

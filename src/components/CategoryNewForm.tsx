@@ -13,6 +13,6 @@ export const CategoryNewForm: React.FC = () => {
             </Typography>
         </Box>
         <ColorPicker/>
-        <Button size='small' sx={{m:1}}>Add</Button>
+        <Button size='small' sx={{m:1}}>Done</Button>
     </Card>
 }

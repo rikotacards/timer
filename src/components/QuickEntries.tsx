@@ -18,7 +18,8 @@ export const QuickEntries: React.FC = () => {
             <Box sx={{display: 'flex', flexDirection: 'row'}}>
                 <QuickEntry/>
                 <QuickEntry/>
-
+                <QuickEntry/>
+                <QuickEntry/>
             </Box>
         </Box>
     )

@@ -30,13 +30,13 @@ export const Entry: React.FC = () => {
 
             </div>
             <Box sx={{ marginTop: 0, ml: 1, alignContent: 'center' }}>
-                <Chip onDelete={() =>{}} size='small' label='Study' />
-                <Chip onDelete={() =>{}} sx={{ ml: 0.5 }} size='small' label='Physics' />
+                <Chip onDelete={() => { }} size='small' label='Study' />
+                <Chip onDelete={() => { }} sx={{ ml: 0.5 }} size='small' label='Physics' />
                 <Tooltip title='Add category'>
-                    
-                <IconButton onClick={handleClick} id={id} size='small'>
-                    <AddCircleOutlineIcon fontSize='small' />
-                </IconButton>
+
+                    <IconButton onClick={handleClick} id={id} size='small'>
+                        <AddCircleOutlineIcon fontSize='small' />
+                    </IconButton>
                 </Tooltip>
 
             </Box>
@@ -53,13 +53,12 @@ export const Entry: React.FC = () => {
             </Tooltip>
         </Box>
     </Card>
-        <Popover id={id} 
-                anchorEl={anchorEl}
-
-        open={open}
-         onClose={handleClose}
-          anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}>
-            <CategoryEdit />
+        <Popover id={id}
+            anchorEl={anchorEl}
+            open={open}
+            onClose={handleClose}
+            anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}>
+            <CategoryEdit onHandleClose={handleClose} />
         </Popover>
     </div>
 }

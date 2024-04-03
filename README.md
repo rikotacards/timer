@@ -31,7 +31,7 @@ export default {
 
 
 ## Endpoints needed
-* create entry
+* CREATE entry
 
    * name
    * start time
@@ -39,8 +39,17 @@ export default {
    * start date
    * category ID
 
-* update entry
-* delete entry
-* create category
-* update category
-* delete category
+* UPDATE entry
+* DELETE entry
+* CREATE category
+* UPDATE category
+* DELTE category
+* CREATE quick entry
+* UPDATE quick entry
+* DELTE quick entry
+* UPDATE dark mode
+* GET all entries
+
+
+* Categories Table
+* Entries Table

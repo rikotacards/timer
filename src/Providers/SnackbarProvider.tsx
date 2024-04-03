@@ -11,7 +11,7 @@ export const SnackbarContext = React.createContext<SnackbarContextProps>({} as S
 interface SnackbarProvider {
     children: React.ReactNode
 }
-export const ModalProvider: React.FC<SnackbarProvider> = ({ children }) => {
+export const SnackbarProvider: React.FC<SnackbarProvider> = ({ children }) => {
     const [open, setOpen] = React.useState(false);
     const [component, setComponent] = React.useState<React.ReactNode | null>();
 
@@ -29,10 +29,10 @@ export const ModalProvider: React.FC<SnackbarProvider> = ({ children }) => {
     }
 
     return <SnackbarContext.Provider value={value}>
-        <Snackbar open={open} onClose={toggleOpen}>
-            <>
+        <Snackbar autoHideDuration={6000} open={open} onClose={toggleOpen}>
+            <div>
                 {component}
-            </>
+            </div>
         </Snackbar>
         {children}
     </SnackbarContext.Provider>

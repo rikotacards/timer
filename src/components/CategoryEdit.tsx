@@ -9,17 +9,23 @@ interface CategoryOption {
     child?: string
   }
 
-const existingCategories: CategoryOption[] = [{label: 'study', child: ''}, {label: 'physics', child: ''}]
+const existingCategories: CategoryOption[] = [{label: 'study', child: ''}, {label: 'physics', child: ''}, {label: 'Leetcode', child: ''}, {label: 'work', child: ''}]
 
 const filter = createFilterOptions<CategoryOption>();
-
-export const CategoryEdit: React.FC = () => {
+interface CategoryEdit {
+  onHandleClose: () => void;
+}
+export const CategoryEdit: React.FC<CategoryEdit> = ({onHandleClose}) => {
     const [value, setValue] = React.useState<CategoryOption | null>(null);
 
-    
+    const [open, setOpen] = React.useState(false);
+    const onOpen = () => {
+      setOpen(!open);
+    }
     return (
         <Box sx={{display: 'flex', flexDirection: 'column', p:1}}>
             <Typography sx={{p:1, fontWeight: 'bold'}}>Add a category</Typography>
+            
             <Autocomplete
             size='small'
              filterOptions={(options, params) => {
@@ -41,39 +47,43 @@ export const CategoryEdit: React.FC = () => {
               clearOnBlur
               handleHomeEndKeys
               freeSolo
-              renderOption={(props, option) => <ListItem {...props} >{option.label}</ListItem>}
-
+            
+              renderOption={(props, option) => <li {...props} ><Chip label={option.label}/></li>}
               renderInput={(params) => (
                 <TextField  placeholder='Search/create new category' {...params}  />
               )}
+              autoComplete
               options={existingCategories}
              onChange={(event, newValue) => {
+              console.log(newValue)
                 if (typeof newValue === 'string') {
                   setValue({
                     label: newValue,
                   });
+                  onOpen()
                 } else if (newValue && newValue.inputValue) {
                   // Create a new value from the user input
                   setValue({
                     label: newValue.inputValue,
                   });
+                  onOpen()
                 } else {
+                  // existing value
                   setValue(newValue);
+                  onHandleClose();
                 }
               }}
             value={value}
 
             />
-            <CategoryNewForm/>
-            <div>
+            <Box sx={{mt:1, mb:1}}>
+            {open && <CategoryNewForm/>}
+              {existingCategories.map((c) => <Chip key={c.label} onClick={() => {}} label={c.label}/>)}
 
-            <Chip label='Study'/>
-            <Chip label='Physics'/>
-            <Chip label='Work'/>
-            <Chip label='Work'/>
-
-            </div>
-     <Typography variant='caption'>Edit</Typography>
+</Box>
+            
+            
+     <Typography variant='caption'>Edit categories</Typography>
 
         </Box >
     )
