@@ -34,7 +34,7 @@ export const TopAppBar: React.FC = () => {
                 <IconButton onClick={onClick}>
                     <MenuIcon />
                 </IconButton>
-                <Typography fontWeight={'bold'}>Simple Timer</Typography>
+                <Typography fontWeight={'bold'}>Timeflix</Typography>
                 <Avatar sx={{ ml: 'auto' }} />
             </Toolbar>
         </AppBar>
