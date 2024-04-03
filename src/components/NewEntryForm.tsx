@@ -1,4 +1,4 @@
-import { AddCircleOutline } from '@mui/icons-material';
+import { AddCircleOutline, MoreVertOutlined } from '@mui/icons-material';
 import { Box, Button, Card, Chip, CircularProgress, IconButton, Popover, TextField, Typography } from '@mui/material';
 import React from 'react';
 import { CategoryEdit } from './CategoryEdit';
@@ -27,9 +27,12 @@ export const NewEntryForm: React.FC = () => {
                 <CircularProgress variant='indeterminate' color='success' sx={{ m: 1}} size='small' />
 
                 <Typography sx={{ fontWeight: 'bold' }}>1:04</Typography>
-                <Button color='success' variant='contained' sx={{ ml: 1 }}>
+                <Button size='small' color='success' variant='contained' sx={{ ml: 1 }}>
                     Start
                 </Button>
+                <IconButton>
+                    <MoreVertOutlined/>
+                </IconButton>
             </Box>
         </Box>
         <Popover id={id}
