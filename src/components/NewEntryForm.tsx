@@ -17,14 +17,13 @@ export const NewEntryForm: React.FC = () => {
     const id = open ? 'simple-popover-newentry' : undefined;
     return <Card elevation={5} sx={{ p: 1 }}>
         <Box alignItems={'center'} display={'flex'}>
-
-            <TextField value='Building Timer' inputProps={{startAdornment:(<CircularProgress size='small'/>)}}  size='small'  placeholder='What are you doing?' sx={{ mr: 1 }} />
+            <TextField value='Building Timer'  size='small'  placeholder='What are you doing?' sx={{ mr: 1 }} />
             <Chip onDelete={() => { }} label={'Personal'} />
             <IconButton onClick={handleClick} sx={{ ml: 1 }}>
                 <AddCircleOutline />
             </IconButton>
             <Box display={'flex'} alignItems={'center'} sx={{ml: 'auto'}}>
-                <CircularProgress variant='indeterminate' color='success' sx={{ m: 1}} size='small' />
+                <CircularProgress variant='indeterminate' color='success' sx={{ m: 1, height: 20, width: 20}} size='small' />
 
                 <Typography sx={{ fontWeight: 'bold' }}>1:04</Typography>
                 <Button size='small' color='success' variant='contained' sx={{ ml: 1 }}>

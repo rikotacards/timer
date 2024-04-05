@@ -3,6 +3,7 @@ import React from 'react';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import { MoreVertOutlined } from '@mui/icons-material';
 import { CategoryEdit } from './CategoryEdit';
+
 export const Entry: React.FC = () => {
     const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
     const [isStart, setIsStart] = React.useState(true)
@@ -16,8 +17,13 @@ export const Entry: React.FC = () => {
     const handleClose = () => {
         setAnchorEl(null);
     };
+    const component = {
+        'simple-popover': <CategoryEdit onHandleClose={handleClose} />,
+        'more': <Button>Delete</Button>
+    }
     const open = Boolean(anchorEl);
-    const id = open ? 'simple-popover' : undefined;
+    
+    const id = open ? anchorEl?.id === 'more' ? 'more' : 'simple-popover' : undefined;
 
 
     return <div><Card sx={{ mt: 1, mb: 1 }}>
@@ -47,7 +53,7 @@ export const Entry: React.FC = () => {
             </Box>
             <Tooltip title='Options'>
 
-                <IconButton sx={{ ml: '' }}>
+                <IconButton sx={{ ml: '' }} onClick={handleClick} id={'more'}>
                     <MoreVertOutlined />
                 </IconButton>
             </Tooltip>
@@ -58,7 +64,7 @@ export const Entry: React.FC = () => {
             open={open}
             onClose={handleClose}
             anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}>
-            <CategoryEdit onHandleClose={handleClose} />
+            {id && component[id]}
         </Popover>
     </div>
 }
