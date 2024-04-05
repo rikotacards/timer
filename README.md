@@ -53,3 +53,14 @@ export default {
 
 * Categories Table
 * Entries Table
+
+
+## Description
+On Clockify, 
+* When starting new timer, click start, starts
+* There is no pause, there is only stop. 
+* Each time you stop, a new entry is created.
+
+When you click "start" from an existing entry, the time there doesn't move
+
+We start a new one at the top. 

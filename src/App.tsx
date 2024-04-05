@@ -5,6 +5,7 @@ import { Layout } from './layout/Layout';
 import { ModalProvider } from './Providers/ModalProvider';
 import { DrawerProvider } from './Providers/DrawerProvider';
 import { SnackbarProvider } from './Providers/SnackbarProvider';
+import { StopwatchProvider } from './Providers/StopwatchProvider';
 const darkTheme = createTheme({
   palette: {
     mode: 'dark',
@@ -16,13 +17,16 @@ function App() {
 
     <ThemeProvider theme={darkTheme}>
       <CssBaseline />
-      <SnackbarProvider>
-        <DrawerProvider>
-          <ModalProvider>
-            <Layout />
-          </ModalProvider>
-        </DrawerProvider>
-      </SnackbarProvider>
+      <StopwatchProvider>
+
+        <SnackbarProvider>
+          <DrawerProvider>
+            <ModalProvider>
+              <Layout />
+            </ModalProvider>
+          </DrawerProvider>
+        </SnackbarProvider>
+      </StopwatchProvider>
     </ThemeProvider>
 
 
