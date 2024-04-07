@@ -2,7 +2,10 @@ import { Box, IconButton, Zoom } from '@mui/material';
 import React from 'react';
 import CheckIcon from '@mui/icons-material/Check';
 
-const defaultColors = [{ dark: '#002884', light: '#757ce8' }, { dark: '#f44336', light: '#757ce8' }, { dark: '#30a54c', light: '#757ce8' }];
+const defaultColors = [{ dark: '#002884', light: '#757ce8' }, 
+{ dark: '#f44336', light: '#757ce8' },
+ { dark: '#30a54c', light: '#757ce8' }
+];
 
 interface ColorSelectionProps {
     color: string;

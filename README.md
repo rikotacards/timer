@@ -76,9 +76,16 @@ users/{uid}/categories/{categoryId}
 
 ## Categories
 
+Each entry can only have 1 category
+
 ```
 {
-  categoryName: string
-  children: string[] //id1, id2
+  categoryName: "activity"
+  categoryId: "123"
+  children: ["1", "2"] //id1, id2
 }
 ```
+
+# Todo
+* show start - end time in entry
+* Figure out how to display and edit nested categories

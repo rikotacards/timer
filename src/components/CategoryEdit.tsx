@@ -1,15 +1,17 @@
-import { Box, Card, Chip, TextField, Typography } from '@mui/material';
+import { AppBar, Box,  Chip, TextField, Typography } from '@mui/material';
 import React from 'react';
 import { CategoryNewForm } from './CategoryNewForm';
 import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
 import { Category } from '../firebase/types';
 import {  getCategories } from '../firebase/db';
+import { CreateNewCategory } from './CreateNewCategory';
 
 interface CategoryOption {
   label: string;
   inputValue?: string;
   child?: string
 }
+
 
 const existingCategories: CategoryOption[] = [{ label: 'study', child: '' }, { label: 'physics', child: '' }, { label: 'Leetcode', child: '' }, { label: 'work', child: '' }]
 
@@ -23,16 +25,20 @@ export const CategoryEdit: React.FC<CategoryEdit> = ({ onHandleClose, addCategor
   React.useEffect(() => {
     getCategories().then((c) => {
       setCategories(c)
-    })
-  })
+    }).catch((e) => console.log(e))
+  }, [])
   const [value, setValue] = React.useState<CategoryOption | null>(null);
-
-  const [open, setOpen] = React.useState(false);
-  const toggleOpen = () => {
-    setOpen(!open);
+  const [openCreateNew, setCreateNew] = React.useState(false);
+  const toggleOpenCreateNew = () => {
+    setCreateNew(!openCreateNew)
   }
+
+ if(openCreateNew){
+  return <CreateNewCategory onHandleClose={onHandleClose} onCancel={toggleOpenCreateNew} categoryName={value?.label}/>
+ }
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', p: 1 , maxWidth:400}}>
+
       <Typography sx={{ p: 1, fontWeight: 'bold' }}>Add a category</Typography>
 
       <Autocomplete
@@ -69,13 +75,13 @@ export const CategoryEdit: React.FC<CategoryEdit> = ({ onHandleClose, addCategor
             setValue({
               label: newValue,
             });
-            toggleOpen()
+            toggleOpenCreateNew()
           } else if (newValue && newValue.inputValue) {
             // Create a new value from the user input
             setValue({
               label: newValue.inputValue,
             });
-            toggleOpen()
+            toggleOpenCreateNew()
           } else {
             // existing value
             setValue(newValue);
@@ -87,7 +93,6 @@ export const CategoryEdit: React.FC<CategoryEdit> = ({ onHandleClose, addCategor
       />
       <Box sx={{ mt: 1, mb: 1 }}>
       
-        {open && <CategoryNewForm onHandleClose={onHandleClose} categoryName={value?.label || ""} />}
         {categories.map((c) => <Chip onClick={()=>{addCategory(c)}} key={c.categoryId} sx={{background: c.color}}  label={c.categoryName} />)}
 
       </Box>
