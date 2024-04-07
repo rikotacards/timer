@@ -29,7 +29,7 @@ export const SnackbarProvider: React.FC<SnackbarProvider> = ({ children }) => {
     }
 
     return <SnackbarContext.Provider value={value}>
-        <Snackbar autoHideDuration={6000} open={open} onClose={toggleOpen}>
+        <Snackbar autoHideDuration={4000} open={open} onClose={toggleOpen}>
             <div>
                 {component}
             </div>

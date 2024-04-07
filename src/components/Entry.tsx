@@ -1,12 +1,16 @@
-import { Box, Button, Card, Chip, IconButton, Popover, TextField, Tooltip, Typography } from '@mui/material';
+import { Alert, Box, Button, Card, Chip, IconButton, Popover, TextField, Tooltip, Typography } from '@mui/material';
 import React from 'react';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import { MoreVertOutlined } from '@mui/icons-material';
 import { CategoryEdit } from './CategoryEdit';
-
-
-export const Entry: React.FC = () => {
+import { OpenEntry } from '../firebase/types';
+import { deleteEntry } from '../firebase/db';
+import { formatTime } from '../utils/formatTime';
+import { useSnackbarContext } from '../Providers/contextHooks';
+export const Entry: React.FC<OpenEntry> = ({desc, entryId, startTime, endTime,categories}) => {
     const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
+    const snackbar = useSnackbarContext();
+
     const [isStart, setIsStart] = React.useState(true)
     const onToggleTimer = () => {
         setIsStart(!isStart)
@@ -18,10 +22,22 @@ export const Entry: React.FC = () => {
     const handleClose = () => {
         setAnchorEl(null);
     };
+
+    const onDelete = async () => {
+        handleClose()
+        entryId && await deleteEntry({entryId})
+        snackbar.onSetComponent(<Alert severity='success'>Deleted entry</Alert>)
+        
+    }
     const component = {
         'simple-popover': <CategoryEdit onHandleClose={handleClose} />,
-        'more': <Button>Delete</Button>
+        'more': <Button color='error' size='small' onClick={onDelete} >Delete</Button>
     }
+  
+  
+    
+  
+    const formattedDuration = endTime?.seconds ? formatTime(endTime?.seconds-startTime.seconds): 0
     const open = Boolean(anchorEl);
     
     const id = open ? anchorEl?.id === 'more' ? 'more' : 'simple-popover' : undefined;
@@ -32,30 +48,29 @@ export const Entry: React.FC = () => {
 
             <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
 
-                <TextField size='small' variant='outlined' value='Building Timer' />
+                <TextField size='small' variant='outlined' value={desc} />
 
 
             </div>
             <Box sx={{ marginTop: 0, ml: 1, alignContent: 'center' }}>
-                <Chip onDelete={() => { }} size='small' label='Study' />
-                <Chip onDelete={() => { }} sx={{ ml: 0.5 }} size='small' label='Physics' />
+                {categories?.map(c => <Chip key={c.categoryId} size='small' onDelete={() => {}} label={c.categoryName} sx={{background: c.color}}/>)}
                 <Tooltip title='Add category'>
 
                     <IconButton onClick={handleClick} id={id} size='small'>
-                        <AddCircleOutlineIcon fontSize='small' />
+                        <AddCircleOutlineIcon  fontSize='small' />
                     </IconButton>
                 </Tooltip>
 
             </Box>
             <Box flexDirection={'row'} display='flex' alignItems={'center'} marginLeft={'auto'}>
 
-                <Typography sx={{ ml: 1, mr: 1, fontWeight: 'bold' }}>5:50</Typography>
+                <Typography sx={{ ml: 1, mr: 1 }}>{formattedDuration}</Typography>
                 <Button onClick={onToggleTimer} size='small' variant='contained'>Start</Button>
             </Box>
             <Tooltip title='Options'>
 
-                <IconButton sx={{ ml: '' }} onClick={handleClick} id={'more'}>
-                    <MoreVertOutlined />
+                <IconButton onClick={handleClick} id={'more'}>
+                    <MoreVertOutlined fontSize=''/>
                 </IconButton>
             </Tooltip>
         </Box>

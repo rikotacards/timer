@@ -64,3 +64,12 @@ On Clockify,
 When you click "start" from an existing entry, the time there doesn't move
 
 We start a new one at the top. 
+
+# Firebase Storage Schema
+
+users/{uid}/entries/{entryId}
+users/{uid}/categories/{categoryId}
+
+
+1. user starts first timer from new entry form, pressing start adds to currentEntry in the db
+2. Pressing stop, deletes this currEntry, before we delete, we take this entry ID, and details, and adds it into the entries table 

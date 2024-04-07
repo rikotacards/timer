@@ -4,6 +4,7 @@ import { Entry } from '../components/Entry';
 import { NewEntryForm } from '../components/NewEntryForm';
 import { QuickEntries } from '../components/QuickEntries';
 import { TopAppBar } from '../components/TopAppBar';
+import { Entries } from '../components/Entries';
 
 export const Layout: React.FC = () => {
     return (
@@ -13,9 +14,7 @@ export const Layout: React.FC = () => {
             <NewEntryForm />
             <QuickEntries />
             <Typography> April 2 2024</Typography>
-            <Entry />
-            <Entry />
-
+            <Entries/>
         </Box>
     )
 }

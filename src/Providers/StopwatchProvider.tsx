@@ -14,10 +14,15 @@ interface StopwatchResult {
 export const StopwatchContext = React.createContext<StopwatchResult>({} as StopwatchResult)
 interface StopwatchProviderProps {
     children: React.ReactNode;
+
 }
 export const StopwatchProvider: React.FC<StopwatchProviderProps> = ({children}) => {
     const stopwatch = useStopwatch({ autoStart:false })
-    const value = {...stopwatch}
+    const start = () => {
+        stopwatch.start();
+        
+    }
+    const value = {...stopwatch, start}
 
     return (
         <StopwatchContext.Provider value={value}>
