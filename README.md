@@ -73,3 +73,12 @@ users/{uid}/categories/{categoryId}
 
 1. user starts first timer from new entry form, pressing start adds to currentEntry in the db
 2. Pressing stop, deletes this currEntry, before we delete, we take this entry ID, and details, and adds it into the entries table 
+
+## Categories
+
+```
+{
+  categoryName: string
+  children: string[] //id1, id2
+}
+```
