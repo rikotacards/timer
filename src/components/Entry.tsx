@@ -53,13 +53,13 @@ export const Entry: React.FC<OpenEntry> = ({desc, entryId, startTime, endTime,ca
 
             </div>
             <Box sx={{ marginTop: 0, ml: 1, alignContent: 'center' }}>
-                {categories?.map(c => <Chip key={c.categoryId} size='small' onDelete={() => {}} label={c.categoryName} sx={{background: c.color}}/>)}
                 <Tooltip title='Add category'>
 
                     <IconButton onClick={handleClick} id={id} size='small'>
                         <AddCircleOutlineIcon  fontSize='small' />
                     </IconButton>
                 </Tooltip>
+                {categories?.map(c => <Chip key={c.categoryId} size='small' onDelete={() => {}} label={c.categoryName} sx={{background: c.color}}/>)}
 
             </Box>
             <Box flexDirection={'row'} display='flex' alignItems={'center'} marginLeft={'auto'}>

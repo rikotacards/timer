@@ -32,7 +32,7 @@ export const CategoryEdit: React.FC<CategoryEdit> = ({ onHandleClose, addCategor
     setOpen(!open);
   }
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', p: 1 }}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', p: 1 , maxWidth:400}}>
       <Typography sx={{ p: 1, fontWeight: 'bold' }}>Add a category</Typography>
 
       <Autocomplete

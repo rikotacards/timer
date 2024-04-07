@@ -4,15 +4,14 @@ import React from 'react';
 import PlayCircleFilledWhiteIcon from '@mui/icons-material/PlayCircleFilledWhite';
 import { CategoryEdit } from './CategoryEdit';
 import { useSnackbarContext, useStopwatchContext } from '../Providers/contextHooks';
-import { AddOpenEntry, addEntry, getOpenEntries, updateOpenEntry } from '../firebase/db';
+import { AddOpenEntry, addEntry, deleteOpenEntry, getOpenEntries, updateOpenEntry } from '../firebase/db';
 import { Category, OpenEntry } from '../firebase/types';
 import { NewEntryFormSkeleton } from './NewEntryFormSkeleton';
 import { formatTime } from '../utils/formatTime';
 import StopCircleIcon from '@mui/icons-material/StopCircle';
-import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 const BLANK_ENTRY = { desc: '', categories: [], created: { seconds: 0, nanoseconds: 0 }, startTime: { seconds: 0, nanoseconds: 0 }, endTime: null } as OpenEntry
 export const NewEntryForm: React.FC = () => {
-
+    
     const [openEntry, setOpenEntry] = React.useState<OpenEntry>(BLANK_ENTRY)
     const s = useSnackbarContext();
     const [isLoading, setLoading] = React.useState(true)
@@ -45,7 +44,7 @@ export const NewEntryForm: React.FC = () => {
     };
     // const dif = currTime - openEntry.startTime.seconds;
     // {autoStart: true, offsetTimeStamp: new Date().setSeconds(openEntry.startTime.seconds+dif)}
-    const { start, pause, totalSeconds } = useStopwatchContext();
+    const { start, pause, totalSeconds, reset } = useStopwatchContext();
     const formatted = formatTime(totalSeconds)
     const onStart = async () => {
         start();
@@ -64,8 +63,11 @@ export const NewEntryForm: React.FC = () => {
             alert(e)
         }
     }
+    
+    
     const onStop = async () => {
         pause()
+        reset();
         setIsRunning(false)
         try {
             console.log('stopping', openEntry)
@@ -81,29 +83,41 @@ export const NewEntryForm: React.FC = () => {
         catch (e) {
             alert(e)
         }
+        
+    }
+    const onCancel = () => {
+        if(!openEntry.entryId){
+            return;
+        }
+        deleteOpenEntry({entryId: openEntry.entryId})
     }
 
     const handleClose = () => {
         setAnchorEl(null);
     };
+    const component = {
+        'simple-popover':             <CategoryEdit addCategory={addCategory} onHandleClose={handleClose} />
+        ,
+        'more': <Button color='error' size='small' onClick={onCancel} >Cancel</Button>
+    }
     const open = Boolean(anchorEl);
-    const id = open ? 'simple-popover-newentry' : undefined;
+    const id = open ? anchorEl?.id === 'more' ? 'more' : 'simple-popover' : undefined;
     if (isLoading) {
         return <NewEntryFormSkeleton />
     }
     return <Card elevation={4} variant='elevation' sx={{ p: 1 }}>
         <Box alignItems={'center'} display={'flex'}>
             <TextField value={openEntry.desc} onChange={onChange} size='small' placeholder='What are you doing?' sx={{ mr: 1 }} />
-            {openEntry.categories?.map((c) => <Chip key={c.categoryId} label={c.categoryName} sx={{ background: c.color }} />)}
             <IconButton onClick={handleClick} sx={{ ml: 1 }}>
                 <AddCircleOutline />
             </IconButton>
+            {openEntry.categories?.map((c) => <Chip key={c.categoryId} label={c.categoryName} sx={{ background: c.color }} />)}
             <Box display={'flex'} alignItems={'center'} sx={{ ml: 'auto' }}>
                 {isRunning && <CircularProgress variant='indeterminate' color='success' sx={{ m: 1, height: 20, width: 20 }} size='small' />}
 
                 <Typography sx={{ fontWeight: 'bold' }}>{formatted}</Typography>
 
-                <IconButton onClick={isRunning ? onStop : () => onStart()} size='small' color={isRunning ? 'warning' : 'success'} variant='contained' sx={{ ml: 1 }}>
+                <IconButton onClick={isRunning ? onStop : () => onStart()} size='small' color={isRunning ? 'warning' : 'success'} sx={{ ml: 1 }}>
                    {!isRunning? <PlayCircleFilledWhiteIcon/> : <StopCircleIcon/>}
                 </IconButton>
                 <IconButton>
@@ -116,7 +130,7 @@ export const NewEntryForm: React.FC = () => {
             open={open}
             onClose={handleClose}
             anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}>
-            <CategoryEdit addCategory={addCategory} onHandleClose={handleClose} />
+            {id && component[id]}
         </Popover>
     </Card>
 }
