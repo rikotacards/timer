@@ -1,6 +1,5 @@
-import { AppBar, Avatar, Box, Toolbar, Typography } from '@mui/material';
+import {  Box, Toolbar, Typography } from '@mui/material';
 import React from 'react';
-import { Entry } from '../components/Entry';
 import { NewEntryForm } from '../components/NewEntryForm';
 import { QuickEntries } from '../components/QuickEntries';
 import { TopAppBar } from '../components/TopAppBar';

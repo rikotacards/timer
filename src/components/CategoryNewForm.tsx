@@ -1,5 +1,5 @@
 import { InfoOutlined } from '@mui/icons-material';
-import { Alert, Box, Button, Card, Typography } from '@mui/material';
+import { Alert, Box, Button, Typography } from '@mui/material';
 import React from 'react';
 import { ColorPicker } from './ColorPicker';
 import { addCategory } from '../firebase/db';
@@ -14,7 +14,7 @@ export const CategoryNewForm: React.FC<CategoryNewFormProps> = ({onHandleClose, 
     const [color, setColor] = React.useState<string>('');
     const snackbar = useSnackbarContext();
     const onAddCategory = async() => {
-       await addCategory({categoryName, color})
+       await addCategory({categoryName, color, categoryId: ''})
        onHandleClose();
        snackbar.onSetComponent(<Alert severity='success'>{categoryName} added</Alert>)
        snackbar.toggleOpen();

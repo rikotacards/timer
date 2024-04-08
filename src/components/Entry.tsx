@@ -6,7 +6,6 @@ import { MoreVertOutlined } from '@mui/icons-material';
 import { CategoryEdit } from './CategoryEdit';
 import { OpenEntry } from '../firebase/types';
 import { deleteEntry } from '../firebase/db';
-import PlayCircleFilledWhiteIcon from '@mui/icons-material/PlayCircleFilledWhite';
 
 import { formatTime } from '../utils/formatTime';
 import { useSnackbarContext } from '../Providers/contextHooks';
@@ -14,10 +13,7 @@ export const Entry: React.FC<OpenEntry> = ({ desc, entryId, startTime, endTime, 
     const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
     const snackbar = useSnackbarContext();
     const [isEdit, setIsEdit] = React.useState(false);
-    const [isStart, setIsStart] = React.useState(true)
-    const onToggleTimer = () => {
-        setIsStart(!isStart)
-    }
+
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);
     };
@@ -33,7 +29,7 @@ export const Entry: React.FC<OpenEntry> = ({ desc, entryId, startTime, endTime, 
 
     }
     const component = {
-        'simple-popover': <CategoryEdit onHandleClose={handleClose} />,
+        'simple-popover': <CategoryEdit  addCategory={() => {}} onHandleClose={handleClose} />,
         'more': <Button color='error' size='small' onClick={onDelete} >Delete</Button>
     }
 

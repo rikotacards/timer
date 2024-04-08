@@ -3,7 +3,7 @@ import { Alert, Box, Button, Card, Chip, CircularProgress, IconButton, Popover, 
 import React from 'react';
 import PlayCircleFilledWhiteIcon from '@mui/icons-material/PlayCircleFilledWhite';
 import { CategoryEdit } from './CategoryEdit';
-import { useSnackbarContext, useStopwatchContext } from '../Providers/contextHooks';
+import { useSnackbarContext } from '../Providers/contextHooks';
 import { AddOpenEntry, addEntry, deleteOpenEntry, getOpenEntries, updateOpenEntry } from '../firebase/db';
 import { Category, OpenEntry } from '../firebase/types';
 import { NewEntryFormSkeleton } from './NewEntryFormSkeleton';
@@ -58,7 +58,7 @@ export const NewEntryForm: React.FC = () => {
             const ref = await AddOpenEntry(openEntry)
             if (ref) {
                 console.log('adding open entry', ref)
-                setOpenEntry(ref)
+                setOpenEntry(ref as unknown as OpenEntry)
             }
         } catch (e) {
             alert(e)

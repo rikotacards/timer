@@ -16,7 +16,7 @@ export const CreateNewCategory: React.FC<CreateNewCategoryProps> = ({categoryNam
         setText(e.target.value)
     }
     const onAddCategory = async() => {
-        await addCategory({categoryName:text, color})
+        await addCategory({categoryName:text, color, categoryId: ''})
         onHandleClose();
         snackbar.onSetComponent(<Alert severity='success'>{categoryName} added</Alert>)
         snackbar.toggleOpen();

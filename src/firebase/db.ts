@@ -1,4 +1,4 @@
-import { setDoc, updateDoc, deleteDoc, getDocs, doc, addDoc, collection, serverTimestamp, DocumentData, DocumentReference, onSnapshot } from "firebase/firestore";
+import { setDoc, updateDoc, deleteDoc, getDocs, doc, addDoc, collection, serverTimestamp, onSnapshot } from "firebase/firestore";
 import { UID, db } from "./firebaseConfig";
 import { OpenEntry , Category} from "./types";
 

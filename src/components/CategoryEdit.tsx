@@ -1,16 +1,10 @@
-import { AppBar, Box, Button, Chip, Input, List, ListItem, ListItemButton, TextField, Typography, useAutocomplete } from '@mui/material';
+import {  Box, Button, Chip, List, ListItemButton, TextField, Typography } from '@mui/material';
 import React from 'react';
-import { CategoryNewForm } from './CategoryNewForm';
-import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
 import { Category } from '../firebase/types';
 import { getCategories } from '../firebase/db';
 import { CreateNewCategory } from './CreateNewCategory';
 
-interface CategoryOption {
-  label: string;
-  inputValue?: string;
-  child?: string
-}
+
 
 
 
