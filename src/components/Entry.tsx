@@ -68,7 +68,7 @@ export const Entry: React.FC<OpenEntry> = ({ desc, entryId, startTime, endTime, 
                 </Box>
                 <Box flexDirection={'row'} display='flex' alignItems={'center'} marginLeft={'auto'}>
 
-                    <Typography sx={{ ml: 1, mr: 1 }}>{formattedDuration}</Typography>
+                    <Typography fontWeight={'bold'} sx={{ ml: 1, mr: 1 }}>{formattedDuration}</Typography>
                     <IconButton color='inherit'>
                         <PlayCircleFilledWhiteOutlinedIcon/>
                     </IconButton>

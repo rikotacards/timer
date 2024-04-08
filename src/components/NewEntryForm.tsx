@@ -9,6 +9,7 @@ import { Category, OpenEntry } from '../firebase/types';
 import { NewEntryFormSkeleton } from './NewEntryFormSkeleton';
 import { formatTime } from '../utils/formatTime';
 import StopCircleIcon from '@mui/icons-material/StopCircle';
+import { useStopwatch } from 'react-timer-hook';
 const BLANK_ENTRY = { desc: '', categories: [], created: { seconds: 0, nanoseconds: 0 }, startTime: { seconds: 0, nanoseconds: 0 }, endTime: null } as OpenEntry
 export const NewEntryForm: React.FC = () => {
     
@@ -44,7 +45,7 @@ export const NewEntryForm: React.FC = () => {
     };
     // const dif = currTime - openEntry.startTime.seconds;
     // {autoStart: true, offsetTimeStamp: new Date().setSeconds(openEntry.startTime.seconds+dif)}
-    const { start, pause, totalSeconds, reset } = useStopwatchContext();
+    const { start, pause, totalSeconds, reset } = useStopwatch();
     const formatted = formatTime(totalSeconds)
     const onStart = async () => {
         start();
