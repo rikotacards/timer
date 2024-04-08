@@ -34,7 +34,7 @@ export const DrawerProvider: React.FC<DrawerProviderProps> = ({ children }) => {
     }
     return (
         <DrawerContext.Provider value={value}>
-            <Drawer anchor={anchor} open={open} onClose={toggleOpen}>
+            <Drawer  anchor={anchor} open={open} onClose={toggleOpen}>
                 {component}
             </Drawer>
                 {children}

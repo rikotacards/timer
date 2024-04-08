@@ -6,6 +6,7 @@ import { ModalProvider } from './Providers/ModalProvider';
 import { DrawerProvider } from './Providers/DrawerProvider';
 import { SnackbarProvider } from './Providers/SnackbarProvider';
 import { StopwatchProvider } from './Providers/StopwatchProvider';
+export const IS_OFFLINE = true;
 const darkTheme = createTheme({
   palette: {
     mode: 'dark',
