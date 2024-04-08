@@ -1,3 +1,3 @@
 export const isMobile = () => {
-    return true
+    return false
 }

@@ -6,6 +6,7 @@ import { TopAppBar } from '../components/TopAppBar';
 import { Entries } from '../components/Entries';
 import { BottomAppBar } from '../components/BottomAppBar';
 import { isMobile } from '../utils/isMobile';
+import { ActiveEntry } from '../components/ActiveEntry';
 
 export const Layout: React.FC = () => {
     return (
@@ -16,12 +17,10 @@ export const Layout: React.FC = () => {
             <QuickEntries />
             <Typography> April 2 2024</Typography>
             <Entries />
-            <Card>
-                <Box>
-
+                <Box sx={{position: 'sticky', bottom: 0}}>
+                    <ActiveEntry/>
                 </Box>
 
-            </Card>
            
             {isMobile() && <BottomAppBar/>}
         </Box>

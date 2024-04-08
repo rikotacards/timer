@@ -37,7 +37,7 @@ export const CategoryEdit: React.FC<CategoryEdit> = ({ onHandleClose, addCategor
     return <CreateNewCategory onHandleClose={onHandleClose} onCancel={toggleOpenCreateNew} categoryName={inputText} />
   }
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', p: 1, width: 400 }}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', p: 1, maxWidth: 400 }}>
 
       <Typography sx={{ p: 1, fontWeight: 'bold' }}>Add a category</Typography>
       <TextField autoFocus onChange={onChange} size='small' placeholder='Add/create category' />

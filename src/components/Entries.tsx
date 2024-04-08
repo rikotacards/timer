@@ -6,6 +6,7 @@ import { EntryMobile } from './EntryMobile';
 import { onSnapshot, collection } from 'firebase/firestore';
 import { db, UID } from '../firebase/firebaseConfig';
 import { IS_OFFLINE } from '../App';
+import { isMobile } from '../utils/isMobile';
 const today = new Date()
 const later = new Date()
 const mockEntries: OpenEntry[] = [
@@ -84,7 +85,12 @@ export const Entries: React.FC = () => {
     return (
         <>
             {entries.map((e) => {
-                return <EntryMobile {...e} key={e.entryId} />;
+                if(isMobile()){
+
+                    return <EntryMobile {...e} key={e.entryId} />;
+                }
+                return <Entry {...e} key={e.entryId} />;
+
             })}
         </>
     )

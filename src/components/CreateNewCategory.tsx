@@ -25,7 +25,7 @@ export const CreateNewCategory: React.FC<CreateNewCategoryProps> = ({categoryNam
 
     const [color, setColor] = React.useState('')
     return (
-        <Box sx={{ width:400, m: 1, display: 'flex', flexDirection: 'column' }}>
+        <Box sx={{ maxWidth:400, m: 1, display: 'flex', flexDirection: 'column' }}>
 
             <Typography sx={{ p: 1 }} fontWeight={'bold'}>Create new category</Typography>
             <div>

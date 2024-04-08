@@ -57,7 +57,8 @@ export const EntryMobile: React.FC<OpenEntry> = ({ desc, entryId, startTime, end
                     <Typography variant='caption'>2:56pm</Typography>
         </Box> */}
 
-        <Card  elevation={1} sx={{ width: '100%', display: 'flex', mt: 1, mb: 1, flexDirection: 'row' }}>
+        <Card  elevation={0} sx={{ width: '100%', display: 'flex', mt: 1, mb: 1, flexDirection: 'row' }}>
+           
             <Box sx={{ width: '100%', p: 1, display: 'flex', flexDirection: 'column', justifyContent: 'left' }}>
                 <Typography variant='caption'>2:34pm - 2:36pm</Typography>
                 <div onClick={() => setIsEdit(true)} style={{ display: 'flex', flexDirection: 'row', alignItems: 'left' }}>
