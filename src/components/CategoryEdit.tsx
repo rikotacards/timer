@@ -50,7 +50,7 @@ export const CategoryEdit: React.FC<CategoryEdit> = ({ onHandleClose, addCategor
 
       <List>
 
-        {filtered.map((c) => <ListItemButton onClick={() => { addCategory(c) }} ><Chip onClick={() => { addCategory(c) }} key={c.categoryId} sx={{ background: c.color, mb: 1 }} label={c.categoryName} /></ListItemButton>)}
+        {filtered.map((c) => <ListItemButton key={c.categoryId} onClick={() => { addCategory(c) }} ><Chip onClick={() => { addCategory(c) }} key={c.categoryId} sx={{ background: c.color, mb: 1 }} label={c.categoryName} /></ListItemButton>)}
       </List>
 
       {
