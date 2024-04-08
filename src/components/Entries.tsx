@@ -10,28 +10,58 @@ const today = new Date()
 const later = new Date()
 const mockEntries: OpenEntry[] = [
     {
-        entryId: '', 
+        entryId: '',
         desc: 'Going to tokyo by HK Express',
-        created: {nanoseconds: 0, seconds: today.getSeconds()},
-        startTime: {nanoseconds: 0, seconds: today.getSeconds()},
-        endTime: {nanoseconds: 0, seconds: later.getSeconds()+100},
-        categories: [{categoryName: 'Travel', color: '', categoryId: ''}, {categoryName: 'Plane', color: '', categoryId: ''}]
+        created: { nanoseconds: 0, seconds: today.getSeconds() },
+        startTime: { nanoseconds: 0, seconds: today.getSeconds() },
+        endTime: { nanoseconds: 0, seconds: later.getSeconds() + 100 },
+        categories: [{ categoryName: 'Travel', color: 'blue', categoryId: '' }, { categoryName: 'Plane', color: '', categoryId: '' }]
     },
     {
-        entryId: '', 
+        entryId: '',
         desc: 'Going to airport',
-        created: {nanoseconds: 0, seconds: today.getSeconds()},
-        startTime: {nanoseconds: 0, seconds: today.getSeconds()},
-        endTime: {nanoseconds: 0, seconds: later.getSeconds()+1000},
-        categories: [{categoryName: 'Travel', color: '', categoryId: ''}, {categoryName: 'Subway', color: '', categoryId: ''}]
+        created: { nanoseconds: 0, seconds: today.getSeconds() },
+        startTime: { nanoseconds: 0, seconds: today.getSeconds() },
+        endTime: { nanoseconds: 0, seconds: later.getSeconds() + 1000 },
+        categories: [{ categoryName: 'Travel', color: '', categoryId: '' }, { categoryName: 'Subway', color: '', categoryId: '' }]
     },
     {
-        entryId: '', 
+        entryId: '',
         desc: 'Work on mobile layout',
-        created: {nanoseconds: 0, seconds: today.getSeconds()},
-        startTime: {nanoseconds: 0, seconds: today.getSeconds()},
-        endTime: {nanoseconds: 0, seconds: later.getSeconds()+1000},
-        categories: [{categoryName: 'Work', color: '', categoryId: ''}, {categoryName: 'Timer', color: '', categoryId: ''}]
+        created: { nanoseconds: 0, seconds: today.getSeconds() },
+        startTime: { nanoseconds: 0, seconds: today.getSeconds() },
+        endTime: { nanoseconds: 0, seconds: later.getSeconds() + 1000 },
+        categories: [{ categoryName: 'Work', color: '', categoryId: '' }, { categoryName: 'Timer', color: '', categoryId: '' }]
+    },
+    {
+        entryId: '',
+        desc: 'Work on mobile layout',
+        created: { nanoseconds: 0, seconds: today.getSeconds() },
+        startTime: { nanoseconds: 0, seconds: today.getSeconds() },
+        endTime: { nanoseconds: 0, seconds: later.getSeconds() + 1000 },
+        categories: [{ categoryName: 'Work', color: '', categoryId: '' }, { categoryName: 'Timer', color: '', categoryId: '' }]
+    },
+    {
+        entryId: '',
+        desc: 'Work on mobile layout',
+        created: { nanoseconds: 0, seconds: today.getSeconds() },
+        startTime: { nanoseconds: 0, seconds: today.getSeconds() },
+        endTime: { nanoseconds: 0, seconds: later.getSeconds() + 1000 },
+        categories: [{ categoryName: 'Work', color: '', categoryId: '' }, { categoryName: 'Timer', color: '', categoryId: '' }]
+    }, {
+        entryId: '',
+        desc: 'Work on mobile layout',
+        created: { nanoseconds: 0, seconds: today.getSeconds() },
+        startTime: { nanoseconds: 0, seconds: today.getSeconds() },
+        endTime: { nanoseconds: 0, seconds: later.getSeconds() + 1000 },
+        categories: [{ categoryName: 'Work', color: '', categoryId: '' }, { categoryName: 'Timer', color: '', categoryId: '' }]
+    }, {
+        entryId: '',
+        desc: 'Work on mobile layout',
+        created: { nanoseconds: 0, seconds: today.getSeconds() },
+        startTime: { nanoseconds: 0, seconds: today.getSeconds() },
+        endTime: { nanoseconds: 0, seconds: later.getSeconds() + 1000 },
+        categories: [{ categoryName: 'Work', color: '', categoryId: '' }, { categoryName: 'Timer', color: '', categoryId: '' }]
     }
 ]
 
@@ -45,7 +75,7 @@ export const Entries: React.FC = () => {
 
             }
             )
-            setEntries(IS_OFFLINE ? mockEntries : res )
+            setEntries(IS_OFFLINE ? mockEntries : res)
         }
         )
         return () => unsub();
