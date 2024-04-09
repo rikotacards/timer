@@ -5,6 +5,7 @@ interface DrawerContextProps {
     toggleOpen: () => void;
     onSetComponent: (component: React.ReactNode) => void;
     onSetAnchor:(anchor: DrawerProps['anchor']) => void;
+    close: () => void;
 }
 export const DrawerContext = React.createContext<DrawerContextProps>({} as DrawerContextProps)
 
@@ -26,11 +27,15 @@ export const DrawerProvider: React.FC<DrawerProviderProps> = ({ children }) => {
     const toggleOpen = () => {
         setOpen(!open)
     }
+    const close = () => {
+        setOpen(false)
+    }
     const value = {
         open,
         toggleOpen,
         onSetComponent,
-        onSetAnchor
+        onSetAnchor,
+        close
     }
     return (
         <DrawerContext.Provider value={value}>

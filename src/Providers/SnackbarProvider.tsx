@@ -1,5 +1,6 @@
-import { Snackbar } from '@mui/material';
+import { Box, Snackbar } from '@mui/material';
 import React from 'react';
+import { useIsNarrow } from '../utils/isMobile';
 
 interface SnackbarContextProps {
     open: boolean;
@@ -14,7 +15,7 @@ interface SnackbarProvider {
 export const SnackbarProvider: React.FC<SnackbarProvider> = ({ children }) => {
     const [open, setOpen] = React.useState(false);
     const [component, setComponent] = React.useState<React.ReactNode | null>();
-
+    const isNarrow = useIsNarrow();
     const onSetComponent = (component: React.ReactNode) => {
         setComponent(component)
     }
@@ -30,9 +31,9 @@ export const SnackbarProvider: React.FC<SnackbarProvider> = ({ children }) => {
 
     return <SnackbarContext.Provider value={value}>
         <Snackbar anchorOrigin={{vertical: 'top', horizontal: 'right'}} autoHideDuration={4000} open={open} onClose={toggleOpen}>
-            <div>
+            <Box sx={{width: isNarrow ? '100%': null}}>
                 {component}
-            </div>
+            </Box>
         </Snackbar>
         {children}
     </SnackbarContext.Provider>

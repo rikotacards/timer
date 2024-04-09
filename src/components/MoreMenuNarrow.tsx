@@ -1,28 +1,37 @@
-import {  CancelRounded } from '@mui/icons-material';
-import {  Box, Button, IconButton, Toolbar } from '@mui/material';
+import { Box, Button, IconButton, Toolbar, Typography } from '@mui/material';
 import React from 'react';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import { useDrawerContext } from '../Providers/contextHooks';
 
-export const MoreMenuNarrow: React.FC = () => {
+interface MoreMenuNarrowProps {
+    onDelete: () => void;
+    handleClose: () => void;
+}
+export const MoreMenuNarrow: React.FC<MoreMenuNarrowProps> = ({onDelete}) => {
+    const d = useDrawerContext();
     return (
-        <Box sx={{display: 'flex', flexDirection: 'column', padding:0}}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', padding: 0 }}>
             <Toolbar>
-                More
-                <Box sx={{ml: 'auto'}}>
+                <Typography fontWeight='bold'>More</Typography>
+                <Box sx={{ ml: 'auto' }}>
 
-                <IconButton>
-                    <CancelRounded/>
-                </IconButton>
+                    <IconButton onClick={d.toggleOpen}>
+                        <KeyboardArrowDownIcon />
+                    </IconButton>
                 </Box>
             </Toolbar>
-<Box display={'flex'} flexDirection={'column'} padding={1}>
-
-            <Button variant='outlined'>
-                Edit
-            </Button>
-            <Button variant='outlined'>
-                Start
-            </Button>
-</Box>
+            <Box display={'flex'} flexDirection={'column'} padding={1}>
+            <Button variant='contained' color='error' sx={{mb:1}} onClick={() =>{onDelete();d.toggleOpen()}}>
+                    Delete
+                </Button>
+                <Button  sx={{mb:1}} variant='contained'>
+                    Edit
+                </Button>
+                
+                <Button sx={{mb:1}} variant='contained'>
+                    Start
+                </Button>
+            </Box>
 
         </Box>
     )

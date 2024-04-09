@@ -1,4 +1,4 @@
-import { AppBar, Avatar, Box, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Toolbar, Typography } from '@mui/material';
+import { AppBar, Avatar, Box, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Paper, Toolbar, Typography } from '@mui/material';
 import React from 'react';
 import MenuIcon from '@mui/icons-material/Menu';
 import { useDrawerContext } from '../Providers/contextHooks';
@@ -29,14 +29,17 @@ export const TopAppBar: React.FC = () => {
         toggleOpen()
     }
     return (
-        <AppBar position='fixed'>
+        <AppBar sx={{background: 'transparent'}} position='fixed'>
+            <Paper variant='elevation' elevation={0}>
+
             <Toolbar sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                 <IconButton onClick={onClick}>
                     <MenuIcon />
                 </IconButton>
-                <Typography fontWeight={'bold'}>Timeflix</Typography>
+                <Typography fontWeight={'bold'}>Linear</Typography>
                 <Avatar sx={{ ml: 'auto' }} />
             </Toolbar>
+            </Paper>
         </AppBar>
     )
 }

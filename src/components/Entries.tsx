@@ -3,10 +3,10 @@ import { OpenEntry } from '../firebase/types';
 import { Entry } from './Entry';
 import { EntryMobile } from './EntryMobile';
 
-import { onSnapshot, collection } from 'firebase/firestore';
+import { onSnapshot, collection, orderBy, query } from 'firebase/firestore';
 import { db, UID } from '../firebase/firebaseConfig';
 import { IS_OFFLINE } from '../App';
-import { isMobile } from '../utils/isMobile';
+import { useIsNarrow } from '../utils/isMobile';
 const today = new Date()
 const later = new Date()
 const mockEntries: OpenEntry[] = [
@@ -68,11 +68,14 @@ const mockEntries: OpenEntry[] = [
 
 export const Entries: React.FC = () => {
     const [entries, setEntries] = React.useState([] as OpenEntry[])
+    const isNarrow = useIsNarrow();
     React.useEffect(() => {
-        const unsub = onSnapshot(collection(db, "users", UID, "entries"), (doc) => {
+        const collRef = collection(db, "users", UID, "entries")
+        const q = query (collRef, orderBy("created","desc" ));
+        const unsub = onSnapshot(q, (doc) => {
             const res: OpenEntry[] = []
             doc.forEach((d) => {
-                console.log('d', d.data()); res.push(d.data() as OpenEntry)
+                 res.push(d.data() as OpenEntry)
 
             }
             )
@@ -85,7 +88,7 @@ export const Entries: React.FC = () => {
     return (
         <>
             {entries.map((e) => {
-                if(isMobile()){
+                if(isNarrow){
 
                     return <EntryMobile {...e} key={e.entryId} />;
                 }

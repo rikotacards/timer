@@ -1,4 +1,4 @@
-import { setDoc, updateDoc, deleteDoc, getDocs, doc, addDoc, collection, serverTimestamp, onSnapshot } from "firebase/firestore";
+import { setDoc, updateDoc, deleteDoc, getDocs, doc, addDoc, collection, serverTimestamp, onSnapshot, query, orderBy } from "firebase/firestore";
 import { UID, db } from "./firebaseConfig";
 import { OpenEntry , Category} from "./types";
 
@@ -100,10 +100,12 @@ export const getEntries = async() => {
     return res
 }
 export const getEntriesOnSnapshot = () => {
+    const collRef = collection(db, "users", UID, "entries")
+    const q = query (collRef, orderBy("created","desc" ));
+
     const res: Entry[] = []
-    const unsub =  onSnapshot(collection(db, "users", UID, "entries"), (doc) =>{
+    const unsub =  onSnapshot(q, (doc) =>{
        doc.forEach((d) => {console.log('d', d.data()); res.push(d.data() as Entry)})})
-       console.log(res)
         return {unsub: unsub, res}
 } 
     

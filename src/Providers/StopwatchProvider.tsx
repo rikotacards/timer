@@ -18,7 +18,7 @@ interface StopwatchProviderProps {
 }
 export const StopwatchProvider: React.FC<StopwatchProviderProps> = ({children}) => {
     const stopwatch = useStopwatch({autoStart:false})
-
+   
     const value = {...stopwatch}
 
     return (

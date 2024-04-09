@@ -3,59 +3,56 @@ import { Alert, Box, Button, Card, Chip, CircularProgress, IconButton, Popover, 
 import React from 'react';
 import PlayCircleFilledWhiteIcon from '@mui/icons-material/PlayCircleFilledWhite';
 import { CategoryEdit } from './CategoryEdit';
-import { useSnackbarContext } from '../Providers/contextHooks';
-import { AddOpenEntry, addEntry, deleteOpenEntry, getOpenEntries, updateOpenEntry } from '../firebase/db';
+import { useAppDataContext, useSnackbarContext, useStopwatchContext } from '../Providers/contextHooks';
+import { AddOpenEntry, addEntry, deleteOpenEntry, updateOpenEntry } from '../firebase/db';
 import { Category, OpenEntry } from '../firebase/types';
 import { NewEntryFormSkeleton } from './NewEntryFormSkeleton';
 import { formatTime } from '../utils/formatTime';
 import StopCircleIcon from '@mui/icons-material/StopCircle';
-import { useStopwatch } from 'react-timer-hook';
-const BLANK_ENTRY = { desc: '', categories: [], created: { seconds: 0, nanoseconds: 0 }, startTime: { seconds: 0, nanoseconds: 0 }, endTime: null } as OpenEntry
+export const BLANK_ENTRY = { desc: '', categories: [], created: { seconds: 0, nanoseconds: 0 }, startTime: { seconds: 0, nanoseconds: 0 }, endTime: null } as OpenEntry
 export const NewEntryForm: React.FC = () => {
-    
-    const [openEntry, setOpenEntry] = React.useState<OpenEntry>(BLANK_ENTRY)
+    const { start, pause, totalSeconds } = useStopwatchContext();
+    const {isLoadingActiveEntry, setOpenEntry,openEntry} = useAppDataContext()
+   
+    const [desc, setDesc] = React.useState("")
     const s = useSnackbarContext();
-    const [isLoading, setLoading] = React.useState(true)
-    const [isRunning, setIsRunning] = React.useState(false);
-    React.useEffect(() => {
-        getOpenEntries().then((r) => {
-            console.log('getting open entries', r)
-            if (r.length) {
-                setOpenEntry(r[0])
-                setIsRunning(true)
-            }
-        }).finally(() => { setLoading(false) })
-    }, [])
+    const [isRunning, setIsRunning] = React.useState(false)
+   React.useEffect(() => {
+    if(openEntry.entryId){
+        console.log('hi')
+        setIsRunning(true)
+    }
+   },[openEntry.entryId])
     const addCategory = (category: Category) => {
         console.log('category added to UI', category.categoryName)
 
-        setOpenEntry((p) => ({ ...p, categories: [category] }))
+        setOpenEntry((p) => (p && { ...p, categories: [category] }))
         console.log('after setting', openEntry)
-        if (openEntry.entryId) {
+        if (openEntry && openEntry.entryId) {
             console.log(openEntry)
             updateOpenEntry({ ...openEntry, categories: [category] })
         }
     }
     const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setOpenEntry((p) => ({ ...p, desc: e.target.value }))
+        setDesc(e.target.value);
     }
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);
     };
-    // const dif = currTime - openEntry.startTime.seconds;
-    // {autoStart: true, offsetTimeStamp: new Date().setSeconds(openEntry.startTime.seconds+dif)}
-    const { start, pause, totalSeconds, reset } = useStopwatch();
+    
     const formatted = formatTime(totalSeconds)
     const onStart = async () => {
         start();
         setIsRunning(true)
         s.onSetComponent(<Alert severity='success'>Logging started</Alert>)
         s.toggleOpen();
+        if(!openEntry){
+            return;
+        }
         try {
 
-
-            const ref = await AddOpenEntry(openEntry)
+            const ref = await AddOpenEntry({...openEntry, desc})
             if (ref) {
                 console.log('adding open entry', ref)
                 setOpenEntry(ref as unknown as OpenEntry)
@@ -68,8 +65,10 @@ export const NewEntryForm: React.FC = () => {
     
     const onStop = async () => {
         pause()
-        reset();
         setIsRunning(false)
+        if(!openEntry){
+            return;
+        }
         try {
             console.log('stopping', openEntry)
             if (!openEntry.entryId) {
@@ -87,6 +86,9 @@ export const NewEntryForm: React.FC = () => {
         
     }
     const onCancel = () => {
+        if(!openEntry){
+            return;
+        }
         if(!openEntry.entryId){
             return;
         }
@@ -103,12 +105,15 @@ export const NewEntryForm: React.FC = () => {
     }
     const open = Boolean(anchorEl);
     const id = open ? anchorEl?.id === 'more' ? 'more' : 'simple-popover' : undefined;
-    if (isLoading) {
+    if (isLoadingActiveEntry) {
         return <NewEntryFormSkeleton />
+    }
+    if(!openEntry){
+        return
     }
     return <Card elevation={4} variant='elevation' sx={{ p: 1 }}>
         <Box alignItems={'center'} display={'flex'}>
-            <TextField value={openEntry.desc} onChange={onChange} size='small' placeholder='What are you doing?' sx={{ mr: 1 }} />
+            <TextField value={openEntry.desc ||desc} onChange={onChange} size='small' placeholder='What are you doing?' sx={{ mr: 1 }} />
             <IconButton onClick={handleClick} sx={{ ml: 1 }}>
                 <AddCircleOutline />
             </IconButton>

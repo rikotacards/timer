@@ -1,3 +1,8 @@
-export const isMobile = () => {
-    return false
+import { useTheme } from '@mui/material/styles';
+import { useMediaQuery } from "@mui/material";
+
+export const useIsNarrow = () => {
+    const theme = useTheme();
+    const matches = useMediaQuery(theme.breakpoints.down('md'));
+    return matches
 }

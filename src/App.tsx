@@ -6,18 +6,20 @@ import { ModalProvider } from './Providers/ModalProvider';
 import { DrawerProvider } from './Providers/DrawerProvider';
 import { SnackbarProvider } from './Providers/SnackbarProvider';
 import { StopwatchProvider } from './Providers/StopwatchProvider';
-export const IS_OFFLINE = true;
+import { AppDataProvider } from './Providers/AppDataProvider';
+export const IS_OFFLINE = false;
 const darkTheme = createTheme({
   palette: {
     mode: 'dark',
   },
 });
 function App() {
-
   return (
 
     <ThemeProvider theme={darkTheme}>
       <CssBaseline />
+      <AppDataProvider>
+
       <StopwatchProvider>
 
         <SnackbarProvider>
@@ -28,6 +30,7 @@ function App() {
           </DrawerProvider>
         </SnackbarProvider>
       </StopwatchProvider>
+      </AppDataProvider>
     </ThemeProvider>
 
 

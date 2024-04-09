@@ -29,7 +29,7 @@ export const Entry: React.FC<OpenEntry> = ({ desc, entryId, startTime, endTime, 
 
     }
     const component = {
-        'simple-popover': <CategoryEdit  addCategory={() => {}} onHandleClose={handleClose} />,
+        'simple-popover': <CategoryEdit addCategory={() => { }} onHandleClose={handleClose} />,
         'more': <Button color='error' size='small' onClick={onDelete} >Delete</Button>
     }
 
@@ -46,7 +46,7 @@ export const Entry: React.FC<OpenEntry> = ({ desc, entryId, startTime, endTime, 
         <Card elevation={1} sx={{ mt: 1, mb: 1 }}>
             <Box sx={{ p: 1, display: 'flex', flexDirection: 'row', justifyContent: 'left', }}>
 
-                <div onClick={() => setIsEdit(true)} style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', paddingLeft:4 }}>
+                <div onClick={() => setIsEdit(true)} style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', paddingLeft: 4 }}>
 
                     {isEdit ? <TextField size='small' variant='outlined' value={desc} /> : <Typography >{desc}</Typography>}
 
@@ -66,13 +66,13 @@ export const Entry: React.FC<OpenEntry> = ({ desc, entryId, startTime, endTime, 
 
                     <Typography fontWeight={'bold'} sx={{ ml: 1, mr: 1 }}>{formattedDuration}</Typography>
                     <IconButton color='inherit'>
-                        <PlayCircleFilledWhiteOutlinedIcon/>
+                        <PlayCircleFilledWhiteOutlinedIcon />
                     </IconButton>
                 </Box>
                 <Tooltip title='Options'>
 
                     <IconButton onClick={handleClick} id={'more'}>
-                        <MoreVertOutlined/>
+                        <MoreVertOutlined />
                     </IconButton>
                 </Tooltip>
             </Box>

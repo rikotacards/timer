@@ -1,8 +1,8 @@
 import {  Box, Button, Chip, List, ListItemButton, TextField, Typography } from '@mui/material';
 import React from 'react';
 import { Category } from '../firebase/types';
-import { getCategories } from '../firebase/db';
 import { CreateNewCategory } from './CreateNewCategory';
+import { useAppDataContext } from '../Providers/contextHooks';
 
 
 
@@ -13,12 +13,7 @@ interface CategoryEdit {
   addCategory: (category: Category) => void;
 }
 export const CategoryEdit: React.FC<CategoryEdit> = ({ onHandleClose, addCategory }) => {
-  const [categories, setCategories] = React.useState<Category[]>([]);
-  React.useEffect(() => {
-    getCategories().then((c) => {
-      setCategories(c)
-    }).catch((e) => console.log(e))
-  }, [])
+  const {categories} = useAppDataContext();
 
   const [inputText, setInputText] = React.useState('')
   const filtered = categories.filter((cat) => cat.categoryName.indexOf(inputText) >= 0)
@@ -55,5 +50,6 @@ export const CategoryEdit: React.FC<CategoryEdit> = ({ onHandleClose, addCategor
       <Typography variant='caption'>Edit categories</Typography>
 
     </Box >
+
   )
 }
