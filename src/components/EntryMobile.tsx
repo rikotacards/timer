@@ -62,7 +62,7 @@ export const EntryMobile: React.FC<OpenEntry & { hideTimestamp: boolean }> = ({ 
             <Box sx={{ width: '100%', p: 1, display: 'flex', flexDirection: 'column', justifyContent: 'left' }}>
 
                 <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-start' }}>
-                    <Box sx={{display: 'flex' , flexDirection: 'column'}}>
+                    <Box sx={{ display: 'flex', flexDirection: 'column' }}>
 
                         <div onClick={() => setIsEdit(true)} style={{ display: 'flex', flexDirection: 'row', alignItems: 'left' }}>
 
@@ -72,7 +72,7 @@ export const EntryMobile: React.FC<OpenEntry & { hideTimestamp: boolean }> = ({ 
                         </div>
                         {!hideTimestamp && <Box sx={{ display: 'flex', alignItems: 'center' }}>
 
-                            <Typography color='GrayText' variant='caption'>{startDate}-</Typography>
+                            <Typography color='GrayText' variant='caption'>{startDate} -</Typography>
                             <Typography color='GrayText' variant='caption'>{endDate}</Typography>
 
                         </Box>}
@@ -80,8 +80,11 @@ export const EntryMobile: React.FC<OpenEntry & { hideTimestamp: boolean }> = ({ 
 
 
                     <Box flexDirection={'row'} display='flex' sx={{ ml: 'auto' }}>
-                        <Typography variant='body1' sx={{ mr: 1 }}>{formattedDuration}</Typography>
+                        <Typography  variant='body1' sx={{ mr: 1 }}>{formattedDuration}</Typography>
+                                <MoreVertOutlined onClick={onMoreClick} />
                     </Box>
+
+
                 </Box>
 
 
@@ -93,23 +96,10 @@ export const EntryMobile: React.FC<OpenEntry & { hideTimestamp: boolean }> = ({ 
                             <AddCircleOutlineIcon fontSize='small' />
                         </IconButton>
                     </Tooltip>
-
-
-
                 </Box>
             </Box>
-            {/* <IconButton color='inherit'>
-                        <PlayCircleFilledWhiteOutlinedIcon />
-                    </IconButton> */}
-            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
 
-                <Tooltip title='Options'>
-                    <IconButton onClick={onMoreClick} id={'more'}>
-                        <MoreVertOutlined />
-                    </IconButton>
 
-                </Tooltip>
-            </Box>
         </Card>
         <Popover id={id}
             anchorEl={anchorEl}

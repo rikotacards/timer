@@ -52,20 +52,21 @@ export const ActiveEntry: React.FC = () => {
     // {autoStart: true, offsetTimeStamp: new Date().setSeconds(openEntry.startTime.seconds+dif)}
 return (
         <Card variant='outlined'  sx={{zIndex: '2000', p: 1, background: 'transparent', backdropFilter: 'blur(20px)' }}>
-            <Box sx={{zIndex:'1000', display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+            <Box sx={{zIndex:'1000', display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+                <Box sx={{display: 'flex',flexDirection: 'row', width: '100%'}}>
 
-                <Box sx={{ display: 'flex', width: '100%', flexDirection: 'column', alignItems: 'center' }}>
-
+                <Box sx={{ display: 'flex', width: '100%', flexDirection: 'column', alignItems: 'flex-start' }}>
                     <Typography>{openEntry.desc}</Typography>
-                    <Box sx={{display: 'flex'}}>
-
-                        <Typography variant='h5' fontWeight={'bold'}>{formatted}</Typography>
-                    </Box>
                     <Box>
                         {openEntry?.categories?.map((c,i) => <Chip size='small' key={c.categoryId + i} sx={{mb:1, background: c.color }} label={c.categoryName} />)}
                     </Box>
-                    <Button size='large' onClick={onStop} color='warning' fullWidth variant='contained'>Stop</Button>
                 </Box>
+                    <Box sx={{display: 'flex', ml: 'auto'}}>
+                        <Typography variant='h6' fontWeight={'bold'}>{formatted}</Typography>
+                    </Box>
+                </Box>
+                    <Button size='large' onClick={onStop} color='warning' fullWidth variant='contained'>Stop</Button>
+                
 
             </Box>
 

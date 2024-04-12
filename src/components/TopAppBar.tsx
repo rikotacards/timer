@@ -1,4 +1,4 @@
-import { AppBar, Avatar, Box, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Paper, Toolbar, Typography } from '@mui/material';
+import { AppBar, Box, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Paper, Toolbar, Typography } from '@mui/material';
 import React from 'react';
 import MenuIcon from '@mui/icons-material/Menu';
 import { useDrawerContext } from '../Providers/contextHooks';
@@ -39,7 +39,6 @@ export const TopAppBar: React.FC = () => {
                     <MenuIcon />
                 </IconButton>}
                 <Typography fontWeight={'bold'}>Linear</Typography>
-                <Avatar sx={{ ml: 'auto' }} />
             </Toolbar>
             </Paper>
         </AppBar>

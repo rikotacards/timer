@@ -21,7 +21,7 @@ const dateFormatter = new Intl.DateTimeFormat('en-US', {
 export const Entries: React.FC = () => {
     const [entries, setEntries] = React.useState([] as OpenEntry[])
     const isNarrow = useIsNarrow();
-    const [isTimeline, setTimeline] = React.useState(true);
+    const [isTimeline, setTimeline] = React.useState(false);
     React.useEffect(() => {
         const collRef = collection(db, "users", UID, "entries")
         const q = query(collRef, orderBy("created", "desc"));
