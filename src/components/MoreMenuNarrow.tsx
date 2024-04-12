@@ -21,14 +21,14 @@ export const MoreMenuNarrow: React.FC<MoreMenuNarrowProps> = ({onDelete}) => {
                 </Box>
             </Toolbar>
             <Box display={'flex'} flexDirection={'column'} padding={1}>
-            <Button variant='contained' color='error' sx={{mb:1}} onClick={() =>{onDelete();d.toggleOpen()}}>
+            <Button size='large' variant='contained' color='error' sx={{mb:1}} onClick={() =>{onDelete();d.toggleOpen()}}>
                     Delete
                 </Button>
-                <Button  sx={{mb:1}} variant='contained'>
+                <Button size='large'  sx={{mb:1}} variant='contained'>
                     Edit
                 </Button>
                 
-                <Button sx={{mb:1}} variant='contained'>
+                <Button size='large' sx={{mb:1}} variant='contained'>
                     Start
                 </Button>
             </Box>

@@ -4,6 +4,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { useDrawerContext } from '../Providers/contextHooks';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import DashboardIcon from '@mui/icons-material/Dashboard';
+import { useIsNarrow } from '../utils/isMobile';
 const sidebarItems = [
     { icon: <AccessTimeIcon />, label: 'Home' }, 
     { icon: <DashboardIcon />, label: 'Dashboard' },
@@ -28,14 +29,15 @@ export const TopAppBar: React.FC = () => {
         onSetAnchor('left')
         toggleOpen()
     }
+    const isNarrow = useIsNarrow();
     return (
         <AppBar sx={{background: 'transparent'}} position='fixed'>
             <Paper variant='elevation' elevation={0}>
 
             <Toolbar sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                <IconButton onClick={onClick}>
+                {!isNarrow && <IconButton onClick={onClick}>
                     <MenuIcon />
-                </IconButton>
+                </IconButton>}
                 <Typography fontWeight={'bold'}>Linear</Typography>
                 <Avatar sx={{ ml: 'auto' }} />
             </Toolbar>
