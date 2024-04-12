@@ -20,7 +20,7 @@ export const mockEntries: OpenEntry[] = [
     },
     {
         entryId: '',
-        desc: 'Work on mobile layout',
+        desc: 'Walk around fish market',
         created: { nanoseconds: 0, seconds: today.getSeconds() },
         startTime: { nanoseconds: 0, seconds: today.getSeconds() },
         endTime: { nanoseconds: 0, seconds: later.getSeconds() + 1000 },
@@ -28,11 +28,11 @@ export const mockEntries: OpenEntry[] = [
     },
     {
         entryId: '',
-        desc: 'Work on mobile layout',
+        desc: 'Eating sushi with dad',
         created: { nanoseconds: 0, seconds: today.getSeconds() },
         startTime: { nanoseconds: 0, seconds: today.getSeconds() },
         endTime: { nanoseconds: 0, seconds: later.getSeconds() + 1000 },
-        categories: [{ categoryName: 'Work', color: '', categoryId: '3' }, { categoryName: 'Timer', color: '', categoryId: '4' }]
+        categories: [{ categoryName: 'Work', color: '', categoryId: '3' }]
     },
     {
         entryId: '',
@@ -40,20 +40,20 @@ export const mockEntries: OpenEntry[] = [
         created: { nanoseconds: 0, seconds: today.getSeconds() },
         startTime: { nanoseconds: 0, seconds: today.getSeconds() },
         endTime: { nanoseconds: 0, seconds: later.getSeconds() + 1000 },
-        categories: [{ categoryName: 'Work', color: '', categoryId: '' }, { categoryName: 'Timer', color: '', categoryId: '' }]
+        categories: [{ categoryName: 'Work', color: '', categoryId: '09' }]
     }, {
         entryId: '',
-        desc: 'Work on mobile layout',
+        desc: 'Walk to shibuya',
         created: { nanoseconds: 0, seconds: today.getSeconds() },
         startTime: { nanoseconds: 0, seconds: today.getSeconds() },
         endTime: { nanoseconds: 0, seconds: later.getSeconds() + 1000 },
-        categories: [{ categoryName: 'Work', color: '', categoryId: '10' }, { categoryName: 'Timer', color: '', categoryId: '11' }]
+        categories: [{ categoryName: 'Work', color: '', categoryId: '10' }]
     }, {
         entryId: '',
-        desc: 'Work on mobile layout',
+        desc: 'Testing mobile',
         created: { nanoseconds: 0, seconds: today.getSeconds() },
         startTime: { nanoseconds: 0, seconds: today.getSeconds() },
-        endTime: { nanoseconds: 0, seconds: later.getSeconds() + 1000 },
-        categories: [{ categoryName: 'Work', color: '', categoryId: '9' }, { categoryName: 'Timer', color: '', categoryId: '8' }]
+        endTime: { nanoseconds: 0, seconds: later.getSeconds() + 110 },
+        categories: [{ categoryName: 'Work', color: '', categoryId: '9' }]
     }
 ]

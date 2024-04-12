@@ -6,6 +6,7 @@ import BarChartIcon from '@mui/icons-material/BarChart';
 import { onSnapshot, collection, orderBy, query } from 'firebase/firestore';
 import { db, UID } from '../firebase/firebaseConfig';
 import { IS_OFFLINE } from '../App';
+import { BarChart } from '@mui/x-charts/BarChart';
 
 import { useIsNarrow } from '../utils/isMobile';
 import { Timeline, TimelineConnector, TimelineContent, TimelineDot, TimelineItem, TimelineOppositeContent, TimelineSeparator, timelineItemClasses } from '@mui/lab';
@@ -25,6 +26,11 @@ export const Entries: React.FC = () => {
     const isNarrow = useIsNarrow();
     const [isTimeline, setTimeline] = React.useState(false);
     React.useEffect(() => {
+        if(!navigator.onLine){
+            console.log("not online")
+            setEntries(mockEntries)
+            return
+        }
         const collRef = collection(db, "users", UID, "entries")
         const q = query(collRef, orderBy("created", "desc"));
         const unsub = onSnapshot(q, (doc) => {
@@ -39,10 +45,11 @@ export const Entries: React.FC = () => {
         )
         return () => unsub();
     }, [])
+    const series = totalTimeByCategory(entries, 'timer') || []
+    console.log(entries)
+    console.log('ss', series)
     const dateGroups = groupByDate(entries);
     const dateStrings = Object.keys(dateGroups);
-    const series = totalTimeByCategory(entries, 'timer')
-    console.log('ss', series)
     const withTimeline =<Timeline sx={{
         p: 0,
 
@@ -115,7 +122,9 @@ export const Entries: React.FC = () => {
             <div>
             <IconButton><BarChartIcon/></IconButton>
             </div>
+            
         </Box>
+            {series.length && <BarChart height={300}  series={[{dataKey: 'totalTime'}]} dataset={series} xAxis={[{dataKey: 'date', scaleType: 'band'}]}/>}
             {isTimeline && withTimeline}
             {!isTimeline && entries.map((e, i) => {
                 if (isNarrow) {

@@ -1,6 +1,7 @@
 import React from 'react';
 import { getCategories, getOpenEntries } from '../firebase/db';
 import { Category, OpenEntry } from '../firebase/types';
+import { IS_OFFLINE } from '../App';
 interface Value {
     openEntry: OpenEntry;
     setOpenEntry: React.Dispatch<React.SetStateAction<OpenEntry>>;
@@ -25,6 +26,9 @@ export const AppDataProvider: React.FC<AppDataProviderProps> = ({ children }) =>
 
     const [openEntry, setOpenEntry] = React.useState<OpenEntry>({} as OpenEntry)
     React.useEffect(() => {
+        if(IS_OFFLINE){
+            return
+        }
         getOpenEntries().then((r) => {
             console.log('getting open entries', r)
             if (r.length) {
@@ -34,6 +38,10 @@ export const AppDataProvider: React.FC<AppDataProviderProps> = ({ children }) =>
         }).finally(() => { setLoadingActiveEntry(false) })
     }, [])
      React.useEffect(() => {
+
+        if(IS_OFFLINE){
+            return
+        }
         getCategories().then((c) => {
             setCategories(c)
         }).catch((e) => console.log(e)).finally(() => {

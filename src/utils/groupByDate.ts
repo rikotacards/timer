@@ -5,11 +5,9 @@ export const groupByDate = (openEntries: OpenEntry[]):{[key:string]: {date: Date
    console.log('o', openEntries)
     openEntries.forEach((o) => {
         if(!o.startTime){
-            console.log('node')
             return []
         }
         const date = new Date (o.startTime.seconds * 1000)
-        console.log('date', date)
         const month = date.getMonth() + 1; // Months are zero-indexed, so add 1
         const day = date.getDate();
         const year = date.getFullYear();
