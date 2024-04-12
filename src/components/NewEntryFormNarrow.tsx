@@ -55,8 +55,8 @@ export const NewEntryFormNarrow: React.FC = () => {
 
        
         try {
-            const ref = await AddOpenEntry({...openEntry, desc})
             toggleOpen();
+            const ref = await AddOpenEntry({...openEntry, desc})
             if (ref) {
                 console.log('adding open entry', ref)
                 setOpenEntry(ref as unknown as OpenEntry)
@@ -77,7 +77,7 @@ export const NewEntryFormNarrow: React.FC = () => {
     }
     return <Box>
         <Box >
-            <Toolbar>
+            <Toolbar sx={{display: 'flex', alignItems: 'center'}}>
                 <Typography fontWeight={'bold'}>Add Entry</Typography><IconButton sx={{ ml: 'auto' }} onClick={toggleOpen}><KeyboardArrowDownIcon /></IconButton>
             </Toolbar>
             <Box sx={{p:1}}>
@@ -88,7 +88,6 @@ export const NewEntryFormNarrow: React.FC = () => {
             <Box sx={{ m: 1 }}>
                 {filtered.map((c) => <Chip key={c.categoryId} icon={selectedCategory === c.categoryName ? <CheckCircleIcon/> : <RadioButtonUncheckedIcon/>} onClick={()=>addCategory(c)} label={c.categoryName} sx={{ background: c.color, mr: 1, mb: 1 }} />)}
             </Box>
-            <Typography variant='caption'>Add Category</Typography>
             <Button color='success' size='large' onClick={onStart} variant='contained' sx={{ mt: 1 }} fullWidth>Start</Button>
             </Box>
         </Box>

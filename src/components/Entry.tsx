@@ -36,7 +36,7 @@ export const Entry: React.FC<OpenEntry> = ({ desc, entryId, startTime, endTime, 
 
 
 
-    const formattedDuration = endTime?.seconds ? formatTime(endTime?.seconds - startTime.seconds) : 0
+    const formattedDuration = endTime?.seconds ? formatTime(endTime?.seconds - startTime?.seconds) : 0
     const open = Boolean(anchorEl);
 
     const id = open ? anchorEl?.id === 'more' ? 'more' : 'simple-popover' : undefined;

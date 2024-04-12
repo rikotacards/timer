@@ -7,7 +7,7 @@ import { DrawerProvider } from './Providers/DrawerProvider';
 import { SnackbarProvider } from './Providers/SnackbarProvider';
 import { StopwatchProvider } from './Providers/StopwatchProvider';
 import { AppDataProvider } from './Providers/AppDataProvider';
-export const IS_OFFLINE = false;
+export const IS_OFFLINE = false
 const darkTheme = createTheme({
   palette: {
     mode: 'dark',

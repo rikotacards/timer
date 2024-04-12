@@ -1,0 +1,16 @@
+.button {
+    
+    background: linear-gradient(to right, violet, indigo, blue, green, yellow, orange, red);
+    background-size: 1400% auto;
+    animation: rainbowShift 30s ease infinite; /* Adjust the animation duration and timing function */
+  }
+  
+  @keyframes rainbowShift {
+    0% {
+      background-position: 0% 50%;
+    }
+    100% {
+      background-position: 100% 50%;
+    }
+  }
+  

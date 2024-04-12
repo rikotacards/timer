@@ -9,7 +9,7 @@ import { deleteEntry } from '../firebase/db';
 import { formatTime } from '../utils/formatTime';
 import { useDrawerContext, useSnackbarContext } from '../Providers/contextHooks';
 import { MoreMenuNarrow } from './MoreMenuNarrow';
-export const EntryMobile: React.FC<OpenEntry> = ({ desc, entryId, startTime, endTime, categories }) => {
+export const EntryMobile: React.FC<OpenEntry & {hideTimestamp: boolean}> = ({hideTimestamp, desc, entryId, startTime, endTime, categories }) => {
     const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
     const snackbar = useSnackbarContext();
     const [isEdit, setIsEdit] = React.useState(false);
@@ -41,8 +41,11 @@ export const EntryMobile: React.FC<OpenEntry> = ({ desc, entryId, startTime, end
         drawerContext.onSetComponent(<MoreMenuNarrow handleClose={drawerContext.toggleOpen} onDelete={onDelete} />)
         drawerContext.toggleOpen()
     }
+    if(!endTime?.seconds || !startTime?.seconds){
+        return null
+    }
 
-    const formattedDuration = endTime?.seconds ? formatTime(endTime?.seconds - startTime.seconds) : 0
+    const formattedDuration = endTime?.seconds ? formatTime(endTime?.seconds - startTime?.seconds) : 0
     const open = Boolean(anchorEl);
     const id = open ? anchorEl?.id === 'more' ? 'more' : 'simple-popover' : undefined;
 
@@ -55,31 +58,32 @@ export const EntryMobile: React.FC<OpenEntry> = ({ desc, entryId, startTime, end
         </Box> */}
 
 
-        <Card elevation={0} sx={{ width: '100%', display: 'flex', mt: 1, mb: 1, flexDirection: 'row' }}>
-
+        <Card elevation={0} sx={{ width: '100%', display: 'flex', mt: 0, mb: 1, flexDirection: 'row' }}>
+       
             <Box sx={{ width: '100%', p: 1, display: 'flex', flexDirection: 'column', justifyContent: 'left' }}>
                 
+               
                 <div onClick={() => setIsEdit(true)} style={{ display: 'flex', flexDirection: 'row', alignItems: 'left' }}>
 
-                    {isEdit ? <TextField size='small' variant='outlined' value={desc} /> : <Typography variant='body1' sx={{ textTransform: 'capitalize' }} fontWeight={700} >{desc}</Typography>}
+                    {isEdit ? <TextField size='small' variant='outlined' value={desc} /> : <Typography variant='body2' sx={{ textTransform: 'capitalize' }} fontWeight={100} >{desc}</Typography>}
 
                 </div>
+                {!hideTimestamp && <Box sx={{ display: 'flex', alignItems: 'center' }}>
 
+<Typography color='GrayText' variant='caption'>{startDate}-</Typography>
+<Typography color='GrayText' variant='caption'>{endDate}</Typography>
+
+</Box>}
 
 
                 <Box flexDirection={'row'} display='flex'>
 
-                    <Typography variant='h6' fontWeight={600} sx={{ mr: 1 }}>{formattedDuration}</Typography>
-                    
+                    <Typography variant='h6' color='info' fontWeight={600} sx={{ mr: 1 }}>{formattedDuration}</Typography>
+
                 </Box>
-                <Box sx={{ display: 'flex', alignItems: 'center' }}>
-
-<Typography variant='caption'>{startDate}-</Typography>
-<Typography variant='caption'>{endDate}</Typography>
-
-</Box>
+                
                 <Box sx={{ mt: 1, ml: 0, alignContent: 'center' }}>
-                    {categories?.map(c => <Chip key={c.categoryId} size='small' onDelete={() => { }} label={c.categoryName} sx={{ background: c.color, mr: 0.5 }} />)}
+                    {categories?.map((c, i) => <Chip key={c.categoryId + i} size='small' label={c.categoryName} sx={{ background: c.color, mr: 0.5 }} />)}
                     <Tooltip title='Add category'>
 
                         <IconButton onClick={handleClick} id={id} size='small'>

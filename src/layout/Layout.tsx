@@ -13,18 +13,23 @@ export const Layout: React.FC = () => {
     const isNarrow = useIsNarrow();
     const s = useSnackbarContext();
     const { openEntry } = useAppDataContext();
-    if(!navigator.onLine){
-        s.onSetComponent(<Alert severity='error'>Not connected</Alert>)
-        s.toggleOpen();
-    }
+    const [isConnected, setIsConnected]=React.useState(true);
+    React.useEffect(() => {
+
+        if(!isConnected && !navigator.onLine){
+            s.onSetComponent(<Alert severity='error'>Not connected</Alert>)
+            s.toggleOpen();
+            setIsConnected(false)
+        }
+    }, [s, isConnected])
     return (
         <Box margin={1} display={'flex'} flexDirection={'column'}>
             {<TopAppBar />}
-            {!isNarrow && <Toolbar />}
+            {isNarrow && <Toolbar />}
             {!isNarrow && <NewEntryForm />}
-            <QuickEntries />
+            {!isNarrow && <QuickEntries />}
             <Entries />
-            { isNarrow && openEntry?.entryId && <Box sx={{ position: 'sticky', bottom: 0 }}>
+            { isNarrow && openEntry?.entryId && <Box sx={{zIndex: '1000',  position: 'sticky', bottom: 0 }}>
                 <ActiveEntry />
             </Box>}
 
