@@ -2,15 +2,17 @@ import React from 'react';
 import { OpenEntry } from '../firebase/types';
 import { Entry } from './Entry';
 import { EntryMobile } from './EntryMobile';
-
+import BarChartIcon from '@mui/icons-material/BarChart';
 import { onSnapshot, collection, orderBy, query } from 'firebase/firestore';
 import { db, UID } from '../firebase/firebaseConfig';
 import { IS_OFFLINE } from '../App';
+
 import { useIsNarrow } from '../utils/isMobile';
 import { Timeline, TimelineConnector, TimelineContent, TimelineDot, TimelineItem, TimelineOppositeContent, TimelineSeparator, timelineItemClasses } from '@mui/lab';
-import { Box, Paper, Switch, Typography } from '@mui/material';
+import { Box, IconButton, Paper, Switch, Typography } from '@mui/material';
 import { mockEntries } from '../mocks/mockEntries';
 import { groupByDate } from '../utils/groupByDate';
+import { totalTimeByCategory } from '../utils/totalTimeByCategoty';
 const dateFormatter = new Intl.DateTimeFormat('en-US', {
     year: 'numeric',
     month: 'short', // '2-digit' ensures two-digit representation of month
@@ -39,6 +41,8 @@ export const Entries: React.FC = () => {
     }, [])
     const dateGroups = groupByDate(entries);
     const dateStrings = Object.keys(dateGroups);
+    const series = totalTimeByCategory(entries, 'timer')
+    console.log('ss', series)
     const withTimeline =<Timeline sx={{
         p: 0,
 
@@ -102,11 +106,16 @@ export const Entries: React.FC = () => {
                 })
             }
     </Timeline>
-
-
+    
     return (
         <>
+        <Box sx={{display: 'flex'}}>
+
             <Switch checked={isTimeline} onChange={() => setTimeline(!isTimeline)} />
+            <div>
+            <IconButton><BarChartIcon/></IconButton>
+            </div>
+        </Box>
             {isTimeline && withTimeline}
             {!isTimeline && entries.map((e, i) => {
                 if (isNarrow) {
