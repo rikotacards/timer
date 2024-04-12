@@ -7,6 +7,8 @@ import { DrawerProvider } from './Providers/DrawerProvider';
 import { SnackbarProvider } from './Providers/SnackbarProvider';
 import { StopwatchProvider } from './Providers/StopwatchProvider';
 import { AppDataProvider } from './Providers/AppDataProvider';
+import { BrowserRouter } from "react-router-dom";
+
 export const IS_OFFLINE = false
 const darkTheme = createTheme({
   palette: {
@@ -17,20 +19,23 @@ function App() {
   return (
 
     <ThemeProvider theme={darkTheme}>
-      <CssBaseline />
-      <AppDataProvider>
+      <BrowserRouter>
+        <CssBaseline />
+        <AppDataProvider>
 
-      <StopwatchProvider>
+          <StopwatchProvider>
 
-        <SnackbarProvider>
-          <DrawerProvider>
-            <ModalProvider>
-              <Layout />
-            </ModalProvider>
-          </DrawerProvider>
-        </SnackbarProvider>
-      </StopwatchProvider>
-      </AppDataProvider>
+            <SnackbarProvider>
+              <DrawerProvider>
+                <ModalProvider>
+                  <Layout />
+                </ModalProvider>
+              </DrawerProvider>
+            </SnackbarProvider>
+          </StopwatchProvider>
+        </AppDataProvider>
+      </BrowserRouter>
+
     </ThemeProvider>
 
 

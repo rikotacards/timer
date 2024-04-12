@@ -6,7 +6,6 @@ import BarChartIcon from '@mui/icons-material/BarChart';
 import { onSnapshot, collection, orderBy, query } from 'firebase/firestore';
 import { db, UID } from '../firebase/firebaseConfig';
 import { IS_OFFLINE } from '../App';
-import { BarChart } from '@mui/x-charts/BarChart';
 
 import { useIsNarrow } from '../utils/isMobile';
 import { Timeline, TimelineConnector, TimelineContent, TimelineDot, TimelineItem, TimelineOppositeContent, TimelineSeparator, timelineItemClasses } from '@mui/lab';
@@ -15,6 +14,7 @@ import { mockEntries } from '../mocks/mockEntries';
 import { groupByDate } from '../utils/groupByDate';
 import { totalTimeByCategory } from '../utils/totalTimeByCategoty';
 import { StatsByCategory } from './StatsByCategory';
+import { Navigate, useNavigate } from 'react-router';
 const dateFormatter = new Intl.DateTimeFormat('en-US', {
     year: 'numeric',
     month: 'short', // '2-digit' ensures two-digit representation of month
@@ -46,6 +46,7 @@ export const Entries: React.FC = () => {
         )
         return () => unsub();
     }, [])
+    const nav = useNavigate();
     const series = totalTimeByCategory(entries, 'timer') || []
     console.log(entries)
     console.log('ss', series)
@@ -121,11 +122,10 @@ export const Entries: React.FC = () => {
 
             <Switch checked={isTimeline} onChange={() => setTimeline(!isTimeline)} />
             <div>
-            <IconButton><BarChartIcon/></IconButton>
+            <IconButton onClick={() => nav('stats')}><BarChartIcon/></IconButton>
             </div>
             
         </Box>
-            <StatsByCategory/>
             {isTimeline && withTimeline}
             {!isTimeline && entries.map((e, i) => {
                 if (isNarrow) {

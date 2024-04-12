@@ -8,6 +8,8 @@ import { BottomAppBar } from '../components/BottomAppBar';
 import { useIsNarrow } from '../utils/isMobile';
 import { ActiveEntry } from '../components/ActiveEntry';
 import { useAppDataContext, useSnackbarContext } from '../Providers/contextHooks';
+import { Route, Routes } from 'react-router';
+import { StatsByCategory } from '../components/StatsByCategory';
 
 export const Layout: React.FC = () => {
     const isNarrow = useIsNarrow();
@@ -25,10 +27,13 @@ export const Layout: React.FC = () => {
     return (
         <Box margin={1} display={'flex'} flexDirection={'column'}>
             {<TopAppBar />}
-            {isNarrow && <Toolbar />}
+        {isNarrow && <Toolbar />}
             {!isNarrow && <NewEntryForm />}
+            <Routes>
+                <Route  path={'/stats'} element={<StatsByCategory/>}/>
+                <Route path={'/'} element={<Entries/>}/>
+            </Routes>
             {!isNarrow && <QuickEntries />}
-            <Entries />
             { isNarrow && openEntry?.entryId && <Box sx={{zIndex: '1000',  position: 'sticky', bottom: 0 }}>
                 <ActiveEntry />
             </Box>}
