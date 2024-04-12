@@ -89,3 +89,9 @@ Each entry can only have 1 category
 # Todo
 * show start - end time in entry
 * Figure out how to display and edit nested categories
+
+# Data Visualization
+* Total hours of a specific category
+
+
+* Stats per day, break down of what is recorded per day

@@ -14,6 +14,7 @@ import { Box, IconButton, Paper, Switch, Typography } from '@mui/material';
 import { mockEntries } from '../mocks/mockEntries';
 import { groupByDate } from '../utils/groupByDate';
 import { totalTimeByCategory } from '../utils/totalTimeByCategoty';
+import { StatsByCategory } from './StatsByCategory';
 const dateFormatter = new Intl.DateTimeFormat('en-US', {
     year: 'numeric',
     month: 'short', // '2-digit' ensures two-digit representation of month
@@ -124,7 +125,7 @@ export const Entries: React.FC = () => {
             </div>
             
         </Box>
-            {series.length && <BarChart height={300}  series={[{dataKey: 'totalTime'}]} dataset={series} xAxis={[{dataKey: 'date', scaleType: 'band'}]}/>}
+            <StatsByCategory/>
             {isTimeline && withTimeline}
             {!isTimeline && entries.map((e, i) => {
                 if (isNarrow) {

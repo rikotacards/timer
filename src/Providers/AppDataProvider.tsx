@@ -1,5 +1,5 @@
 import React from 'react';
-import { getCategories, getOpenEntries } from '../firebase/db';
+import { getCategories, getEntries, getOpenEntries } from '../firebase/db';
 import { Category, OpenEntry } from '../firebase/types';
 import { IS_OFFLINE } from '../App';
 interface Value {
@@ -10,6 +10,8 @@ interface Value {
     isLoadingActiveEntry: boolean;
     isLoadingCategories: boolean;
     isRunning: boolean;
+    entries: OpenEntry[];
+    isLoadingEntries: boolean;
     setIsRunning: React.Dispatch<React.SetStateAction<boolean>>
 }
 export const AppDataContext = React.createContext({} as Value);
@@ -23,12 +25,20 @@ export const AppDataProvider: React.FC<AppDataProviderProps> = ({ children }) =>
     const [isLoadingCategories, setLoadingCategories] = React.useState(true);
     const [categories, setCategories] = React.useState<Category[]>([]);
     const [isRunning, setIsRunning] = React.useState(false);
-
+    const [entries, setEntries] = React.useState([] as OpenEntry[])
+    const [isLoadingEntries, setIsLoadingEntries]= React.useState(true);
     const [openEntry, setOpenEntry] = React.useState<OpenEntry>({} as OpenEntry)
     React.useEffect(() => {
         if(IS_OFFLINE){
             return
         }
+        getEntries().then((r) => {
+            console.log('getting open entries', r)
+            if (r.length) {
+                setIsLoadingEntries(true)
+                setEntries(r)
+            }
+        }).finally(() => { setIsLoadingEntries(false) })
         getOpenEntries().then((r) => {
             console.log('getting open entries', r)
             if (r.length) {
@@ -56,6 +66,8 @@ export const AppDataProvider: React.FC<AppDataProviderProps> = ({ children }) =>
         isLoadingActiveEntry, 
         isLoadingCategories,
         isRunning,
+        entries,
+        isLoadingEntries,
         setIsRunning
     }
     return (
