@@ -91,9 +91,8 @@ export const EntryMobile: React.FC<OpenEntry & { hideTimestamp: boolean }> = ({ 
                 <Box sx={{ mt: 1, ml: 0, alignContent: 'center' }}>
                     {categories?.map((c, i) => <Chip key={c.categoryId + i} size='small' label={c.categoryName} sx={{ background: c.color, mr: 0.5 }} />)}
                     <Tooltip title='Add category'>
-
                         <IconButton onClick={handleClick} id={id} size='small'>
-                            <AddCircleOutlineIcon fontSize='small' />
+                            <AddCircleOutlineIcon color='action' fontSize='small' />
                         </IconButton>
                     </Tooltip>
                 </Box>
