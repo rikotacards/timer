@@ -21,9 +21,9 @@ export const DrawerProvider: React.FC<DrawerProviderProps> = ({ children }) => {
         setAnchor(anchor)
     }
     const [component, setComponent] = React.useState<React.ReactNode | null>();
-    const onSetComponent = (component: React.ReactNode) => {
+    const onSetComponent = React.useCallback((component: React.ReactNode) => {
         setComponent(component)
-    }
+    }, [])
     const toggleOpen = () => {
         setOpen(!open)
     }

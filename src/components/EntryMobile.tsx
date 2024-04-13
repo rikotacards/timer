@@ -6,17 +6,20 @@ import { CategoryEdit } from './CategoryEdit';
 import { OpenEntry } from '../firebase/types';
 import { deleteEntry } from '../firebase/db';
 import { formatTime } from '../utils/formatTime';
-import { useDrawerContext, useSnackbarContext } from '../Providers/contextHooks';
+import {  useDrawerContext, useSnackbarContext, useTopAppBarContext } from '../Providers/contextHooks';
 import { MoreMenuNarrow } from './MoreMenuNarrow';
+import { useNavigate } from 'react-router';
+import { CategoryTopAppBar } from './CategoryTopAppBar';
 export const EntryMobile: React.FC<OpenEntry & { hideTimestamp: boolean }> = ({ hideTimestamp, desc, entryId, startTime, endTime, categories }) => {
     const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
     const snackbar = useSnackbarContext();
     const [isEdit, setIsEdit] = React.useState(false);
     const drawerContext = useDrawerContext()
+    const {onSetComponent} = useTopAppBarContext();
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);
     };
-
+    const nav = useNavigate();
     const handleClose = () => {
         setAnchorEl(null);
     };
@@ -32,6 +35,11 @@ export const EntryMobile: React.FC<OpenEntry & { hideTimestamp: boolean }> = ({ 
     const component = {
         'simple-popover': <CategoryEdit addCategory={() => { }} onHandleClose={handleClose} />,
         'more': <Button color='error' size='small' onClick={onDelete} >Delete</Button>
+    }
+    const onChipClick = (categoryName: string) => {
+        // activateBackButton();
+        onSetComponent(<CategoryTopAppBar title={categoryName}/>)
+        nav(`/stats/${categoryName}`)
     }
 
 
@@ -89,7 +97,8 @@ export const EntryMobile: React.FC<OpenEntry & { hideTimestamp: boolean }> = ({ 
 
 
                 <Box sx={{ mt: 1, ml: 0, alignContent: 'center' }}>
-                    {categories?.map((c, i) => <Chip key={c.categoryId + i} size='small' label={c.categoryName} sx={{ background: c.color, mr: 0.5 }} />)}
+                    {categories?.map((c, i) => <Chip onClick={() =>onChipClick(c.categoryName)}
+                    key={c.categoryId + i} size='small' label={c.categoryName} sx={{ background: c.color, mr: 0.5 }} />)}
                     <Tooltip title='Add category'>
                         <IconButton onClick={handleClick} id={id} size='small'>
                             <AddCircleOutlineIcon color='action' fontSize='small' />

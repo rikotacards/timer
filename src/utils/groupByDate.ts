@@ -2,7 +2,6 @@ import { OpenEntry } from "../firebase/types";
 
 export const groupByDate = (openEntries: OpenEntry[]):{[key:string]: {date: Date, entries: OpenEntry[]}} => {
     const dateGroups: {[key:string]: {date: Date, entries: OpenEntry[]}} = {}
-   console.log('o', openEntries)
     openEntries.forEach((o) => {
         if(!o.startTime){
             return []

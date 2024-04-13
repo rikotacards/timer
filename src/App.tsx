@@ -13,6 +13,10 @@ export const IS_OFFLINE = false
 const darkTheme = createTheme({
   palette: {
     mode: 'dark',
+    background: {
+      default: 'black',
+      paper: 'black'
+    }
   },
 });
 function App() {
@@ -22,9 +26,7 @@ function App() {
       <BrowserRouter>
         <CssBaseline />
         <AppDataProvider>
-
           <StopwatchProvider>
-
             <SnackbarProvider>
               <DrawerProvider>
                 <ModalProvider>

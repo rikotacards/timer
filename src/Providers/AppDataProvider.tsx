@@ -2,6 +2,7 @@ import React from 'react';
 import { getCategories, getEntries, getOpenEntries } from '../firebase/db';
 import { Category, OpenEntry } from '../firebase/types';
 import { IS_OFFLINE } from '../App';
+import { mockEntries } from '../mocks/mockEntries';
 interface Value {
     openEntry: OpenEntry;
     setOpenEntry: React.Dispatch<React.SetStateAction<OpenEntry>>;
@@ -12,6 +13,9 @@ interface Value {
     isRunning: boolean;
     entries: OpenEntry[];
     isLoadingEntries: boolean;
+    disableBackButton: () => void;
+    activateBackButton: () => void;
+    enableBackButton: boolean;
     setIsRunning: React.Dispatch<React.SetStateAction<boolean>>
 }
 export const AppDataContext = React.createContext({} as Value);
@@ -28,8 +32,17 @@ export const AppDataProvider: React.FC<AppDataProviderProps> = ({ children }) =>
     const [entries, setEntries] = React.useState([] as OpenEntry[])
     const [isLoadingEntries, setIsLoadingEntries]= React.useState(true);
     const [openEntry, setOpenEntry] = React.useState<OpenEntry>({} as OpenEntry)
+    const [enableBackButton, setEnableBackButton] = React.useState(false);
+    const activateBackButton = () => {
+        setEnableBackButton(true)
+    }
+    const disableBackButton = () => {
+        setEnableBackButton(false)
+    }
     React.useEffect(() => {
         if(IS_OFFLINE){
+            setEntries(mockEntries)
+            setIsLoadingEntries(false)
             return
         }
         getEntries().then((r) => {
@@ -60,6 +73,9 @@ export const AppDataProvider: React.FC<AppDataProviderProps> = ({ children }) =>
     }, [])
     const value: Value = {
         openEntry, 
+        disableBackButton,
+        activateBackButton,
+        enableBackButton,
         setOpenEntry, 
         categories, 
         setCategories, 

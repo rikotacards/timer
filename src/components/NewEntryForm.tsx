@@ -19,10 +19,10 @@ export const NewEntryForm: React.FC = () => {
     const [isRunning, setIsRunning] = React.useState(false)
    React.useEffect(() => {
     if(openEntry.entryId){
-        console.log('hi')
+        console.log('id', openEntry)
         setIsRunning(true)
     }
-   },[openEntry.entryId])
+   },[openEntry])
     const addCategory = (category: Category) => {
         console.log('category added to UI', category.categoryName)
 
@@ -109,6 +109,8 @@ export const NewEntryForm: React.FC = () => {
         return <NewEntryFormSkeleton />
     }
     if(!openEntry){
+
+        console.log('hi', openEntry)
         return
     }
     return <Card elevation={4} variant='elevation' sx={{ p: 1 }}>

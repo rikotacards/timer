@@ -1,10 +1,11 @@
-import { Alert, Box, Button, Card, Chip, CircularProgress, Typography } from '@mui/material';
+import { Alert, Box, Card, Chip, IconButton, Typography } from '@mui/material';
 import React from 'react';
 import { useAppDataContext, useSnackbarContext } from '../Providers/contextHooks';
 import { formatTime } from '../utils/formatTime';
 import { addEntry } from '../firebase/db';
 import { BLANK_ENTRY } from './NewEntryForm';
 import { useStopwatch } from 'react-timer-hook';
+import StopCircleIcon from '@mui/icons-material/StopCircle';
 
 export const ActiveEntry: React.FC = () => {
     const s = useSnackbarContext();
@@ -51,25 +52,16 @@ export const ActiveEntry: React.FC = () => {
 
     // {autoStart: true, offsetTimeStamp: new Date().setSeconds(openEntry.startTime.seconds+dif)}
     return (
-        <Card variant='outlined' sx={{ zIndex: '2000', p: 1, background: 'transparent', backdropFilter: 'blur(20px)' }}>
-            <Box sx={{ zIndex: '1000', display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-                <Box sx={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
-
-                    <Box sx={{ display: 'flex', width: '100%', flexDirection: 'column', alignItems: 'flex-start' }}>
-                        <Typography variant='body1'>{openEntry.desc}</Typography>
-                        <Box>
-                            {openEntry?.categories?.map((c, i) => <Chip size='small' key={c.categoryId + i} sx={{ mb: 1, background: c.color }} label={c.categoryName} />)}
+        <Card variant='outlined' sx={{ zIndex: '2000', p: 0.5, background: 'transparent', backdropFilter: 'blur(20px)' }}>
+            <Box sx={{ zIndex: '1000', display: 'flex', flexDirection: 'row', alignItems: 'center', width: '100%' }}>
+                        <Box sx={{display: 'flex', flex: 1}}>
+                        <Typography sx={{ml:1}} variant='body1'>{openEntry.desc}</Typography>
                         </Box>
-                    </Box>
-                    <Box sx={{ display: 'flex', ml: 'auto', alignItems: 'flex-start' }}>
-                        <Box sx={{alignItems: 'center', display: 'flex', }}>
-
-                        <CircularProgress color='success' sx={{mr:0.5}} size='1rem'/>
-                        <Typography variant='h6' fontWeight={'bold'}>{formatted}</Typography>
+                            {openEntry?.categories?.map((c, i) => <Chip size='small' key={c.categoryId + i} sx={{ mr: 1, background: c.color }} label={c.categoryName} />)}
+                        <Box sx={{ alignItems: 'center', display: 'flex', }}>
+                            <Typography variant='body1' fontWeight={'bold'}>{formatted}</Typography>
                         </Box>
-                    </Box>
-                </Box>
-                <Button size='large' onClick={onStop} color='warning' fullWidth variant='contained'>Stop</Button>
+                        <IconButton  onClick={onStop} color='warning'><StopCircleIcon/></IconButton>
 
 
             </Box>
