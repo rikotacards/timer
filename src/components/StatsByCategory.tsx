@@ -1,13 +1,15 @@
-import { Box, Button, Card, Chip, CircularProgress, Slide, TextField, Typography } from "@mui/material"
+import { Box, Button, Chip, CircularProgress, Slide, TextField, Typography } from "@mui/material"
 import { useAppDataContext } from "../Providers/contextHooks"
 import { totalTimeByCategory } from "../utils/totalTimeByCategoty";
 import { IS_OFFLINE } from "../App";
+
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
 import React from 'react';
 import { BarChart } from '@mui/x-charts/BarChart';
 import { useParams } from "react-router";
-import { getEntryDurations } from "../utils/getEntryDurations";
+
+import { CustomLines } from "./CustomLines";
 const ranges = [{
     label: 'D'
 }, { label: 'W' }, { label: 'M' }, { label: '6M' }, { label: 'Y' }]
@@ -22,7 +24,6 @@ export const StatsByCategory: React.FC = () => {
         e.preventDefault()
     }
     const filteredByCategory = entries.filter((e) => e.categories?.[0]?.categoryName === selectedCategory)
-    const entriesWithDuration = getEntryDurations(filteredByCategory)
     const series = selectedCategory ? totalTimeByCategory(entries, selectedCategory) : []
     const filtered = (IS_OFFLINE ? categories : categories).filter((cat) => cat.categoryName.indexOf(inputText) >= 0)
     if (isLoadingEntries) {
@@ -46,17 +47,18 @@ export const StatsByCategory: React.FC = () => {
                         {rounded}hrs
                     </Typography>
                     <Box sx={{ display: 'flex', height: 300, width: '100%' }}>
-                        {series.length && <BarChart grid={{ vertical: true }}
+                        {series.length && <BarChart margin={{
+    left: 10,
+    right: 10,
+    top: 0,
+    bottom: 30,
+  }} grid={{ vertical: true }}
                             leftAxis={null} series={[{ dataKey: 'totalTime' }]} dataset={series} xAxis={[{ dataKey: 'date', scaleType: 'band' }]} yAxis={[]} />}
 
                     </Box>
-                    <Box sx={{ display: 'flex', height: 500, width: '100%' }}>
-                        {<BarChart layout="horizontal"
-                            grid={{ vertical: true }}
-                             series={[{ dataKey: 'duration' }]} dataset={entriesWithDuration}
+                    <Box sx={{m:1}}>
 
-                            yAxis={[{ dataKey: 'desc', scaleType: 'band', }]} />}
-
+                    <CustomLines entries={filteredByCategory}/>
                     </Box>
 
 

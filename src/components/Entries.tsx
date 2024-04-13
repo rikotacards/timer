@@ -8,7 +8,7 @@ import { IS_OFFLINE } from '../App';
 
 import { useIsNarrow } from '../utils/isMobile';
 import { Timeline, TimelineConnector, TimelineContent, TimelineDot, TimelineItem, TimelineOppositeContent, TimelineSeparator, timelineItemClasses } from '@mui/lab';
-import { Box, Paper, Slide, Switch, Typography } from '@mui/material';
+import { Box, Paper, Switch, Typography } from '@mui/material';
 import { mockEntries } from '../mocks/mockEntries';
 import { groupByDate } from '../utils/groupByDate';
 import { useAppDataContext, useTopAppBarContext } from '../Providers/contextHooks';
