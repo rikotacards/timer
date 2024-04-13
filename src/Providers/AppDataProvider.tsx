@@ -46,14 +46,12 @@ export const AppDataProvider: React.FC<AppDataProviderProps> = ({ children }) =>
             return
         }
         getEntries().then((r) => {
-            console.log('getting open entries', r)
             if (r.length) {
                 setIsLoadingEntries(true)
                 setEntries(r)
             }
         }).finally(() => { setIsLoadingEntries(false) })
         getOpenEntries().then((r) => {
-            console.log('getting open entries', r)
             if (r.length) {
                 setIsRunning(true)
                 setOpenEntry(r[0])

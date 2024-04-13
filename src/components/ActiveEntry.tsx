@@ -52,7 +52,7 @@ export const ActiveEntry: React.FC = () => {
 
     // {autoStart: true, offsetTimeStamp: new Date().setSeconds(openEntry.startTime.seconds+dif)}
     return (
-        <Card variant='outlined' sx={{ zIndex: '2000', p: 0.5, background: 'transparent', backdropFilter: 'blur(20px)' }}>
+        <Card variant='outlined' sx={{ zIndex: '2000', p: 0.5, backdropFilter: 'blur(20px)' }}>
             <Box sx={{ zIndex: '1000', display: 'flex', flexDirection: 'row', alignItems: 'center', width: '100%' }}>
                         <Box sx={{display: 'flex', flex: 1}}>
                         <Typography sx={{ml:1}} variant='body1'>{openEntry.desc}</Typography>
