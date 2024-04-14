@@ -26,7 +26,7 @@ const SidebarList: React.FC = () => {
 interface CategoryTopAppBarProps {
     title?: string
 }
-export const CategoryTopAppBar: React.FC<CategoryTopAppBarProps> = ({ title }) => {
+export const CategoryTopAppBar: React.FC<CategoryTopAppBarProps> = () => {
     const { onSetComponent, toggleOpen, onSetAnchor } = useDrawerContext();
     const onClick = () => {
         onSetComponent(<SidebarList />)
@@ -34,8 +34,10 @@ export const CategoryTopAppBar: React.FC<CategoryTopAppBarProps> = ({ title }) =
         toggleOpen()
     }
     const params = useParams();
+    
     console.log(params)
     const nav = useNavigate();
+    console.log('category top', nav)
     const isNarrow = useIsNarrow();
     return (
 
@@ -43,14 +45,14 @@ export const CategoryTopAppBar: React.FC<CategoryTopAppBarProps> = ({ title }) =
             <Paper variant='elevation' elevation={0}>
                 <Toolbar sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                     <Box sx={{flex:1}}>
-                        {<IconButton size='small'><ArrowBackIosNewIcon fontSize='small' onClick={() => nav(-1)} /></IconButton>}
+                        <IconButton size='small'><ArrowBackIosNewIcon fontSize='small' onClick={() => nav(-1)} /></IconButton>
                         {!isNarrow && <IconButton onClick={onClick}>
                             <MenuIcon />
                         </IconButton>}
                     </Box>
                     <Box sx={{flex:1, display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
 
-                        <Typography fontWeight={'bold'}>{title}</Typography>
+                        <Typography fontWeight={'bold'}>{params.categoryName}</Typography>
                     </Box>
                     <Box sx={{flex:1}} />
                 </Toolbar>

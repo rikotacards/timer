@@ -1,14 +1,13 @@
 import React from 'react';
 import { OpenEntry } from '../firebase/types';
 import { Entry } from './Entry';
-import { EntryMobile } from './EntryMobile';
+import { EntryNarrow } from './EntryNarrow';
 import { onSnapshot, collection, orderBy, query } from 'firebase/firestore';
 import { db, UID } from '../firebase/firebaseConfig';
 import { IS_OFFLINE } from '../App';
 
 import { useIsNarrow } from '../utils/isMobile';
-import { Timeline, TimelineConnector, TimelineContent, TimelineDot, TimelineItem, TimelineOppositeContent, TimelineSeparator, timelineItemClasses } from '@mui/lab';
-import { Box, Paper, Switch, Typography } from '@mui/material';
+import { Box, Paper, Typography } from '@mui/material';
 import { mockEntries } from '../mocks/mockEntries';
 import { groupByDate } from '../utils/groupByDate';
 import { useAppDataContext, useTopAppBarContext } from '../Providers/contextHooks';
@@ -26,7 +25,6 @@ export const Entries: React.FC = () => {
     const { onSetComponent } = useTopAppBarContext();
     const { disableBackButton } = useAppDataContext();
     const isNarrow = useIsNarrow();
-    const [isTimeline, setTimeline] = React.useState(false);
     React.useEffect(() => {
         onSetComponent(<TopAppBar />)
         console.log('setting top')
@@ -52,15 +50,12 @@ export const Entries: React.FC = () => {
     }, [disableBackButton, onSetComponent])
     const dateGroups = groupByDate(entries);
     const dateStrings = Object.keys(dateGroups);
-    const withTimeline = <Timeline sx={{
-        p: 0,
 
-        [`& .${timelineItemClasses.root}:before`]: {
-            flex: 0,
-            padding: 0,
-        },
-    }} >
-        {
+    return (
+
+        <div>
+
+            {
             dateStrings.map((date) => {
                 const dateValue = dateGroups[date].date
 
@@ -74,65 +69,25 @@ export const Entries: React.FC = () => {
                         width: '100%',
                         position: 'sticky', top: 54 /* Ensure it's above other content */
                     }}>
-                        <Paper sx={{ width: '100%', pb: 1, pt: 1, zIndex: 1000 }} elevation={0}>
-
-                            <Typography sx={{ mb: 0 }}>{displayed}</Typography>
+                        <Paper sx={{ width: '100%', p:1, zIndex: 1000 }} elevation={0}>
+                            <Typography color='GrayText' fontWeight={'bold'} variant='caption' sx={{ mb: 0 }}>{displayed}</Typography>
                         </Paper>
 
                     </Box>
                     <>
                         {
                             dateGroups[date].entries.map((e, i) => {
-                                let startDate;
-                                let endDate
-
-                                if (e.startTime && e?.endTime) {
-                                    startDate = new Date(e.startTime.seconds * 1000).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', hour12: false })
-                                    endDate = new Date(e.endTime.seconds * 1000).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', hour12: false })
+                                if(isNarrow){
+                                    return <EntryNarrow key={e.entryId || 0 + i} hideTimestamp={false} {...e}/>
+                                } else {
+                                    return <Entry key={e.entryId || 0 + i}  {...e}/>
                                 }
-                                if (isNarrow) {
-
-                                    return <TimelineItem key={e?.entryId || 0 + i}>
-                                        <TimelineOppositeContent sx={{ pl: 0, flex: 0, display: 'flex', flexDirection: 'column' }}>
-                                            <Typography sx={{ textTransform: 'lowercase' }} variant='caption'>{startDate}</Typography>
-                                            <Typography sx={{ textTransform: 'lowercase' }} color='GrayText' variant='caption'>{endDate}</Typography>
-
-                                        </TimelineOppositeContent>
-                                        <TimelineSeparator>
-                                            <TimelineDot>
-                                            </TimelineDot>
-                                            <TimelineConnector>
-                                            </TimelineConnector>
-                                        </TimelineSeparator>
-
-                                        <TimelineContent sx={{ p: 0 }}><EntryMobile hideTimestamp={isTimeline} {...e} key={e?.entryId || 0 + i} /></TimelineContent></TimelineItem>;
-                                }
-                                return <Entry {...e} key={e.entryId} />;
                             })
                         }
                     </>
                 </Box>
             })
         }
-    </Timeline>
-
-    return (
-
-        <div>
-            <Box sx={{ display: 'flex' }}>
-
-                <Switch checked={isTimeline} onChange={() => setTimeline(!isTimeline)} />
-
-
-            </Box>
-            {isTimeline && withTimeline}
-            {!isTimeline && entries.map((e, i) => {
-                if (isNarrow) {
-                    return <EntryMobile hideTimestamp={isTimeline} {...e} key={e?.entryId || 0 + i} />
-                }
-                return <Entry {...e} key={e.entryId} />;
-                
-            })}
         </div>
     )
 }

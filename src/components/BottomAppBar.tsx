@@ -15,12 +15,16 @@ import { isChrome } from '../utils/isChrome';
 export const BottomAppBar: React.FC = () => {
     const { onSetComponent, toggleOpen, onSetAnchor } = useDrawerContext();
     const { openEntry } = useAppDataContext();
-    console.log('is', isChrome())
     const onClick = () => {
         onSetComponent(<Box><NewEntryFormNarrow /></Box>)
         onSetAnchor('bottom')
         toggleOpen()
     }
+    const onItemClick = (route:string) => {
+        setSelected(route)
+        nav(route)
+    }
+    const [selected, setSelected] = React.useState('home')
     const nav = useNavigate()
     return (
         <AppBar position='fixed' sx={{ background: 'black', top: 'auto', bottom: 0, backdropFilter: 'blur(20px)', }}>
@@ -33,17 +37,17 @@ export const BottomAppBar: React.FC = () => {
                         {openEntry?.entryId && <ActiveEntry />}
                     </Box> </Collapse>}
                 <Box sx={{ display: 'flex', width: '100%', justifyContent: 'space-evenly', mb: 0.5, mt: 0.5 }}>
-                    <IconButton onClick={() => nav('/')}>
+                    <IconButton onClick={() => onItemClick('/')}>
 
-                        <ReorderIcon color='action' />
+                        <ReorderIcon color={selected === '/' ? 'primary' : 'action'}/>
                     </IconButton>
                     <IconButton onClick={onClick}>
 
                         <AddIcon color='action' />
                     </IconButton>
-                    <IconButton onClick={() => nav('stats')}>
+                    <IconButton onClick={() => onItemClick('stats')}>
 
-                        <BarChartIcon color='action' />
+                        <BarChartIcon color={selected === 'stats' ? 'primary' : 'action'} />
                     </IconButton>
                 </Box>
             </Paper>

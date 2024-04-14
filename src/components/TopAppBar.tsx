@@ -6,7 +6,7 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import { useIsNarrow } from '../utils/isMobile';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
-import { useNavigate } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 const sidebarItems = [
     { icon: <AccessTimeIcon />, label: 'Home' }, 
     { icon: <DashboardIcon />, label: 'Dashboard' },
@@ -32,12 +32,14 @@ export const TopAppBar: React.FC = () => {
         onSetAnchor('left')
         toggleOpen()
     }
+    const params = useParams();
+    console.log('params', params)
     const nav = useNavigate();
     const isNarrow = useIsNarrow();
     return (
         <AppBar elevation={0} position='fixed'>
             <Toolbar sx={{height:20, overflow:'hidden', display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                {enableBackButton && <IconButton size='small'><ArrowBackIosNewIcon fontSize='small' onClick={() => nav(-1)}/></IconButton>}
+                { enableBackButton && <IconButton size='small'><ArrowBackIosNewIcon fontSize='small' onClick={() => nav(-1)}/></IconButton>}
                 {!isNarrow && <IconButton onClick={onClick}>
                     <MenuIcon />
                 </IconButton>}

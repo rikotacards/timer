@@ -24,17 +24,19 @@ export const Layout: React.FC = () => {
     }, [s, isConnected])
     return (
         <Box margin={1} display={'flex'} flexDirection={'column'}>
+            {isNarrow && <Toolbar />}
+            {!isNarrow && <NewEntryForm />}
             <TopAppBarProvider>
-                {isNarrow && <Toolbar />}
-                {!isNarrow && <NewEntryForm />}
                 <Routes>
-                    <Route path={'/stats/:category'} element={<StatsByCategory />} />
-                    <Route path={'/stats/*'} element={<StatsByCategory />} />
-                    <Route path={'/'} element={<Entries />} />
+                    <>
+                        <Route path={'/stats/:categoryName'} element={<StatsByCategory />} />
+                        <Route path={'/stats/*'} element={<StatsByCategory />} />
+                        <Route path={'/'} element={<Entries />} />
+                    </>
                 </Routes>
-                {!isNarrow && <QuickEntries />}
-                {isNarrow && <BottomAppBar />}
             </TopAppBarProvider>
+            {!isNarrow && <QuickEntries />}
+            {isNarrow && <BottomAppBar />}
         </Box>
     )
 }

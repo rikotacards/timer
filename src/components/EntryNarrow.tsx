@@ -10,7 +10,7 @@ import {  useDrawerContext, useSnackbarContext, useTopAppBarContext } from '../P
 import { MoreMenuNarrow } from './MoreMenuNarrow';
 import { useNavigate } from 'react-router';
 import { CategoryTopAppBar } from './CategoryTopAppBar';
-export const EntryMobile: React.FC<OpenEntry & { hideTimestamp: boolean }> = ({ hideTimestamp, desc, entryId, startTime, endTime, categories }) => {
+export const EntryNarrow: React.FC<OpenEntry & { hideTimestamp: boolean }> = ({ hideTimestamp, desc, entryId, startTime, endTime, categories }) => {
     const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
     const snackbar = useSnackbarContext();
     const [isEdit, setIsEdit] = React.useState(false);
@@ -37,8 +37,7 @@ export const EntryMobile: React.FC<OpenEntry & { hideTimestamp: boolean }> = ({ 
         'more': <Button color='error' size='small' onClick={onDelete} >Delete</Button>
     }
     const onChipClick = (categoryName: string) => {
-        // activateBackButton();
-        onSetComponent(<CategoryTopAppBar title={categoryName}/>)
+        onSetComponent(<CategoryTopAppBar />)
         nav(`/stats/${categoryName}`)
     }
 

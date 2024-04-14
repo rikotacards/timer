@@ -1,5 +1,5 @@
-import { Box, Button, Chip, CircularProgress, Slide, TextField, Typography } from "@mui/material"
-import { useAppDataContext } from "../Providers/contextHooks"
+import { Box, Button, Chip, LinearProgress, Slide, TextField, Typography } from "@mui/material"
+import { useAppDataContext, useTopAppBarContext } from "../Providers/contextHooks"
 import { totalTimeByCategory } from "../utils/totalTimeByCategoty";
 import { IS_OFFLINE } from "../App";
 
@@ -10,6 +10,7 @@ import { BarChart } from '@mui/x-charts/BarChart';
 import { useParams } from "react-router";
 
 import { CustomLines } from "./CustomLines";
+import { CategoryTopAppBar } from "./CategoryTopAppBar";
 const ranges = [{
     label: 'D'
 }, { label: 'W' }, { label: 'M' }, { label: '6M' }, { label: 'Y' }]
@@ -17,18 +18,22 @@ export const StatsByCategory: React.FC = () => {
     const { entries, isLoadingEntries, categories } = useAppDataContext();
     const params = useParams();
     const [inputText, setInputText] = React.useState('')
-    const [selectedCategory, setSelectedCategory] = React.useState<string>(params?.category || categories[0]?.categoryName || '')
-
+    const [selectedCategory, setSelectedCategory] = React.useState<string>(params?.categoryName || categories[0]?.categoryName || '')
+    const {onSetComponent} = useTopAppBarContext();
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setInputText(e.target.value)
         e.preventDefault()
     }
+    React.useEffect(() => {
+        onSetComponent(<CategoryTopAppBar title={params.categoryName}/>)
+    }, [onSetComponent, params.categoryName])
     const filteredByCategory = entries.filter((e) => e.categories?.[0]?.categoryName === selectedCategory)
     const series = selectedCategory ? totalTimeByCategory(entries, selectedCategory) : []
     const filtered = (IS_OFFLINE ? categories : categories).filter((cat) => cat.categoryName.indexOf(inputText) >= 0)
     if (isLoadingEntries) {
-        return <CircularProgress />
+        return <LinearProgress sx={{width: '100%'}} />
     }
+
     
 
     const sum = series.reduce((p, c) => { const total = p + c.totalTime; return total }, 0)
@@ -36,6 +41,7 @@ export const StatsByCategory: React.FC = () => {
     return (
         <Slide direction='left' in={true}>
             <Box>
+            <CategoryTopAppBar title='hi'/>
                 <Box sx={{ width: '100%', flexDirection: 'row', display: 'flex', justifyContent: 'center' }}>
                     {ranges.map((r) => <Button size='small' fullWidth variant='outlined'>{r.label}</Button>)}
                 </Box>

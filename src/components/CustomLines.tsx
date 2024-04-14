@@ -9,13 +9,13 @@ interface CustomLinesProps {
 export const CustomLines:React.FC<CustomLinesProps> = ({entries}) => {
     const entriesWithDuration = getEntryDurations(entries)
     const maxDuration = Math.max(...entriesWithDuration.map((e) => e.duration))
-    console.log('max', maxDuration)
     return (
         <>
         {entriesWithDuration.map((e) => {
-            console.log(e.duration)
-            const rounded = Math.round(e.duration * 10) / 10
-            const formatted = formatTime(e.endTime.seconds-e.startTime.seconds)
+            if(!e?.endTime){
+                return
+            }
+            const formatted = formatTime(e?.endTime?.seconds -e.startTime.seconds)
             return <Box sx={{mb:2}}>
                 <Box sx={{display: 'flex', flexDirection: 'row'}}>
 
