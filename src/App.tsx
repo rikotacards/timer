@@ -7,8 +7,35 @@ import { DrawerProvider } from './Providers/DrawerProvider';
 import { SnackbarProvider } from './Providers/SnackbarProvider';
 import { StopwatchProvider } from './Providers/StopwatchProvider';
 import { AppDataProvider } from './Providers/AppDataProvider';
-import { BrowserRouter } from "react-router-dom";
+import {
+  createBrowserRouter,
+  RouterProvider,
+} from "react-router-dom";
+import { StatsByCategory } from './components/StatsByCategory';
+import { TopAppBarProvider } from './Providers/TopAppBarProvider';
+import { Entries } from './components/Entries';
 
+const router = createBrowserRouter([
+  {
+    path:'/',
+    element: <TopAppBarProvider><Layout/></TopAppBarProvider>,
+    children: [
+      {
+        path: '',
+        element: <Entries/>
+
+      },
+      {
+        path: 'stats/:categoryName',
+        element: <StatsByCategory/>
+      },
+      {
+        path: 'stats',
+        element: <StatsByCategory/>
+      }
+    ]
+  }
+])
 export const IS_OFFLINE = false
 const darkTheme = createTheme({
   palette: {
@@ -23,20 +50,18 @@ function App() {
   return (
 
     <ThemeProvider theme={darkTheme}>
-      <BrowserRouter>
         <CssBaseline />
         <AppDataProvider>
           <StopwatchProvider>
             <SnackbarProvider>
               <DrawerProvider>
                 <ModalProvider>
-                  <Layout />
+                  <RouterProvider router={router}/>
                 </ModalProvider>
               </DrawerProvider>
             </SnackbarProvider>
           </StopwatchProvider>
         </AppDataProvider>
-      </BrowserRouter>
 
     </ThemeProvider>
 

@@ -2,13 +2,10 @@ import { Alert, Box, Toolbar } from '@mui/material';
 import React from 'react';
 import { NewEntryForm } from '../components/NewEntryForm';
 import { QuickEntries } from '../components/QuickEntries';
-import { Entries } from '../components/Entries';
 import { BottomAppBar } from '../components/BottomAppBar';
 import { useIsNarrow } from '../utils/isMobile';
 import { useSnackbarContext } from '../Providers/contextHooks';
-import { Route, Routes } from 'react-router';
-import { StatsByCategory } from '../components/StatsByCategory';
-import { TopAppBarProvider } from '../Providers/TopAppBarProvider';
+import { Outlet } from 'react-router';
 
 export const Layout: React.FC = () => {
     const isNarrow = useIsNarrow();
@@ -26,15 +23,7 @@ export const Layout: React.FC = () => {
         <Box margin={1} display={'flex'} flexDirection={'column'}>
             {isNarrow && <Toolbar />}
             {!isNarrow && <NewEntryForm />}
-            <TopAppBarProvider>
-                <Routes>
-                    <>
-                        <Route path={'/stats/:categoryName'} element={<StatsByCategory />} />
-                        <Route path={'/stats/*'} element={<StatsByCategory />} />
-                        <Route path={'/'} element={<Entries />} />
-                    </>
-                </Routes>
-            </TopAppBarProvider>
+                  <Outlet/>
             {!isNarrow && <QuickEntries />}
             {isNarrow && <BottomAppBar />}
         </Box>

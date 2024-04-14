@@ -45,7 +45,7 @@ export const CategoryTopAppBar: React.FC<CategoryTopAppBarProps> = () => {
             <Paper variant='elevation' elevation={0}>
                 <Toolbar sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                     <Box sx={{flex:1}}>
-                        <IconButton size='small'><ArrowBackIosNewIcon fontSize='small' onClick={() => nav(-1)} /></IconButton>
+                        <IconButton  onClick={() => nav(-1)} size='small'><ArrowBackIosNewIcon fontSize='small' /></IconButton>
                         {!isNarrow && <IconButton onClick={onClick}>
                             <MenuIcon />
                         </IconButton>}

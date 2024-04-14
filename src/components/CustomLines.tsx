@@ -16,7 +16,7 @@ export const CustomLines:React.FC<CustomLinesProps> = ({entries}) => {
                 return
             }
             const formatted = formatTime(e?.endTime?.seconds -e.startTime.seconds)
-            return <Box sx={{mb:2}}>
+            return <Box key={e.entryId || 0} sx={{mb:2}}>
                 <Box sx={{display: 'flex', flexDirection: 'row'}}>
 
                 <Typography variant='body2'>{e.desc}</Typography>

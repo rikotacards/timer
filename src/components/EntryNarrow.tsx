@@ -74,7 +74,7 @@ export const EntryNarrow: React.FC<OpenEntry & { hideTimestamp: boolean }> = ({ 
                         <div onClick={() => setIsEdit(true)} style={{ display: 'flex', flexDirection: 'row', alignItems: 'left' }}>
 
                             {isEdit ? <TextField size='small' variant='outlined' value={desc} /> :
-                                <Typography variant='body1' sx={{ textTransform: 'capitalize', fontWeight: 'bold' }} >{desc}</Typography>}
+                                <Typography variant='body1' sx={{ textTransform: 'capitalize', fontWeight: '600' }} >{desc}</Typography>}
 
                         </div>
                         {!hideTimestamp && <Box sx={{ display: 'flex', alignItems: 'center' }}>
