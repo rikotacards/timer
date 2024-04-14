@@ -35,9 +35,7 @@ export const CategoryTopAppBar: React.FC<CategoryTopAppBarProps> = () => {
     }
     const params = useParams();
     
-    console.log(params)
     const nav = useNavigate();
-    console.log('category top', nav)
     const isNarrow = useIsNarrow();
     return (
 

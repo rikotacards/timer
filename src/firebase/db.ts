@@ -1,4 +1,4 @@
-import { setDoc, updateDoc, deleteDoc, getDocs, doc, addDoc, collection, serverTimestamp, onSnapshot, query, orderBy } from "firebase/firestore";
+import { setDoc, updateDoc, deleteDoc, getDocs, doc, addDoc, collection, serverTimestamp, onSnapshot, query, orderBy, where } from "firebase/firestore";
 import { UID, db } from "./firebaseConfig";
 import { OpenEntry , Category} from "./types";
 
@@ -99,6 +99,22 @@ export const getEntries = async() => {
     console.log('getting entries', res)
     return res
 }
+
+// today = new Date();
+// sevenDaysAgo = new Date(today); sevenDaysAgo.setDate(today.getDate()-7)
+export const getEntriesByDateRange = async({start, end}: {start: Date, end: Date}) => {
+    const collRef = collection(db, "users", UID, "entries")
+    const q =  query(collRef, where("created", "<=", start ), where("created", '>=', end))
+    const querySnapshot = await getDocs(q);
+    console.log('getting date range',  querySnapshot.size)
+    const res: Entry[] = [] 
+    querySnapshot.forEach((doc) => {
+        // console.log(doc.data())
+        res.push({...doc.data() as Entry, entryId: doc.id})
+    })
+    return res;
+}
+
 export const getEntriesOnSnapshot = () => {
     const collRef = collection(db, "users", UID, "entries")
     const q = query (collRef, orderBy("created","desc" ));

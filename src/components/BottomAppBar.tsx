@@ -14,7 +14,6 @@ import { NavLink } from 'react-router-dom'
 
 export const BottomAppBar: React.FC = () => {
     const location = useLocation()
-    console.log('bottom', location)
     const { onSetComponent, toggleOpen, onSetAnchor } = useDrawerContext();
     const { openEntry } = useAppDataContext();
     const onClick = () => {
@@ -26,7 +25,6 @@ export const BottomAppBar: React.FC = () => {
         nav(route)
     }
     const currRoute = location.pathname.split('/')[1]
-    console.log('cur', currRoute)
     const nav = useNavigate()
     return (
         <AppBar position='fixed' sx={{ background: 'black', top: 'auto', bottom: 0, backdropFilter: 'blur(20px)', }}>

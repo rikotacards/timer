@@ -12,6 +12,7 @@ import { mockEntries } from '../mocks/mockEntries';
 import { groupByDate } from '../utils/groupByDate';
 import { useAppDataContext, useTopAppBarContext } from '../Providers/contextHooks';
 import { TopAppBar } from './TopAppBar';
+import {  getEntriesByDateRange } from '../firebase/db';
 const dateFormatter = new Intl.DateTimeFormat('en-US', {
     year: 'numeric',
     month: 'short', // '2-digit' ensures two-digit representation of month
@@ -25,7 +26,11 @@ export const Entries: React.FC = () => {
     const { onSetComponent } = useTopAppBarContext();
     const { disableBackButton } = useAppDataContext();
     const isNarrow = useIsNarrow();
+    const today = new Date();
+    const sevenDaysAgo = new Date(today);
+    sevenDaysAgo.setDate(today.getDate()-1)
     React.useEffect(() => {
+        getEntriesByDateRange({start: today, end: sevenDaysAgo})
         onSetComponent(<TopAppBar />)
         console.log('setting top')
         if (!navigator.onLine) {

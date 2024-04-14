@@ -11,6 +11,15 @@ export interface OpenEntry {
     categories: Category[];
 }
 
+export interface Entry {
+    entryId: string; 
+    desc: string;
+    endTime: FirebaseTimeStamp | null;
+    created: FirebaseTimeStamp;
+    startTime: FirebaseTimeStamp;
+    categories: Category[];
+}
+
 export interface Category {
     categoryName: string;
     child?: string;
