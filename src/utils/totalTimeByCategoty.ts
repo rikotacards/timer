@@ -1,8 +1,8 @@
-import { OpenEntry } from "../firebase/types";
+import {  Entry } from "../firebase/types";
 import { groupByDate } from "./groupByDate";
 
-export const totalTimeByCategory = (openEntries: OpenEntry[], categoryName: string) => {
-    const dateGroups = groupByDate(openEntries);
+export const totalTimeByCategory = (entries: Entry[], categoryName: string) => {
+    const dateGroups = groupByDate(entries);
     const dateStrings = Object.keys(dateGroups);
     const res: {category: string, totalTime: number, date: string}[] = [];  //{date}
     dateStrings.forEach((dateString) => {

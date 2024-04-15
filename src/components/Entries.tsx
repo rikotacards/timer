@@ -38,7 +38,6 @@ export const Entries: React.FC = () => {
             setEntries(mockEntries)
             return
         }
-        console.log('log')
         const collRef = collection(db, "users", UID, "entries")
         const q = query(collRef, orderBy("created", "desc"));
         const unsub = onSnapshot(q, (doc) => {
@@ -63,7 +62,7 @@ export const Entries: React.FC = () => {
             {
             dateStrings.map((date) => {
                 const dateValue = dateGroups[date].date
-
+                const count = dateGroups[date].entries.length
 
                 const displayed = dateFormatter.format(dateValue)
                 return <Box key={date}>
@@ -72,10 +71,13 @@ export const Entries: React.FC = () => {
                         display: 'flex',
                         alignItems: 'center',
                         width: '100%',
+                        justifyContent: 'flex-start',
+                        flexDirection: 'row',
                         position: 'sticky', top: 54 /* Ensure it's above other content */
                     }}>
-                        <Paper sx={{ width: '100%', p:1, zIndex: 1000 }} elevation={0}>
+                        <Paper sx={{ width: '100%', p:1, zIndex: 1000, alignItems: 'center' }} elevation={0}>
                             <Typography color='GrayText' fontWeight={'bold'} variant='caption' sx={{ mb: 0 }}>{displayed}</Typography>
+                        <Typography sx={{ml:1}} variant='caption'>{count} entries</Typography>
                         </Paper>
 
                     </Box>

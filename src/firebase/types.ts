@@ -14,7 +14,7 @@ export interface OpenEntry {
 export interface Entry {
     entryId: string; 
     desc: string;
-    endTime: FirebaseTimeStamp | null;
+    endTime: FirebaseTimeStamp;
     created: FirebaseTimeStamp;
     startTime: FirebaseTimeStamp;
     categories: Category[];

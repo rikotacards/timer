@@ -7,6 +7,9 @@ interface CustomLinesProps {
     entries: OpenEntry[]
 }
 export const CustomLines:React.FC<CustomLinesProps> = ({entries}) => {
+    if(entries.length === 0){
+        return null
+    }
     const entriesWithDuration = getEntryDurations(entries)
     const maxDuration = Math.max(...entriesWithDuration.map((e) => e.duration))
     return (

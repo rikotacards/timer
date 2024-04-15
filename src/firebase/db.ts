@@ -104,12 +104,15 @@ export const getEntries = async() => {
 // sevenDaysAgo = new Date(today); sevenDaysAgo.setDate(today.getDate()-7)
 export const getEntriesByDateRange = async({start, end}: {start: Date, end: Date}) => {
     const collRef = collection(db, "users", UID, "entries")
+    console.log('START', start, end)
     const q =  query(collRef, where("created", "<=", start ), where("created", '>=', end))
     const querySnapshot = await getDocs(q);
-    console.log('getting date range',  querySnapshot.size)
     const res: Entry[] = [] 
+    if(!querySnapshot){
+        return []
+    }
     querySnapshot.forEach((doc) => {
-        // console.log(doc.data())
+        console.log("DATA", doc.data())
         res.push({...doc.data() as Entry, entryId: doc.id})
     })
     return res;

@@ -14,8 +14,10 @@ import { CategoryTopAppBar } from "./CategoryTopAppBar";
 import { getEntriesByDateRange } from "../firebase/db";
 import { Entry } from "../firebase/types";
 const today = new Date();
+today.setHours(23,59,59,99)
 const endOfDay = new Date(today)
-endOfDay.setDate(today.getDate() - 1)
+endOfDay.setHours(0,0,0,0)
+console.log(today, endOfDay)
 const week = new Date(today)
 week.setDate(today.getDate() - 7)
 const month = new Date(today)
@@ -24,6 +26,7 @@ const sixMonth = new Date(today)
 sixMonth.setDate(today.getDate() - 180)
 const year = new Date(today)
 year.setDate(today.getDate() - 365);
+
     type RangeType = 'D' | 'W' | 'M' | '6M' | 'Y'
 
 const ranges:{label: RangeType}[] = [{
@@ -63,23 +66,25 @@ export const StatsByCategory: React.FC = () => {
         onSetComponent(<CategoryTopAppBar title={params.categoryName} />)
         getEntriesByDateRange({ start: today, end: rangeMap[range] }).then((e) => {
             setEntries(e as Entry[])
+            console.log("wonder", e)
             setFetching(false);
         })
     }, [onSetComponent, params.categoryName, range])
     const filteredByCategory = entries.filter((e) => e.categories?.[0]?.categoryName === selectedCategory)
     const series = selectedCategory ? totalTimeByCategory(entries, selectedCategory) : []
+   console.log('Sosup', series)
     const filtered = (IS_OFFLINE ? categories : categories).filter((cat) => cat.categoryName.indexOf(inputText) >= 0)
 
 
-
-    const sum = series.reduce((p, c) => { const total = p + c.totalTime; return total }, 0)
+    console.log("series", series)
+    const sum = series.reduce((p, c) => { const total = p + c?.totalTime ||0; return total }, 0)
     const rounded = Math.round(sum * 10) / 10
     return (
         <Slide direction='left' in={true}>
             <Box>
                 <CategoryTopAppBar title='hi' />
                 <Box sx={{ width: '100%', flexDirection: 'row', display: 'flex', justifyContent: 'center' }}>
-                    {ranges.map((r) => <Button onClick={() => onRangeSelect(r.label)} size='small' fullWidth variant={range === r.label ? "contained" : "outlined"}>{r.label}</Button>)}
+                    {ranges.map((r) => <Button key={r.label} onClick={() => onRangeSelect(r.label)} size='small' fullWidth variant={range === r.label ? "contained" : "outlined"}>{r.label}</Button>)}
                 </Box>
                 <Box sx={{ p: 1 }}>
                     <Typography fontWeight={'bold'}>
@@ -89,16 +94,16 @@ export const StatsByCategory: React.FC = () => {
                         {rounded}hrs
                     </Typography>
                     <Typography color='GrayText' variant='body1'>{rangeMap[range].toDateString()}-{today.toDateString()}</Typography>
-                     <Box sx={{ display: 'flex', height: 300, width: '100%', alignItems: 'center', justifyContent: 'center' }}>
+                   {  <Box sx={{ display: 'flex', height: 300, width: '100%', alignItems: 'center', justifyContent: 'center' }}>
                         { fetching ? <CircularProgress/> : <BarChart margin={{
                             left: 10,
                             right: 10,
                             top: 0,
                             bottom: 30,
                         }} grid={{ vertical: true }}
-                            leftAxis={null} series={[{ dataKey: 'totalTime' }]} dataset={series} xAxis={[{ tickPlacement: 'middle', dataKey: 'date', scaleType: 'band' }]} yAxis={[]} />}
+                            leftAxis={null} series={[{ dataKey: 'totalTime' }]} dataset={series} xAxis={[{ tickPlacement: 'middle', dataKey: 'date', scaleType: 'band' }]} />}
 
-                    </Box>
+                    </Box>}
                     <Box sx={{ m: 1 }}>
                         <CustomLines entries={filteredByCategory} />
                     </Box>
