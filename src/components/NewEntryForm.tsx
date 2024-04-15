@@ -108,11 +108,7 @@ export const NewEntryForm: React.FC = () => {
     if (isLoadingActiveEntry) {
         return <NewEntryFormSkeleton />
     }
-    if(!openEntry){
-
-        console.log('hi', openEntry)
-        return
-    }
+   
     return <Card elevation={4} variant='elevation' sx={{ p: 1 }}>
         <Box alignItems={'center'} display={'flex'}>
             <TextField value={openEntry.desc ||desc} onChange={onChange} size='small' placeholder='What are you doing?' sx={{ mr: 1 }} />

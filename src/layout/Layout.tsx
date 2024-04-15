@@ -21,7 +21,7 @@ export const Layout: React.FC = () => {
     }, [s, isConnected])
     return (
         <Box margin={1} display={'flex'} flexDirection={'column'}>
-            {isNarrow && <Toolbar />}
+            { <Toolbar />}
             {!isNarrow && <NewEntryForm />}
                   <Outlet/>
             {!isNarrow && <QuickEntries />}
