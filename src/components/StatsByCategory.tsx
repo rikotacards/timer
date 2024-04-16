@@ -72,11 +72,9 @@ export const StatsByCategory: React.FC = () => {
     }, [onSetComponent, params.categoryName, range])
     const filteredByCategory = entries.filter((e) => e.categories?.[0]?.categoryName === selectedCategory)
     const series = selectedCategory ? totalTimeByCategory(entries, selectedCategory) : []
-   console.log('Sosup', series)
     const filtered = (IS_OFFLINE ? categories : categories).filter((cat) => cat.categoryName.indexOf(inputText) >= 0)
 
 
-    console.log("series", series)
     const sum = series.reduce((p, c) => { const total = p + c?.totalTime ||0; return total }, 0)
     const rounded = Math.round(sum * 10) / 10
     return (

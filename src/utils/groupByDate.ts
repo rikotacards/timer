@@ -1,7 +1,7 @@
-import { OpenEntry } from "../firebase/types";
+import { Entry } from "../firebase/types";
 
-export const groupByDate = (openEntries: OpenEntry[]):{[key:string]: {date: Date, entries: OpenEntry[]}} => {
-    const dateGroups: {[key:string]: {date: Date, entries: OpenEntry[]}} = {}
+export const groupByDate = (openEntries: Entry[]):{[key:string]: {date: Date, entries: Entry[]}} => {
+    const dateGroups: {[key:string]: {date: Date, entries: Entry[]}} = {}
     openEntries.forEach((o) => {
         if(!o.startTime){
             return []

@@ -1,7 +1,7 @@
-import { OpenEntry } from "../firebase/types";
+import { Entry } from "../firebase/types";
 const today = new Date()
 const later = new Date()
-export const mockEntries: OpenEntry[] = [
+export const mockEntries: Entry[] = [
     {
         entryId: '0',
         desc: 'Going to tokyo by HK Express',
