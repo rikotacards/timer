@@ -78,6 +78,7 @@ export const Entries: React.FC = () => {
                             flexDirection: 'row',
                             position: 'sticky', top: 54 /* Ensure it's above other content */
                         }}>
+                            
                             <Paper sx={{ width: '100%', p: 1, zIndex: 1000, alignItems: 'center' }} elevation={0}>
                                 <Typography color='GrayText' fontWeight={'bold'} variant='caption' sx={{ mb: 0 }}>{displayed}</Typography>
                                 <Typography sx={{ ml: 1 }} variant='caption'>{count} entries</Typography>
