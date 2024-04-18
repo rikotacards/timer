@@ -86,6 +86,21 @@ Each entry can only have 1 category
 }
 ```
 
+User Journey of Adding Categories
+
+Add category, Activity
+2. User can decide to add parent or child
+3. Decides to add child. 
+
+When rendering, if I only selected a parent category, we would onlyrender this. 
+
+Showing category in an Entry
+Essentailly, only render current category, and parents
+If I selected "Running", then we would show 
+"Activity" -> "Running"
+
+if I only selected "Activity", then we show "Activity" -> "General"
+
 # Todo
 * show start - end time in entry
 * Figure out how to display and edit nested categories
