@@ -96,7 +96,6 @@ export const getEntries = async() => {
     querySnapshot.forEach((doc) => {
         res.push({...doc.data(), entryId: doc.id} as OpenEntry)
     });
-    console.log('getting entries', res)
     return res
 }
 
@@ -112,7 +111,6 @@ export const getEntriesByDateRange = async({start, end}: {start: Date, end: Date
         return []
     }
     querySnapshot.forEach((doc) => {
-        console.log("DATA", doc.data())
         res.push({...doc.data() as Entry, entryId: doc.id})
     })
     return res;

@@ -17,7 +17,6 @@ const today = new Date();
 today.setHours(23,59,59,99)
 const endOfDay = new Date(today)
 endOfDay.setHours(0,0,0,0)
-console.log(today, endOfDay)
 const week = new Date(today)
 week.setDate(today.getDate() - 7)
 const month = new Date(today)
@@ -63,20 +62,23 @@ export const StatsByCategory: React.FC = () => {
         e.preventDefault()
     }
     React.useEffect(() => {
+        console.log('GETTING')
         onSetComponent(<CategoryTopAppBar title={params.categoryName} />)
         getEntriesByDateRange({ start: today, end: rangeMap[range] }).then((e) => {
             setEntries(e as Entry[])
-            console.log("wonder", e)
+            console.log("GOT", e)
             setFetching(false);
-        })
+        }).catch((e) => console.log('error', e))
     }, [onSetComponent, params.categoryName, range])
     const filteredByCategory = entries.filter((e) => e.categories?.[0]?.categoryName === selectedCategory)
+    
     const series = selectedCategory ? totalTimeByCategory(entries, selectedCategory) : []
     const filtered = (IS_OFFLINE ? categories : categories).filter((cat) => cat.categoryName.indexOf(inputText) >= 0)
 
 
     const sum = series.reduce((p, c) => { const total = p + c?.totalTime ||0; return total }, 0)
     const rounded = Math.round(sum * 10) / 10
+    console.log('series', series)
     return (
         <Slide direction='left' in={true}>
             <Box>
@@ -93,13 +95,13 @@ export const StatsByCategory: React.FC = () => {
                     </Typography>
                     <Typography color='GrayText' variant='body1'>{rangeMap[range].toDateString()}-{today.toDateString()}</Typography>
                    {  <Box sx={{ display: 'flex', height: 300, width: '100%', alignItems: 'center', justifyContent: 'center' }}>
-                        { fetching ? <CircularProgress/> : <BarChart margin={{
+                        { fetching ? <CircularProgress/> : series.length ?  <BarChart margin={{
                             left: 10,
                             right: 10,
                             top: 0,
                             bottom: 30,
                         }} grid={{ vertical: true }}
-                            leftAxis={null} series={[{ dataKey: 'totalTime' }]} dataset={series} xAxis={[{ tickPlacement: 'middle', dataKey: 'date', scaleType: 'band' }]} />}
+                            leftAxis={null} series={[{ dataKey: 'totalTime' }]} dataset={series} xAxis={[{ tickPlacement: 'middle', dataKey: 'date', scaleType: 'band' }]} />: <Typography>No data for today. Try weekly range or more.</Typography>}
 
                     </Box>}
                     <Box sx={{ m: 1 }}>

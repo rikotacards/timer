@@ -5,7 +5,7 @@ import { db, UID } from '../firebase/firebaseConfig';
 import { IS_OFFLINE } from '../App';
 
 import { useIsNarrow } from '../utils/isMobile';
-import { Box, Paper, Typography } from '@mui/material';
+import { Box,  Paper, Typography } from '@mui/material';
 import { mockEntries } from '../mocks/mockEntries';
 import { groupByDate } from '../utils/groupByDate';
 import { useAppDataContext, useTopAppBarContext } from '../Providers/contextHooks';
@@ -66,6 +66,21 @@ export const Entries: React.FC = () => {
                     const dateValue = dateGroups[date].date
                     const count = dateGroups[date].entries.length
                     const totalTime = totalTimeInSeconds(dateGroups[date].entries)
+                    const categories: {[key: string]: EntryType[]} = {}
+                    dateGroups[date].entries.forEach((e) => {
+                        if(e.categories?.[0]){
+                            const categoryName = e.categories[0].categoryName
+                            if(categories[categoryName]){
+                                categories[categoryName].push(e)
+                            } else {
+                                categories[categoryName] = [e];
+                            }
+                        }
+                    })
+                    const categoryList = Object.keys(categories)
+                    const secondsInADay = 60 * 60 * 24;
+                    const percentage = (totalTime/secondsInADay) * 100
+                    const rounded = Math.round(percentage*10)/10
                     const formatted = formatTime(totalTime);
                     const displayed = dateFormatter.format(dateValue)
                     return <Box key={date}>
@@ -79,12 +94,27 @@ export const Entries: React.FC = () => {
                             position: 'sticky', top: 54 /* Ensure it's above other content */
                         }}>
                             
-                            <Paper sx={{ width: '100%', p: 1, zIndex: 1000, alignItems: 'center' }} elevation={0}>
+                            <Paper sx={{ width: '100%', p: 1, zIndex: 1000, alignItems: 'center', flexDirection: 'column' }} elevation={0}>
+                                <Box sx={{display: 'flex', alignItems: 'center'}}>
+
                                 <Typography color='GrayText' fontWeight={'bold'} variant='caption' sx={{ mb: 0 }}>{displayed}</Typography>
                                 <Typography sx={{ ml: 1 }} variant='caption'>{count} entries</Typography>
-                                <Typography sx={{m:1}} variant='caption'>Total time logged:</Typography>
-
+                                <Typography sx={{m:1}} variant='caption'>Total:</Typography>
                                 <Typography sx={{m:0}} variant='caption'>{formatted}</Typography>
+                                <Typography sx={{m:1}} variant='caption'>{rounded}%</Typography>
+                                </Box>
+                                <Box sx={{display: 'flex'}}>
+                                    {categoryList.map((key) => {
+                                        const totalTime = totalTimeInSeconds(categories[key])
+                                        const format = formatTime(totalTime);
+                                        return (
+                                            <Box sx={{display: 'flex', alignItems: 'center'}}>
+                                                <Typography fontWeight={700} variant='caption'>{key}:</Typography>
+                                                <Typography variant='caption' sx={{m:1}}>{format}</Typography>
+                                            </Box>
+                                        )
+                                    })}
+                                </Box>
                             </Paper>
 
                         </Box>

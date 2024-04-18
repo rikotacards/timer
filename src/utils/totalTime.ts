@@ -4,7 +4,10 @@ import { Entry } from "../firebase/types";
 export const totalTimeInSeconds = (entries: Entry[]) => {
     let totalSeconds = 0;
     entries.forEach((e) => {
-        const duration = e.endTime.seconds-e.startTime.seconds;
+        if(!e.endTime?.seconds){
+            return 0
+        } 
+        const duration = (e.endTime.seconds|| 0)-e.startTime.seconds;
         totalSeconds = duration + totalSeconds
     })
     return totalSeconds

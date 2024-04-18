@@ -3,6 +3,7 @@ import { groupByDate } from "./groupByDate";
 
 export const totalTimeByCategory = (entries: Entry[], categoryName: string) => {
     const dateGroups = groupByDate(entries);
+    console.log(entries)
     const dateStrings = Object.keys(dateGroups);
     const res: {category: string, totalTime: number, date: string}[] = [];  //{date}
     dateStrings.forEach((dateString) => {
@@ -20,7 +21,6 @@ export const totalTimeByCategory = (entries: Entry[], categoryName: string) => {
         })
         res.push({category: categoryName, totalTime: sum / 60/60 , date: dateString})
     })
-    console.log('totalTime', res)
     return res
 
 
