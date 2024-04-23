@@ -1,13 +1,15 @@
-import { Alert, Box, Button, Chip, IconButton, TextField, Toolbar, Typography } from '@mui/material';
+import { Alert, AppBar, Box, Button, Card, IconButton, Paper, TextField, Toolbar, Typography } from '@mui/material';
 import React from 'react';
 import { useAppDataContext, useDrawerContext, useSnackbarContext } from '../Providers/contextHooks';
 import { AddOpenEntry, updateOpenEntry } from '../firebase/db';
 import { Category, OpenEntry } from '../firebase/types';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 
-import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
 import { IS_OFFLINE } from '../App';
+import { AddNewCategory } from './AddNewCategory';
+import { AddSubCategory } from './AddSubCategory';
+import { CategoryList } from './CategoryList';
 const mockCategories = [{
     categoryName: 'work',
     color: '',
@@ -30,24 +32,45 @@ const mockCategories = [{
 }]
 export const NewEntryFormNarrow: React.FC = () => {
     const s = useSnackbarContext();
-    console.log('new entry form')
     const [desc, setDesc] = React.useState("");
+    const [currStep, setCurrStep] = React.useState(0)
+   
+    const setStep = (step: number) => {
+        setCurrStep(step)
+    }
+    const back = () => {
+        if(currStep > 0){
 
+            setCurrStep(currStep-1)
+            resetText();
+        }
+    }
+    React.useEffect(() => {
+        
+    }, [])
+    
     const { toggleOpen } = useDrawerContext();
     const { openEntry, setOpenEntry, categories } = useAppDataContext();
-    const [inputText, setInputText] = React.useState('');
+    console.log(categories)
+    const [categoryText, setCategoryText] = React.useState('');
+    const [color, setColor] = React.useState('')
     const onCatChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setInputText(e.target.value);
+        setCategoryText(e.target.value);
         e.preventDefault()
       }
+    const resetText = () => {
+        setCategoryText('')
+    }
     const [selectedCategory, setSelectedCategory] = React.useState<string | undefined>()
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setDesc(e.target.value)
         e.preventDefault()
     }
-   
-    const filtered = (IS_OFFLINE ? mockCategories : categories).filter((cat) => cat.categoryName.indexOf(inputText) >= 0)
-
+    const selectCategory = (categoryName: string) => {
+        setSelectedCategory(categoryName)
+    }
+    const filtered = (IS_OFFLINE ? mockCategories : categories).filter((cat) => cat.categoryName.indexOf(categoryText) >= 0)
+   console.log(categories, 'filtered', filtered, 'categorytext', categoryText)
     const onStart = async () => {
         s.onSetComponent(<Alert variant='filled' severity='success'>Logging started</Alert>)
         s.toggleOpen();
@@ -75,23 +98,56 @@ export const NewEntryFormNarrow: React.FC = () => {
             updateOpenEntry({ ...openEntry, categories: [category] })
         }
     }
-    return <Box>
-        <Box >
-            <Toolbar sx={{display: 'flex', alignItems: 'center'}}>
-                <Typography fontWeight={'bold'}>Add Entry</Typography><IconButton sx={{ ml: 'auto' }} onClick={toggleOpen}><KeyboardArrowDownIcon /></IconButton>
+
+    const addNewEntryForm = (<Box sx={{p:1,display: 'flex', flexDirection: 'column', height: '100%'}}> 
+    <TextField value={categoryText}  onChange={onCatChange} size='small' fullWidth placeholder='Search categories' />
+    {(categoryText.length === 0 ? categories : filtered).length === 0 && <Box sx={{p:1, display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'center'}}>
+        <Card sx={{width: '100%', p:2, textAlign: 'center'}}>
+
+        <Typography sx={{mb:1}} variant='body2'>{categoryText} does not exist</Typography> 
+        <Button sx={{mb:1}} variant='contained' fullWidth onClick={() => setCurrStep(1)}>Add New</Button>
+        <Button variant='contained' fullWidth onClick={() => resetText()}>Go Back</Button>
+
+        <Typography sx={{mb:1}} variant='caption'>or continue below to add entry without category</Typography> 
+
+        </Card>
+        </Box>}
+
+    <Box sx={{  overflow: 'hidden', overflowY: 'scroll', alignItems: 'flex-start', m: 1, display: 'flex', flexDirection: 'column' , flexGrow:1}}>
+       
+        <CategoryList  selectedCategory={selectedCategory} categoryInput={categoryText} addCategory={addCategory} categories={filtered}/>
+    </Box>
+
+    <Box sx={{position: 'sticky', bottom: '0', p:1, width:'100%'}}>
+    <Paper sx={{p:0.5}} elevation={10}>
+
+
+    <TextField onChange={onChange} size='small' margin='dense' fullWidth placeholder='What are you working on?' />
+    <Button  color='success' size='large' onClick={onStart} variant='contained' sx={{ mt: 1 }} fullWidth>Start</Button>
+    </Paper>
+    </Box>
+    </Box>
+    )
+    const steps = [addNewEntryForm, 
+    <AddNewCategory selectCategory={selectCategory} resetText={resetText} color={color} setColor={setColor}
+    category={categoryText} setStep={setStep}/>, 
+    <AddSubCategory  resetText={resetText}  categoryName={categoryText} color={color} setStep={setStep}/>]
+    
+    return <Box sx={{ height: '100%', flexDirection: 'column'}}>
+            <AppBar>
+
+            <Toolbar>
+              {currStep !== 0 && <IconButton onClick={back} size='small'><ArrowBackIosNewIcon/></IconButton>}  
+              <Typography fontWeight={'bold'}>Add Entry</Typography><IconButton sx={{ ml: 'auto' }} onClick={toggleOpen}><KeyboardArrowDownIcon /></IconButton>
             </Toolbar>
-            <Box sx={{p:1}}>
-
-            <TextField autoFocus onChange={onChange} size='small' margin='dense' fullWidth placeholder='What are you working on?' />
-            <TextField onChange={onCatChange} size='small' fullWidth placeholder='Add Category' />
-
-            <Box sx={{ m: 1 }}>
-                {filtered.map((c) => <Chip key={c.categoryId} icon={selectedCategory === c.categoryName ? <CheckCircleIcon/> : <RadioButtonUncheckedIcon/>} onClick={()=>addCategory(c)} label={c.categoryName} sx={{ background: c.color, mr: 1, mb: 1 }} />)}
-            </Box>
-            <Button color='success' size='large' onClick={onStart} variant='contained' sx={{ mt: 1 }} fullWidth>Start</Button>
-            </Box>
+            
+            </AppBar>
+            <Toolbar/>
+         
+            
+                {steps[currStep]}
+                
         </Box>
 
 
-    </Box>
 }

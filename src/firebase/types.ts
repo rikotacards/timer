@@ -22,8 +22,16 @@ export interface Entry {
 
 export interface Category {
     categoryName: string;
-    child?: string;
+    children?: string[];
     parent?: string;
     color: string;
     categoryId: string;
 }
+
+export interface AddCategoryRequestBody {
+    categoryName: string;
+    children?: string[];
+    parent?: string;
+    color: string;
+}
+

@@ -5,7 +5,7 @@ import { db, UID } from '../firebase/firebaseConfig';
 import { IS_OFFLINE } from '../App';
 
 import { useIsNarrow } from '../utils/isMobile';
-import { Box,  Paper, Typography } from '@mui/material';
+import { Box,  Chip,  Paper, Typography } from '@mui/material';
 import { mockEntries } from '../mocks/mockEntries';
 import { groupByDate } from '../utils/groupByDate';
 import { useAppDataContext, useTopAppBarContext } from '../Providers/contextHooks';
@@ -85,13 +85,14 @@ export const Entries: React.FC = () => {
                     const displayed = dateFormatter.format(dateValue)
                     return <Box key={date}>
                         <Box sx={{
-                            zIndex: '10',
+                            zIndex:'10',
                             display: 'flex',
                             alignItems: 'center',
                             width: '100%',
                             justifyContent: 'flex-start',
                             flexDirection: 'row',
-                            position: 'sticky', top: 54 /* Ensure it's above other content */
+                            position: 'sticky', 
+                            top: 54 /* Ensure it's above other content */
                         }}>
                             
                             <Paper sx={{ width: '100%', p: 1, zIndex: 1000, alignItems: 'center', flexDirection: 'column' }} elevation={0}>
@@ -103,13 +104,14 @@ export const Entries: React.FC = () => {
                                 <Typography sx={{m:0}} variant='caption'>{formatted}</Typography>
                                 <Typography sx={{m:1}} variant='caption'>{rounded}%</Typography>
                                 </Box>
-                                <Box sx={{display: 'flex'}}>
+                                <Box sx={{display: 'flex',                            overflowX: 'scroll',
+}}>
                                     {categoryList.map((key) => {
                                         const totalTime = totalTimeInSeconds(categories[key])
                                         const format = formatTime(totalTime);
                                         return (
                                             <Box sx={{display: 'flex', alignItems: 'center'}}>
-                                                <Typography fontWeight={700} variant='caption'>{key}:</Typography>
+                                                <Chip size='small' label={key}/>
                                                 <Typography variant='caption' sx={{m:1}}>{format}</Typography>
                                             </Box>
                                         )

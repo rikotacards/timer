@@ -14,10 +14,11 @@ import { NavLink } from 'react-router-dom'
 
 export const BottomAppBar: React.FC = () => {
     const location = useLocation()
-    const { onSetComponent, toggleOpen, onSetAnchor } = useDrawerContext();
+    const { onSetComponent, toggleOpen, onSetAnchor , onSetPaperProps} = useDrawerContext();
     const { openEntry } = useAppDataContext();
     const onClick = () => {
-        onSetComponent(<Box><NewEntryFormNarrow /></Box>)
+        onSetComponent(<NewEntryFormNarrow />)
+        onSetPaperProps({sx:{height: '100%'}})
         onSetAnchor('bottom')
         toggleOpen()
     }

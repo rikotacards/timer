@@ -14,7 +14,7 @@ export const CategoryNewForm: React.FC<CategoryNewFormProps> = ({onHandleClose, 
     const [color, setColor] = React.useState<string>('');
     const snackbar = useSnackbarContext();
     const onAddCategory = async() => {
-       await addCategory({categoryName, color, categoryId: ''})
+       await addCategory({categoryName, color})
        onHandleClose();
        snackbar.onSetComponent(<Alert variant='filled' severity='success'>{categoryName} added</Alert>)
        snackbar.toggleOpen();

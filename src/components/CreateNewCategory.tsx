@@ -2,7 +2,7 @@ import { Alert, Box, Button, Chip, Input, Typography } from '@mui/material';
 import React from 'react';
 import { ColorPicker } from './ColorPicker';
 import { addCategory } from '../firebase/db';
-import { useSnackbarContext } from '../Providers/contextHooks';
+import { useAppDataContext, useSnackbarContext } from '../Providers/contextHooks';
 interface CreateNewCategoryProps {
     categoryName?: string
     onCancel: () => void;
@@ -11,12 +11,13 @@ interface CreateNewCategoryProps {
 export const CreateNewCategory: React.FC<CreateNewCategoryProps> = ({categoryName, onCancel, onHandleClose}) => {
     const [text, setText] = React.useState(categoryName || '')
     const snackbar = useSnackbarContext();
-
+    const {triggerRefetch} = useAppDataContext();
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setText(e.target.value)
     }
     const onAddCategory = async() => {
-        await addCategory({categoryName:text, color, categoryId: ''})
+        await addCategory({categoryName:text, color})
+        triggerRefetch()
         onHandleClose();
         snackbar.onSetComponent(<Alert variant='filled' severity='success'>{categoryName} added</Alert>)
         snackbar.toggleOpen();

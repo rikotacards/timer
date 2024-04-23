@@ -16,6 +16,7 @@ interface Value {
     disableBackButton: () => void;
     activateBackButton: () => void;
     enableBackButton: boolean;
+    triggerRefetch: () => void;
     setIsRunning: React.Dispatch<React.SetStateAction<boolean>>
 }
 export const AppDataContext = React.createContext({} as Value);
@@ -30,11 +31,16 @@ export const AppDataProvider: React.FC<AppDataProviderProps> = ({ children }) =>
     const [categories, setCategories] = React.useState<Category[]>([]);
     const [isRunning, setIsRunning] = React.useState(false);
     const [entries, setEntries] = React.useState([] as OpenEntry[])
+    const [refetch, setRefetch] = React.useState(false);
+
     const [isLoadingEntries, setIsLoadingEntries]= React.useState(true);
     const [openEntry, setOpenEntry] = React.useState<OpenEntry>({} as OpenEntry)
     const [enableBackButton, setEnableBackButton] = React.useState(false);
     const activateBackButton = () => {
         setEnableBackButton(true)
+    }
+    const triggerRefetch = () => {
+        setRefetch(!refetch)
     }
     const disableBackButton = () => {
         setEnableBackButton(false)
@@ -68,9 +74,10 @@ export const AppDataProvider: React.FC<AppDataProviderProps> = ({ children }) =>
         }).catch((e) => console.log(e)).finally(() => {
             setLoadingCategories(false)
         })
-    }, [])
+    }, [refetch])
     const value: Value = {
         openEntry, 
+        triggerRefetch,
         disableBackButton,
         activateBackButton,
         enableBackButton,

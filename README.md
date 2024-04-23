@@ -76,6 +76,8 @@ users/{uid}/categories/{categoryId}
 
 # Categories
 
+When searching firebase for entries wtih certain categories. The entry should have flat list of categories. eg categories = [name1, name2]
+
 Each entry can only have 1 category
 
 ```

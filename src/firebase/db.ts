@@ -1,6 +1,6 @@
-import { setDoc, updateDoc, deleteDoc, getDocs, doc, addDoc, collection, serverTimestamp, onSnapshot, query, orderBy, where } from "firebase/firestore";
+import { setDoc, updateDoc, deleteDoc, getDocs, doc, addDoc, collection, serverTimestamp, onSnapshot, query, orderBy, where, arrayUnion } from "firebase/firestore";
 import { UID, db } from "./firebaseConfig";
-import { OpenEntry , Category} from "./types";
+import { OpenEntry , Category, AddCategoryRequestBody} from "./types";
 
 export interface Entry {
     desc: string;
@@ -129,18 +129,26 @@ export const getEntriesOnSnapshot = () => {
 
 
 // categories
-export const addCategory = async(arg: Category) => {
+export const addCategory = async(arg: AddCategoryRequestBody) => {
     try {
         if(!arg.categoryName){
             throw new Error("Category name cannot be empty.")
         }
         const docRef = await addDoc(collection(db, "users", UID, "categories"), arg)
-        console.log('add category', arg)
         return docRef
     } catch (e) {
+        throw new Error('Failed to add category')
+    }
+}
+export const deleteCategory = async(categoryId: string) => {
+    try {
+
+        await deleteDoc(doc(db, "users", UID, "categories", categoryId))
+    } catch(e) {
         alert(e)
     }
 }
+
 export const getCategories = async() => {
     const querySnapshot = await getDocs(collection(db, "users", UID, "categories"));
     const res: Category[] = [];
@@ -148,6 +156,35 @@ export const getCategories = async() => {
         res.push({...doc.data(), categoryId: doc.id} as Category)
     });
     return res
+}
+export const addChildToParent = async(parentCategoryId: string, childCategoryId: string) => {
+    const docRef = doc(db, "users", UID, "categories", parentCategoryId);
+    if(childCategoryId === parentCategoryId){
+        throw new Error("Subcategory cannot be same as parent category")
+    }
+    try {
+        await updateDoc(docRef, {
+            children: arrayUnion(childCategoryId)
+        })
+    } catch {
+        alert('errror adding sub')
+    }
+}
+interface addSubCategoryArgs {
+    parentCategoryId: string, 
+    childCategory: AddCategoryRequestBody
+}
+// does the two things of adding a new category
+// use this in frontend ui to add sub category
+export const addSubCategory = async(arg: addSubCategoryArgs) => {
+    try {
+       const childCategory = await addCategory(arg.childCategory);
+        await addChildToParent(arg.parentCategoryId, childCategory.id)
+
+    }catch(e){
+        alert(e)
+    }
+
 }
 
 export const updateCategory = () => {

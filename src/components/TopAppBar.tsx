@@ -23,8 +23,11 @@ const SidebarList: React.FC = () => {
     )
 
 }
-
-export const TopAppBar: React.FC = () => {
+interface TopAppBarProps {
+    title?: string;
+    enableBack?: boolean;
+}
+export const TopAppBar: React.FC<TopAppBarProps> = ({title, enableBack}) => {
     const {enableBackButton} = useAppDataContext();
     const { onSetComponent, toggleOpen, onSetAnchor } = useDrawerContext();
     const onClick = () => {
@@ -37,12 +40,16 @@ export const TopAppBar: React.FC = () => {
     return (
         <AppBar elevation={0} position='fixed'>
             <Toolbar sx={{height:20, overflow:'hidden', display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                { enableBackButton && <IconButton size='small'>
+                { (enableBackButton || enableBack) && <IconButton size='small'>
                     <ArrowBackIosNewIcon fontSize='small' onClick={() => nav(-1)}/></IconButton>}
                 {!isNarrow && <IconButton onClick={onClick}>
                     <MenuIcon />
                 </IconButton>}
-                <Typography fontWeight={'bold'}>Linear</Typography>
+                <Typography fontWeight={'bold'}>{title ||'Linear'}</Typography>
+                <Box sx={{marginLeft: 'auto'}}>
+
+                <IconButton onClick={() => nav('app-settings')}><MenuIcon/></IconButton>
+                </Box>
             </Toolbar>
         </AppBar>
     )

@@ -14,6 +14,8 @@ import {
 import { StatsByCategory } from './components/StatsByCategory';
 import { TopAppBarProvider } from './Providers/TopAppBarProvider';
 import { Entries } from './components/Entries';
+import { NewEntryFormNarrow } from './components/NewEntryFormNarrow';
+import { SettingsPage } from './pages/SettingsPage';
 
 const router = createBrowserRouter([
   {
@@ -32,6 +34,14 @@ const router = createBrowserRouter([
       {
         path: 'stats',
         element: <StatsByCategory/>
+      }, 
+      {
+        path: 'add-entry',
+        element: <NewEntryFormNarrow/>
+      },
+      {
+        path: 'app-settings',
+        element: <SettingsPage/>
       }
     ]
   }

@@ -1,4 +1,4 @@
-import { Alert, Box, Button, Card, Chip, IconButton, Popover, TextField, Tooltip, Typography } from '@mui/material';
+import { Alert, Box, Button, Card, Divider, IconButton, Popover, TextField, Tooltip, Typography } from '@mui/material';
 import React from 'react';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import { MoreVertOutlined } from '@mui/icons-material';
@@ -10,6 +10,7 @@ import {  useDrawerContext, useSnackbarContext, useTopAppBarContext } from '../P
 import { MoreMenuNarrow } from './MoreMenuNarrow';
 import { useNavigate } from 'react-router';
 import { CategoryTopAppBar } from './CategoryTopAppBar';
+import { CategoryChips } from './CategoryChips';
 export const EntryNarrow: React.FC<OpenEntry & { hideTimestamp: boolean }> = ({ hideTimestamp, desc, entryId, startTime, endTime, categories }) => {
     const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
     const snackbar = useSnackbarContext();
@@ -93,21 +94,19 @@ export const EntryNarrow: React.FC<OpenEntry & { hideTimestamp: boolean }> = ({ 
 
 
                 </Box>
-
-
                 <Box sx={{ mt: 1, ml: 0, alignContent: 'center' }}>
-                    {categories?.map((c, i) => <Chip onClick={() =>onChipClick(c.categoryName)}
-                    key={c.categoryId + i} size='small' label={c.categoryName} sx={{ background: c.color, mr: 0.5 }} />)}
-                    <Tooltip title='Add category'>
+                   <CategoryChips onChipClick={onChipClick} entryCategories={categories}/>
+                    {false && <Tooltip title='Add category'>
                         <IconButton onClick={handleClick} id={id} size='small'>
                             <AddCircleOutlineIcon color='action' fontSize='small' />
                         </IconButton>
-                    </Tooltip>
+                    </Tooltip>}
                 </Box>
             </Box>
 
 
         </Card>
+        <Divider sx={{width: '100%'}}/>
         <Popover id={id}
             anchorEl={anchorEl}
             open={open}
