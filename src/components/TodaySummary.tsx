@@ -1,4 +1,4 @@
-import { Box, Card, Chip, LinearProgress, Typography } from '@mui/material';
+import { Box, Card, Chip, LinearProgress, Slider, Stack, Toolbar, Typography } from '@mui/material';
 import React from 'react';
 import { Entry as EntryType } from '../firebase/types';
 import { useAppDataContext, useTopAppBarContext } from '../Providers/contextHooks';
@@ -18,6 +18,7 @@ import { styled } from '@mui/material/styles';
 import { TopAppBar } from './TopAppBar';
 
 import { EntryNarrow } from './EntryNarrow';
+import { IOSSlider } from './PercentSlider';
 interface TodaySummaryProps {
     entriesPassedIn?: EntryType[];
 }
@@ -39,6 +40,7 @@ function PieCenterLabel({ children }: { children: React.ReactNode }) {
         </StyledText>
     );
 }
+
 
 // Considered doing a version where you just pass in the dates
 // here we assume we pass in a group of dates belonging to the same day
@@ -82,48 +84,54 @@ export const TodaySummary: React.FC<TodaySummaryProps> = () => {
         return <LinearProgress />
     }
     return (
-        <Box>
+        <Box sx={{m:1}}>
             <Typography variant='body2' color='GrayText'>{today.toDateString()}</Typography>
-            <Typography variant='h6' fontWeight={'bold'}>
+            <Typography sx={{mb:1}} variant='h4' fontWeight={'bold'}>
                 {'Summary'}
             </Typography>
 
-            <Card elevation={5} sx={{ p: 1, m: 0, mb:2 }}>
-                <Typography variant='body1'>You have logged {percentOfDayLogged}% of your day.</Typography>
-                <Typography variant='body1'>Time logged: {formattedTotalTime}</Typography>
-                <Typography variant='body1'>Total entries: {totalEntries}</Typography>
+            <Card elevation={5} sx={{ p: 2, mb:2, display: 'flex', flexDirection: 'column' }}>
+                <Typography variant='body1' fontWeight={'bold'} sx={{pb:2, fontWeight:500}}>{percentOfDayLogged}% of day logged</Typography>
+                <LinearProgress sx={{mb:1}} variant='determinate' value={percentOfDayLogged}/>
+                <Typography variant='caption' color='GrayText'>{formattedTotalTime} of 24 hours logged</Typography>
+                <Typography variant='caption' color='GrayText'>Entries: {totalEntries}</Typography>
 
-                <Box sx={{ display: 'flex', flexGrow: 1 }}>
-                  
-                        
-                    <PieChart
-                        slotProps={{ legend: { hidden: true } }}
-                        height={200}
-                        series={[
-                            {
-                                data:
-                                    [...pieCharData,
-                                    { label: 'Unlogged', value: 100 - percentOfDayLogged, color: 'black' }
-
-                                    ],
-                                innerRadius: 60,
-                                paddingAngle: 0
-
-                            }
-                        ]}
-
-                    >
-                        <PieCenterLabel>{percentOfDayLogged}% logged</PieCenterLabel>
-
-                    </PieChart>
-
-
-                </Box>
               
 
             </Card>
-            <Typography fontWeight={'bold'}>By Category</Typography>
-            <Card elevation={10} sx={{mt:1, p:2, mb:1}}>
+            <Typography variant='h6' sx={{mb:1}} fontWeight={'bold'}>By Category</Typography>
+            <Card elevation={5} sx={{ p:2, mb:1}}>
+                <Stack textAlign={'center'} direction='row'>
+
+          <Box flexGrow={1} sx={{  display: 'flex', justifyContent: 'flex-end', alignItems: 'flex-end' }}>
+                  
+                        
+                  <PieChart
+                      slotProps={{ legend: { hidden: true, } }}
+                      height={200}
+                      margin={{right: 5}}
+                      series={[
+                          {
+                              data:
+                                  [...pieCharData,
+                                  { label: 'Unlogged', value: 100 - percentOfDayLogged, color: 'black' }
+
+                                  ],
+                              innerRadius: 60,
+                              paddingAngle: 0
+
+                          }
+                      ]}
+
+                  >
+                      <PieCenterLabel>{percentOfDayLogged}% logged</PieCenterLabel>
+
+                  </PieChart>
+
+
+              </Box>
+              </Stack>
+
                 {
                     categoryIds.map((id) => {
                         const c = categories.find((x) => x.categoryId === id)
@@ -134,16 +142,18 @@ export const TodaySummary: React.FC<TodaySummaryProps> = () => {
                                 <Typography>{round(((totalTimeByCategory[id] / (24 * 60 * 60)) * 100))}%</Typography>
                                 <Typography sx={{ ml: 'auto' }}>{time}</Typography>
                             </Box>
+                            {/* <IOSSlider min={0} max={24} defaultValue={[11.4,12]} track={'normal'}/> */}
                         </Box>)
                     })
                 }
 
             </Card>
-            <Typography fontWeight={'bold'}>Acivities today</Typography>
+            <Typography sx={{mb:1}} variant='h5' fontWeight={'bold'}>Acivities today</Typography>
 
          
             {entries.map((e) => <EntryNarrow hideTimestamp={false} {...e} />)}
-
+                <Toolbar/>
+                <Toolbar/>
         </Box>
     )
 }
