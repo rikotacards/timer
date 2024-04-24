@@ -15,7 +15,8 @@ import { totalTimeInSeconds } from '../utils/totalTime';
 import { Entry as EntryType } from '../firebase/types';
 import { Entry } from './Entry';
 import { formatTime } from '../utils/formatTime';
-const dateFormatter = new Intl.DateTimeFormat('en-US', {
+import { TodaySummary } from './TodaySummary';
+export const dateFormatter = new Intl.DateTimeFormat('en-US', {
     year: 'numeric',
     month: 'short', // '2-digit' ensures two-digit representation of month
     day: '2-digit' // '2-digit' ensures two-digit representation of day
@@ -60,7 +61,7 @@ export const Entries: React.FC = () => {
     return (
 
         <div>
-
+            <TodaySummary/>
             {
                 dateStrings.map((date) => {
                     const dateValue = dateGroups[date].date
@@ -98,7 +99,7 @@ export const Entries: React.FC = () => {
                             <Paper sx={{ width: '100%', p: 1, zIndex: 1000, alignItems: 'center', flexDirection: 'column' }} elevation={0}>
                                 <Box sx={{display: 'flex', alignItems: 'center'}}>
 
-                                <Typography color='GrayText' fontWeight={'bold'} variant='caption' sx={{ mb: 0 }}>{displayed}</Typography>
+                                <Typography  fontWeight={'bold'} variant='h6' sx={{ mb: 0 }}>{displayed}</Typography>
                                 <Typography sx={{ ml: 1 }} variant='caption'>{count} entries</Typography>
                                 <Typography sx={{m:1}} variant='caption'>Total:</Typography>
                                 <Typography sx={{m:0}} variant='caption'>{formatted}</Typography>

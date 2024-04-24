@@ -13,9 +13,9 @@ import {
 } from "react-router-dom";
 import { StatsByCategory } from './components/StatsByCategory';
 import { TopAppBarProvider } from './Providers/TopAppBarProvider';
-import { Entries } from './components/Entries';
 import { NewEntryFormNarrow } from './components/NewEntryFormNarrow';
 import { SettingsPage } from './pages/SettingsPage';
+import { TodaySummary } from './components/TodaySummary';
 
 const router = createBrowserRouter([
   {
@@ -24,7 +24,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: '',
-        element: <Entries/>
+        element: <TodaySummary/>
 
       },
       {
