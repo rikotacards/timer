@@ -1,4 +1,4 @@
-import { AppBar, Box, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Toolbar, Typography } from '@mui/material';
+import { AppBar, Box, Divider, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Toolbar, Typography } from '@mui/material';
 import React from 'react';
 import MenuIcon from '@mui/icons-material/Menu';
 import { useAppDataContext, useDrawerContext } from '../Providers/contextHooks';
@@ -51,6 +51,7 @@ export const TopAppBar: React.FC<TopAppBarProps> = ({title, enableBack}) => {
                 <IconButton onClick={() => nav('app-settings')}><MenuIcon/></IconButton>
                 </Box>
             </Toolbar>
+            <Divider sx={{width: '100%'}}/>
         </AppBar>
     )
 }

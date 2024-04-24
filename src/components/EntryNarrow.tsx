@@ -65,7 +65,7 @@ export const EntryNarrow: React.FC<OpenEntry & { hideTimestamp: boolean }> = ({ 
         </Box> */}
 
 
-        <Card elevation={5} sx={{ width: '100%', display: 'flex', mt: 0, mb: 1,p:1, flexDirection: 'row' }}>
+        <Card elevation={0} sx={{background: 'transparent', width: '100%', display: 'flex', mt: 0, mb: 1,p:1, flexDirection: 'row' }}>
 
             <Box sx={{ width: '100%', p: 1, display: 'flex', flexDirection: 'column', justifyContent: 'left' }}>
 
@@ -106,7 +106,7 @@ export const EntryNarrow: React.FC<OpenEntry & { hideTimestamp: boolean }> = ({ 
 
 
         </Card>
-        <Divider sx={{width: '0'}}/>
+        <Divider sx={{width: '100%'}}/>
         <Popover id={id}
             anchorEl={anchorEl}
             open={open}

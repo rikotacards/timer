@@ -1,4 +1,4 @@
-import { Box, Card, Chip, LinearProgress, Slider, Stack, Toolbar, Typography } from '@mui/material';
+import { Box, Card, Chip, LinearProgress, Stack, Toolbar, Typography } from '@mui/material';
 import React from 'react';
 import { Entry as EntryType } from '../firebase/types';
 import { useAppDataContext, useTopAppBarContext } from '../Providers/contextHooks';
@@ -18,13 +18,16 @@ import { styled } from '@mui/material/styles';
 import { TopAppBar } from './TopAppBar';
 
 import { EntryNarrow } from './EntryNarrow';
-import { IOSSlider } from './PercentSlider';
+// import { IOSSlider } from './PercentSlider';
+// import { Timeline } from './Timeline';
+// import {SingleTimeline} from './SingleTimeline';
 interface TodaySummaryProps {
     entriesPassedIn?: EntryType[];
 }
 const today = new Date();
 const endOfDay = new Date(today)
 endOfDay.setHours(0, 0, 0, 0)
+const ELEVATION = 2;
 const StyledText = styled('text')(({ theme }) => ({
     fill: theme.palette.text.primary,
     textAnchor: 'middle',
@@ -70,6 +73,8 @@ export const TodaySummary: React.FC<TodaySummaryProps> = () => {
     const percentOfDayLogged = round((totalTime / (24 * 60 * 60)) * 100)
     const categoryIds = Object.keys(entriesByCategoryId)
 
+    // Inline style for the color scale
+
     for (const key in entriesByCategoryId) {
 
         totalTimeByCategory[key] = totalTimeInSeconds(entriesByCategoryId[key])
@@ -77,60 +82,70 @@ export const TodaySummary: React.FC<TodaySummaryProps> = () => {
     const pieCharData = categoryIds.map((id) => {
         const c = categories.find((x) => x.categoryId === id)
         const time = totalTimeByCategory[id]
-        return ({ label: c?.categoryName, color: c?.color || 'green', value: round(time / (24 * 60 * 60) * 100) })
+        return ({ label: c?.categoryName, color: c?.color || 'grey', value: round(time / (24 * 60 * 60) * 100) })
     })
 
     if (fetching) {
         return <LinearProgress />
     }
     return (
-        <Box sx={{m:1}}>
+        <Box sx={{ m: 1 }}>
             <Typography variant='body2' color='GrayText'>{today.toDateString()}</Typography>
-            <Typography sx={{mb:1}} variant='h4' fontWeight={'bold'}>
+            <Typography sx={{ mb: 1 }} variant='h4' fontWeight={'bold'}>
                 {'Summary'}
             </Typography>
 
-            <Card elevation={5} sx={{ p: 2, mb:2, display: 'flex', flexDirection: 'column' }}>
-                <Typography variant='body1' fontWeight={'bold'} sx={{pb:2, fontWeight:500}}>{percentOfDayLogged}% of day logged</Typography>
-                <LinearProgress sx={{mb:1}} variant='determinate' value={percentOfDayLogged}/>
+            <Card elevation={ELEVATION} sx={{ p: 2, mb: 2, display: 'flex', flexDirection: 'column' }}>
+                <Box sx={{display: 'flex', flexDirection: 'row', textAlign: 'left', width: '100%'}}>
+                    <div>
+                        <Typography fontWeight={'bold'} sx={{mr:0.5}}>{percentOfDayLogged}%</Typography>
+                    </div>
+                    <Typography variant='body1' fontWeight={'bold'} sx={{ pb: 2, fontWeight: 500 }}> of day logged</Typography>
+                </Box>
+                <LinearProgress sx={{ mb: 1 }} variant='determinate' value={percentOfDayLogged} />
                 <Typography variant='caption' color='GrayText'>{formattedTotalTime} of 24 hours logged</Typography>
                 <Typography variant='caption' color='GrayText'>Entries: {totalEntries}</Typography>
 
-              
+
 
             </Card>
-            <Typography variant='h6' sx={{mb:1}} fontWeight={'bold'}>By Category</Typography>
-            <Card elevation={5} sx={{ p:2, mb:1}}>
+            <Typography variant='h6' sx={{ mb: 1 }} fontWeight={'bold'}>By Category</Typography>
+            {/* <SingleTimeline entries={entries}/> */}
+            <Card elevation={ELEVATION} sx={{ p: 2, mb: 1 }}>
+                <Box sx={{ mb: 1 }}>
+
+                    {/* <Timeline entries={entries}/> */}
+                </Box>
                 <Stack textAlign={'center'} direction='row'>
 
-          <Box flexGrow={1} sx={{  display: 'flex', justifyContent: 'flex-end', alignItems: 'flex-end' }}>
-                  
-                        
-                  <PieChart
-                      slotProps={{ legend: { hidden: true, } }}
-                      height={200}
-                      margin={{right: 5}}
-                      series={[
-                          {
-                              data:
-                                  [...pieCharData,
-                                  { label: 'Unlogged', value: 100 - percentOfDayLogged, color: 'black' }
-
-                                  ],
-                              innerRadius: 60,
-                              paddingAngle: 0
-
-                          }
-                      ]}
-
-                  >
-                      <PieCenterLabel>{percentOfDayLogged}% logged</PieCenterLabel>
-
-                  </PieChart>
+                    <Box flexGrow={1} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'flex-end' }}>
 
 
-              </Box>
-              </Stack>
+                        <PieChart
+                            slotProps={{ legend: { hidden: true, } }}
+                            height={200}
+                            margin={{ right: 5 }}
+                            series={[
+                                {
+                                    data:
+                                        [...pieCharData,
+                                        { label: 'Unlogged', value: 100 - percentOfDayLogged, color: 'black' }
+
+                                        ],
+                                    innerRadius: 60,
+                                    paddingAngle: 0
+
+                                }
+                            ]}
+
+                        >
+                            <PieCenterLabel>{percentOfDayLogged}% logged</PieCenterLabel>
+
+                        </PieChart>
+
+
+                    </Box>
+                </Stack>
 
                 {
                     categoryIds.map((id) => {
@@ -138,7 +153,7 @@ export const TodaySummary: React.FC<TodaySummaryProps> = () => {
                         const time = formatTime(totalTimeByCategory[id])
                         return (<Box>
                             <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', mb: 1 }}>
-                                <Chip sx={{mr:1, backgroundColor: c?.color }} label={c?.categoryName || 'NA'} />
+                                <Chip sx={{ mr: 1, backgroundColor: c?.color }} label={c?.categoryName || 'NA'} />
                                 <Typography>{round(((totalTimeByCategory[id] / (24 * 60 * 60)) * 100))}%</Typography>
                                 <Typography sx={{ ml: 'auto' }}>{time}</Typography>
                             </Box>
@@ -148,12 +163,14 @@ export const TodaySummary: React.FC<TodaySummaryProps> = () => {
                 }
 
             </Card>
-            <Typography sx={{mb:1}} variant='h5' fontWeight={'bold'}>Acivities today</Typography>
+            <Typography sx={{ mb: 1 }} variant='h6' fontWeight={'bold'}>Acivities today</Typography>
 
-         
-            {entries.map((e) => <EntryNarrow hideTimestamp={false} {...e} />)}
-                <Toolbar/>
-                <Toolbar/>
+            <Card elevation={ELEVATION}>
+
+                {entries.map((e) => <EntryNarrow hideTimestamp={false} {...e} />)}
+            </Card>
+            <Toolbar />
+            <Toolbar />
         </Box>
     )
 }
