@@ -140,6 +140,15 @@ export const addCategory = async(arg: AddCategoryRequestBody) => {
         throw new Error('Failed to add category')
     }
 }
+export const editCategory = async(categoryId: string,arg: Partial<AddCategoryRequestBody> ) => {
+    const ref = doc(db, "users", UID, "categories", categoryId)
+    try {
+        const docRef = await updateDoc(ref, arg)
+        return docRef
+    } catch (e) {
+        throw new Error('Failed to add category')
+    }
+}
 export const deleteCategory = async(categoryId: string) => {
     try {
 

@@ -90,15 +90,15 @@ export const TodaySummary: React.FC<TodaySummaryProps> = () => {
     }
     return (
         <Box sx={{ m: 1 }}>
-            <Typography variant='body2' color='GrayText'>{today.toDateString()}</Typography>
+            <Typography variant='body2' fontWeight={600} color='GrayText'>{today.toDateString()}</Typography>
             <Typography sx={{ mb: 1 }} variant='h4' fontWeight={'bold'}>
                 {'Summary'}
             </Typography>
 
-            <Card elevation={ELEVATION} sx={{ p: 2, mb: 2, display: 'flex', flexDirection: 'column' }}>
-                <Box sx={{display: 'flex', flexDirection: 'row', textAlign: 'left', width: '100%'}}>
+            <Card elevation={ELEVATION} sx={{ borderRadius: 3, p: 2, mb: 2, display: 'flex', flexDirection: 'column' }}>
+                <Box sx={{ display: 'flex', flexDirection: 'row', textAlign: 'left', width: '100%' }}>
                     <div>
-                        <Typography fontWeight={'bold'} sx={{mr:0.5}}>{percentOfDayLogged}%</Typography>
+                        <Typography fontWeight={'bold'} sx={{ mr: 0.5 }}>{percentOfDayLogged}%</Typography>
                     </div>
                     <Typography variant='body1' fontWeight={'bold'} sx={{ pb: 2, fontWeight: 500 }}> of day logged</Typography>
                 </Box>
@@ -111,7 +111,7 @@ export const TodaySummary: React.FC<TodaySummaryProps> = () => {
             </Card>
             <Typography variant='h6' sx={{ mb: 1 }} fontWeight={'bold'}>By Category</Typography>
             {/* <SingleTimeline entries={entries}/> */}
-            <Card elevation={ELEVATION} sx={{ p: 2, mb: 1 }}>
+            <Card elevation={ELEVATION} sx={{ borderRadius: 3, p: 2, mb: 1 }}>
                 <Box sx={{ mb: 1 }}>
 
                     {/* <Timeline entries={entries}/> */}
@@ -166,7 +166,7 @@ export const TodaySummary: React.FC<TodaySummaryProps> = () => {
             <Typography sx={{ mb: 1 }} variant='h6' fontWeight={'bold'}>Acivities today</Typography>
 
             <Card elevation={ELEVATION}>
-
+                {entries.length === 0 && <Typography variant='body2'>No entries yet.</Typography>}
                 {entries.map((e) => <EntryNarrow hideTimestamp={false} {...e} />)}
             </Card>
             <Toolbar />
