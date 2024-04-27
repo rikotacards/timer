@@ -158,7 +158,7 @@ export const TodaySummary: React.FC<TodaySummaryProps> = () => {
         color: c?.color,
         fontWeight:600,
         background: c?.color+"34",  mr: 1 }} label={c?.categoryName || 'NA'} />
-                                <Typography>{round(((totalTimeByCategory[id] / (24 * 60 * 60)) * 100))}%</Typography>
+                                <Typography color='GrayText'>{round(((totalTimeByCategory[id] / (24 * 60 * 60)) * 100))}%</Typography>
                                 <Typography sx={{ ml: 'auto' }}>{time}</Typography>
                             </Box>
                             {/* <IOSSlider min={0} max={24} defaultValue={[11.4,12]} track={'normal'}/> */}
