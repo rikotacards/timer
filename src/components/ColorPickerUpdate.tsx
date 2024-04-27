@@ -31,7 +31,7 @@ export const ColorPickerUpdate: React.FC<ColorPickerPropsUpdate> = ({ categoryId
         }
     }
     return <Box>
-        {defaultColors.map((c, i) => <IconButton onClick={() => onClick(categoryId, c.dark)} sx={{ m: 1, borderRadius: '100%', background: c.dark, height: 30, width: 30 }}>
+        {defaultColors.map((c) => <IconButton onClick={() => onClick(categoryId, c.dark)} sx={{ m: 1, borderRadius: '100%', background: c.dark, height: 30, width: 30 }}>
             <Zoom in={c.dark === (selectedColor|| currColor)}>
                 <CheckIcon fontSize='small' />
             </Zoom>
