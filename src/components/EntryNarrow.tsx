@@ -84,11 +84,9 @@ export const EntryNarrow: React.FC<OpenEntry & { hideTimestamp: boolean }> = ({ 
                             <Typography color='GrayText' variant='caption'>{endDate}</Typography>
 
                         </Box>}
-                    </Box>
-
-
+                    </Box> 
                     <Box flexDirection={'row'} display='flex' sx={{ ml: 'auto' }}>
-                        <Typography  variant='body1' sx={{ mr: 1 }}>{formattedDuration}</Typography>
+                        <Typography fontWeight={'bold'}  variant='body1' sx={{ mr: 1 }}>{formattedDuration}</Typography>
                                 <MoreVertOutlined onClick={onMoreClick} />
                     </Box>
 
