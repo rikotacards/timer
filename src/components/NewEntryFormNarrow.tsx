@@ -10,6 +10,7 @@ import { IS_OFFLINE } from '../App';
 import { AddNewCategory } from './AddNewCategory';
 import { AddSubCategory } from './AddSubCategory';
 import { CategoryList } from './CategoryList';
+import { flattenCategories } from '../utils/flattenCategories';
 const mockCategories = [{
     categoryName: 'work',
     color: '',
@@ -34,21 +35,21 @@ export const NewEntryFormNarrow: React.FC = () => {
     const s = useSnackbarContext();
     const [desc, setDesc] = React.useState("");
     const [currStep, setCurrStep] = React.useState(0)
-   
+
     const setStep = (step: number) => {
         setCurrStep(step)
     }
     const back = () => {
-        if(currStep > 0){
+        if (currStep > 0) {
 
-            setCurrStep(currStep-1)
+            setCurrStep(currStep - 1)
             resetText();
         }
     }
     React.useEffect(() => {
-        
+
     }, [])
-    
+
     const { toggleOpen } = useDrawerContext();
     const { openEntry, setOpenEntry, categories } = useAppDataContext();
     console.log(categories)
@@ -57,7 +58,7 @@ export const NewEntryFormNarrow: React.FC = () => {
     const onCatChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setCategoryText(e.target.value);
         e.preventDefault()
-      }
+    }
     const resetText = () => {
         setCategoryText('')
     }
@@ -70,16 +71,16 @@ export const NewEntryFormNarrow: React.FC = () => {
         setSelectedCategory(categoryName)
     }
     const filtered = (IS_OFFLINE ? mockCategories : categories).filter((cat) => cat.categoryName.indexOf(categoryText) >= 0)
-   console.log(categories, 'filtered', filtered, 'categorytext', categoryText)
+    console.log(categories, 'filtered', filtered, 'categorytext', categoryText)
     const onStart = async () => {
         s.onSetComponent(<Alert variant='filled' severity='success'>Logging started</Alert>)
         s.toggleOpen();
 
 
-       
+
         try {
             toggleOpen();
-            const ref = await AddOpenEntry({...openEntry, desc})
+            const ref = await AddOpenEntry({ ...openEntry, desc })
             if (ref) {
                 console.log('adding open entry', ref)
                 setOpenEntry(ref as unknown as OpenEntry)
@@ -91,63 +92,72 @@ export const NewEntryFormNarrow: React.FC = () => {
     const addCategory = (category: Category) => {
         console.log('category added to UI', category.categoryName)
         setSelectedCategory(category.categoryName)
-        setOpenEntry((p) => ({ ...p, categories: [category] }))
+        // eslint-disable-next-line react-hooks/rules-of-hooks
+        const flattened = flattenCategories([category], categories)
+        setOpenEntry((p) => ({ ...p, categories: flattened }))
+        console.log('flattened', flattened)
         console.log('after setting', openEntry)
         if (openEntry && openEntry.entryId) {
             console.log('setting', openEntry)
-            updateOpenEntry({ ...openEntry, categories: [category] })
+            updateOpenEntry({ ...openEntry, categories: flattened })
         }
     }
 
-    const addNewEntryForm = (<Box sx={{p:1,display: 'flex', flexDirection: 'column', height: '100%'}}> 
-    <TextField value={categoryText}  onChange={onCatChange} size='small' fullWidth placeholder='Search categories' />
-    {(categoryText.length === 0 ? categories : filtered).length === 0 && <Box sx={{p:1, display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'center'}}>
-        <Card sx={{width: '100%', p:2, textAlign: 'center'}}>
+    const addNewEntryForm = (<Box sx={{ p: 1, display: 'flex', flexDirection: 'column', height: '100%' }}>
+        <TextField
+            value={categoryText}
+            onChange={onCatChange}
+            size='small'
+            fullWidth
+            placeholder='Search categories' />
+        {(categoryText.length === 0 ? categories : filtered).length === 0 &&
+            <Box sx={{ p: 1, display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'center' }}>
+                <Card sx={{ width: '100%', p: 2, textAlign: 'center' }}>
+                    <Typography sx={{ mb: 1 }} variant='body2'>{categoryText} does not exist</Typography>
+                    <Button sx={{ mb: 1 }} variant='contained' fullWidth onClick={() => setCurrStep(1)}>Add New</Button>
+                    <Button variant='contained' fullWidth onClick={() => resetText()}>Go Back</Button>
+                    <Typography sx={{ mb: 1 }} variant='caption'>or continue below to add entry without category</Typography>
 
-        <Typography sx={{mb:1}} variant='body2'>{categoryText} does not exist</Typography> 
-        <Button sx={{mb:1}} variant='contained' fullWidth onClick={() => setCurrStep(1)}>Add New</Button>
-        <Button variant='contained' fullWidth onClick={() => resetText()}>Go Back</Button>
+                </Card>
+            </Box>}
 
-        <Typography sx={{mb:1}} variant='caption'>or continue below to add entry without category</Typography> 
+        <Box sx={{ overflow: 'hidden', overflowY: 'scroll', alignItems: 'flex-start', m: 1, display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
+            <CategoryList selectedCategory={selectedCategory} 
+            categoryInput={categoryText} 
+            addCategory={addCategory} 
+            categories={filtered} />
+        </Box>
 
-        </Card>
-        </Box>}
-
-    <Box sx={{  overflow: 'hidden', overflowY: 'scroll', alignItems: 'flex-start', m: 1, display: 'flex', flexDirection: 'column' , flexGrow:1}}>
-       
-        <CategoryList  selectedCategory={selectedCategory} categoryInput={categoryText} addCategory={addCategory} categories={filtered}/>
-    </Box>
-
-    <Box sx={{position: 'sticky', bottom: '0', p:1, width:'100%'}}>
-    <Paper sx={{p:0.5}} elevation={10}>
+        <Box sx={{ position: 'sticky', bottom: '0', p: 1, width: '100%' }}>
+            <Paper sx={{ p: 0.5 }} elevation={10}>
 
 
-    <TextField onChange={onChange} size='small' margin='dense' fullWidth placeholder='What are you working on?' />
-    <Button  color='success' size='large' onClick={onStart} variant='contained' sx={{ mt: 1 }} fullWidth>Start</Button>
-    </Paper>
-    </Box>
+                <TextField onChange={onChange} size='small' margin='dense' fullWidth placeholder='What are you working on?' />
+                <Button color='success' size='large' onClick={onStart} variant='contained' sx={{ mt: 1 }} fullWidth>Start</Button>
+            </Paper>
+        </Box>
     </Box>
     )
-    const steps = [addNewEntryForm, 
-    <AddNewCategory selectCategory={selectCategory} resetText={resetText} color={color} setColor={setColor}
-    category={categoryText} setStep={setStep}/>, 
-    <AddSubCategory  resetText={resetText}  categoryName={categoryText} color={color} setStep={setStep}/>]
-    
-    return <Box sx={{ height: '100%', flexDirection: 'column'}}>
-            <AppBar>
+    const steps = [addNewEntryForm,
+        <AddNewCategory selectCategory={selectCategory} resetText={resetText} color={color} setColor={setColor}
+            category={categoryText} setStep={setStep} />,
+        <AddSubCategory resetText={resetText} categoryName={categoryText} color={color} setStep={setStep} />]
+
+    return <Box sx={{ height: '100%', flexDirection: 'column' }}>
+        <AppBar>
 
             <Toolbar>
-              {currStep !== 0 && <IconButton onClick={back} size='small'><ArrowBackIosNewIcon/></IconButton>}  
-              <Typography fontWeight={'bold'}>Add Entry</Typography><IconButton sx={{ ml: 'auto' }} onClick={toggleOpen}><KeyboardArrowDownIcon /></IconButton>
+                {currStep !== 0 && <IconButton onClick={back} size='small'><ArrowBackIosNewIcon /></IconButton>}
+                <Typography fontWeight={'bold'}>Add Entry</Typography><IconButton sx={{ ml: 'auto' }} onClick={toggleOpen}><KeyboardArrowDownIcon /></IconButton>
             </Toolbar>
-            
-            </AppBar>
-            <Toolbar/>
-         
-            
-                {steps[currStep]}
-                
-        </Box>
+
+        </AppBar>
+        <Toolbar />
+
+
+        {steps[currStep]}
+
+    </Box>
 
 
 }

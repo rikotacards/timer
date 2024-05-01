@@ -6,17 +6,24 @@ import { CategoryEdit } from './CategoryEdit';
 import { OpenEntry } from '../firebase/types';
 import { deleteEntry } from '../firebase/db';
 import { formatTime } from '../utils/formatTime';
-import {  useDrawerContext, useSnackbarContext, useTopAppBarContext } from '../Providers/contextHooks';
+import { useDrawerContext, useSnackbarContext, useTopAppBarContext } from '../Providers/contextHooks';
 import { MoreMenuNarrow } from './MoreMenuNarrow';
 import { useNavigate } from 'react-router';
 import { CategoryTopAppBar } from './CategoryTopAppBar';
 import { CategoryChips } from './CategoryChips';
-export const EntryNarrow: React.FC<OpenEntry & { hideTimestamp: boolean }> = ({ hideTimestamp, desc, entryId, startTime, endTime, categories }) => {
+export const EntryNarrow: React.FC<OpenEntry & { hideTimestamp: boolean }> = ({
+    hideTimestamp,
+    desc,
+    entryId,
+    startTime,
+    endTime,
+    categories
+}) => {
     const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
     const snackbar = useSnackbarContext();
     const [isEdit, setIsEdit] = React.useState(false);
     const drawerContext = useDrawerContext()
-    const {onSetComponent} = useTopAppBarContext();
+    const { onSetComponent } = useTopAppBarContext();
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);
     };
@@ -65,7 +72,7 @@ export const EntryNarrow: React.FC<OpenEntry & { hideTimestamp: boolean }> = ({ 
         </Box> */}
 
 
-        <Card elevation={0} sx={{background: 'transparent', width: '100%', display: 'flex', mt: 0, mb: 1,p:1, flexDirection: 'row' }}>
+        <Card elevation={0} sx={{ background: 'transparent', width: '100%', display: 'flex', mt: 0, mb: 1, p: 1, flexDirection: 'row' }}>
 
             <Box sx={{ width: '100%', p: 1, display: 'flex', flexDirection: 'column', justifyContent: 'left' }}>
 
@@ -84,16 +91,16 @@ export const EntryNarrow: React.FC<OpenEntry & { hideTimestamp: boolean }> = ({ 
                             <Typography color='GrayText' variant='caption'>{endDate}</Typography>
 
                         </Box>}
-                    </Box> 
+                    </Box>
                     <Box flexDirection={'row'} display='flex' sx={{ ml: 'auto' }}>
-                        <Typography fontWeight={'bold'}  variant='body1' sx={{ mr: 1 }}>{formattedDuration}</Typography>
-                                <MoreVertOutlined onClick={onMoreClick} />
+                        <Typography fontWeight={'bold'} variant='body1' sx={{ mr: 1 }}>{formattedDuration}</Typography>
+                        <MoreVertOutlined onClick={onMoreClick} />
                     </Box>
 
 
                 </Box>
                 <Box sx={{ mt: 1, ml: 0, alignContent: 'center' }}>
-                   <CategoryChips onChipClick={onChipClick} entryCategories={categories}/>
+                    <CategoryChips onChipClick={onChipClick} entryCategories={categories} />
                     {false && <Tooltip title='Add category'>
                         <IconButton onClick={handleClick} id={id} size='small'>
                             <AddCircleOutlineIcon color='action' fontSize='small' />
@@ -104,7 +111,7 @@ export const EntryNarrow: React.FC<OpenEntry & { hideTimestamp: boolean }> = ({ 
 
 
         </Card>
-        <Divider sx={{width: '100%'}}/>
+        <Divider sx={{ width: '100%' }} />
         <Popover id={id}
             anchorEl={anchorEl}
             open={open}

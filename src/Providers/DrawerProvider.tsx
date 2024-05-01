@@ -4,7 +4,7 @@ interface DrawerContextProps {
     open: boolean;
     toggleOpen: () => void;
     onSetComponent: (component: React.ReactNode) => void;
-    onSetAnchor:(anchor: DrawerProps['anchor']) => void;
+    onSetAnchor: (anchor: DrawerProps['anchor']) => void;
     close: () => void;
     onSetPaperProps: (paperProps: PaperProps) => void;
 }
@@ -18,11 +18,11 @@ export const DrawerProvider: React.FC<DrawerProviderProps> = ({ children }) => {
     const [open, setOpen] = React.useState(false);
     const [anchor, setAnchor] = React.useState<DrawerProps['anchor']>()
     const [paperProps, setPaperProps] = React.useState<PaperProps>({} as PaperProps)
-    const onSetAnchor = (anchor: DrawerProps['anchor']) =>{
+    const onSetAnchor = (anchor: DrawerProps['anchor']) => {
         setAnchor(anchor)
     }
     const onSetPaperProps = (paperProps: PaperProps) => {
-        setPaperProps(paperProps); 
+        setPaperProps(paperProps);
     }
     const [component, setComponent] = React.useState<React.ReactNode | null>();
     const onSetComponent = React.useCallback((component: React.ReactNode) => {
@@ -39,16 +39,21 @@ export const DrawerProvider: React.FC<DrawerProviderProps> = ({ children }) => {
         toggleOpen,
         onSetComponent,
         onSetAnchor,
-        close, 
+        close,
         onSetPaperProps,
         paperProps
     }
     return (
         <DrawerContext.Provider value={value}>
-            <Drawer PaperProps={paperProps} sx={{ position: 'relative'}} anchor={anchor} open={open} onClose={toggleOpen}>
+            <Drawer
+                PaperProps={paperProps}
+                sx={{ position: 'relative' }}
+                anchor={anchor}
+                open={open}
+                onClose={toggleOpen}>
                 {component}
             </Drawer>
-                {children}
+            {children}
         </DrawerContext.Provider>
     )
 }

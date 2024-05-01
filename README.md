@@ -76,17 +76,121 @@ users/{uid}/categories/{categoryId}
 
 # Categories
 
+The main conflict I have is, do we allow users to freely choose parent categories and sub categores. Or should these structures be strictly defined.
+
+### Freely defined example: 
+
+I have an entry, I can add `walk` to it, the app does not know that `walk` belongs under `sport` or `activity`. I have to then add `Activity` to it to establish that `walk` is a part of `acticity`
+
+<b>usecase for freely defined</b>
+
+I log `walk` and `gym`, I can also log `walk` and `transport`. 
+
+Benefit of this is I can see
+1. total time walked
+2. Time walked at the gym
+3. Time walked going to some place `transport`
+
+Negative: 
+
+* User needs 2 steps. 1. Add `walk`, add `activity`
+* How do I create a UI that is intuitive? 
+
+### Fixed Relationship Example: `activity > walking`
+
+I have an entry. If I add `walking`, the app knows that `walking` is a part of `activity`, because this relationship is defined when adding categories. 
+
+Benefit:
+
+1.  If the user knows what the child category should be, they just add it. Eg, user just adds `jog`
+2. More logical UI. User adds `activity` as parent category, then can add `running` later to establish that relatinship
+
+### Required steps for Fixed Relationship
+1. User adds parent category into category table
+2. User adds child category into category table, explicitly indicating which is parent
+3. User adds entry
+4. User adds child category
+5. App adds child category to entry
+6. App checks if child category has any parent
+7. If child has parent, we add parent category to entry
+8. User wants to see all `running` activity, we select all queries with the `running` key
+
+
+
+### Rendering entries, showing the category heiarcy
+1. 
+
+### Getting entries with categories
+
+### Adding categories themselves
+
+---
+
+
 When searching firebase for entries wtih certain categories. The entry should have flat list of categories. eg categories = [name1, name2]
 
-Each entry can only have 1 category
+### Category interface
+In firebase, we could have a collection, "activity" and sub collections "running", "gym", but that makes it layered and annoying. So we opt with al flat. 
 
-```
+```ts
 {
   categoryName: "activity"
-  categoryId: "123"
-  children: ["1", "2"] //id1, id2
+  categoryId: "123",
+  color: '#123',
+  childrenIds: ["1", "2"] //id1, id2
+  // ensure parent never exists in children, otherwise loop.
+  parentId: "4"
 }
 ```
+
+<b>important</b>
+* Graphing out entries by activity is different than displaying the category heiarchy in an entry, eg "activity" > "walking"
+
+## Graphing out Entries with Categories
+
+1. Select all entries with 1 category (for general)
+2. Select all entries where both keys exist
+
+## Adding Category to Entry
+
+1. User could add parent category, `Activity` and stop there. 
+2. User can add child category ("walking") and stop there
+
+Adding only parent category, `Activity`, we simply add the below
+```ts
+categories: {
+  acitivityId: {
+    index: 0
+  }
+}
+```
+
+### Adding child category directly, to Entry. 
+
+A common behavior is, I just add `Running`, or `Walk`, or `Jog`, however, I want the app to know that `running` is a part of `activity`. I don't want to have a 2 step process: 1st add running, 2nd, add `activity`. So this parent / child relationship must be stored somewhere.
+
+*another way to think* 
+
+An _entry_ can look like this 
+```ts
+{
+  entryId: 123, 
+  categories: {
+    walkingId: true, index: 1
+    activityId: true, index: 0
+  }
+}
+```
+
+### When adding a child category directly
+
+## searching entry for category (to be displayed in chart or UI)
+A flat list because for example, user wants to search all entries with "activity".
+
+We would query all entries with category "activity"
+
+To be more specific, we would query "activity" and "walking"
+
 
 User Journey of Adding Categories
 
@@ -109,9 +213,15 @@ if I only selected "Activity", then we show "Activity" -> "General"
 const category = {
   categoryName: '', 
   categoryId: '', 
-  parentIds: [1,2,3], 
+  parentId: 1 || null, 
   childrenIds: [4,5,6]
   }
+// example
+const walkingCategory = {
+  parentId: 'activity', 
+  categoryName: 'walking', 
+  categoryId: 1
+}
 ```
 
 Firebase Schema

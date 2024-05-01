@@ -151,7 +151,7 @@ export const TodaySummary: React.FC<TodaySummaryProps> = () => {
                     categoryIds.map((id) => {
                         const c = categories.find((x) => x.categoryId === id)
                         const time = formatTime(totalTimeByCategory[id])
-                        return (<Box>
+                        return (<Box key={id}>
                             <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', mb: 1 }}>
                                 <Chip sx={{ border: '1px solid transparent',
         borderColor: c?.color,
@@ -171,7 +171,7 @@ export const TodaySummary: React.FC<TodaySummaryProps> = () => {
 
             <Card elevation={ELEVATION}>
                 {entries.length === 0 && <Typography variant='body2'>No entries yet.</Typography>}
-                {entries.map((e) => <EntryNarrow hideTimestamp={false} {...e} />)}
+                {entries.map((e) => <EntryNarrow key={e.entryId} hideTimestamp={false} {...e} />)}
             </Card>
             <Toolbar />
             <Toolbar />
