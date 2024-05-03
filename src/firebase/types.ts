@@ -9,6 +9,7 @@ export interface OpenEntry {
     created: FirebaseTimeStamp;
     startTime: FirebaseTimeStamp;
     categories: Category[];
+    categoryIds?: string[]
 }
 
 export interface Entry {

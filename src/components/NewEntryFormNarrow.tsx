@@ -33,7 +33,6 @@ const mockCategories = [{
 }]
 export const NewEntryFormNarrow: React.FC = () => {
     const s = useSnackbarContext();
-    const [desc, setDesc] = React.useState("");
     const [currStep, setCurrStep] = React.useState(0)
 
     const setStep = (step: number) => {
@@ -46,9 +45,6 @@ export const NewEntryFormNarrow: React.FC = () => {
             resetText();
         }
     }
-    React.useEffect(() => {
-
-    }, [])
 
     const { toggleOpen } = useDrawerContext();
     const { openEntry, setOpenEntry, categories } = useAppDataContext();
@@ -63,10 +59,8 @@ export const NewEntryFormNarrow: React.FC = () => {
         setCategoryText('')
     }
     const [selectedCategory, setSelectedCategory] = React.useState<string | undefined>()
-    const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setDesc(e.target.value)
-        e.preventDefault()
-    }
+    const desc = React.useRef<HTMLInputElement>(null) 
+    
     const selectCategory = (categoryName: string) => {
         setSelectedCategory(categoryName)
     }
@@ -80,7 +74,8 @@ export const NewEntryFormNarrow: React.FC = () => {
 
         try {
             toggleOpen();
-            const ref = await AddOpenEntry({ ...openEntry, desc })
+            console.log(desc?.current)
+            const ref = await AddOpenEntry({ ...openEntry, desc: desc?.current?.value || '' })
             if (ref) {
                 console.log('adding open entry', ref)
                 setOpenEntry(ref as unknown as OpenEntry)
@@ -94,12 +89,12 @@ export const NewEntryFormNarrow: React.FC = () => {
         setSelectedCategory(category.categoryName)
         // eslint-disable-next-line react-hooks/rules-of-hooks
         const flattened = flattenCategories([category], categories)
-        setOpenEntry((p) => ({ ...p, categories: flattened }))
-        console.log('flattened', flattened)
-        console.log('after setting', openEntry)
+        const categoryIds = flattened.map((c) => c.categoryId)
+        setOpenEntry((p) => ({ ...p, categories: flattened, categoryIds }))
+       
         if (openEntry && openEntry.entryId) {
             console.log('setting', openEntry)
-            updateOpenEntry({ ...openEntry, categories: flattened })
+            updateOpenEntry({ ...openEntry, categories: flattened, categoryIds })
         }
     }
 
@@ -132,7 +127,7 @@ export const NewEntryFormNarrow: React.FC = () => {
             <Paper sx={{ p: 0.5 }} elevation={10}>
 
 
-                <TextField onChange={onChange} size='small' margin='dense' fullWidth placeholder='What are you working on?' />
+                <TextField inputRef={desc}  size='small' margin='dense' fullWidth placeholder='What are you working on?' />
                 <Button color='success' size='large' onClick={onStart} variant='contained' sx={{ mt: 1 }} fullWidth>Start</Button>
             </Paper>
         </Box>

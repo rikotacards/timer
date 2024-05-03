@@ -44,10 +44,10 @@ export const EntryNarrow: React.FC<OpenEntry & { hideTimestamp: boolean }> = ({
         'simple-popover': <CategoryEdit addCategory={() => { }} onHandleClose={handleClose} />,
         'more': <Button color='error' size='small' onClick={onDelete} >Delete</Button>
     }
-    const onChipClick = (categoryName: string) => {
+    const onChipClick = React.useCallback((categoryName: string, categoryId: string) => {
         onSetComponent(<CategoryTopAppBar />)
-        nav(`/stats/${categoryName}`)
-    }
+        nav(`/stats/${categoryName}`, {state: {categoryId: categoryId}})
+    }, [nav, onSetComponent])
 
 
     const onMoreClick = () => {

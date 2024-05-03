@@ -103,12 +103,24 @@ export const getEntries = async() => {
 // sevenDaysAgo = new Date(today); sevenDaysAgo.setDate(today.getDate()-7)
 export const getEntriesByDateRange = async({start, end}: {start: Date, end: Date}) => {
     const collRef = collection(db, "users", UID, "entries")
-    console.log('START', start, end)
     const q =  query(collRef, where("created", "<=", start ), where("created", '>=', end))
     const querySnapshot = await getDocs(q);
     const res: Entry[] = [] 
     if(!querySnapshot){
         return []
+    }
+    querySnapshot.forEach((doc) => {
+        res.push({...doc.data() as Entry, entryId: doc.id})
+    })
+    return res;
+}
+export const getEntriesByDateRangeAndCategories = async({start, end, categoryIds}: {start: Date, end: Date, categoryIds:string[]}) => {
+    const collRef = collection(db, "users", UID, "entries")
+    const q =  query(collRef, where("created", "<=", start ), where("created", '>=', end), where("categoryIds", "array-contains-any", categoryIds))
+    const querySnapshot = await getDocs(q);
+    const res: Entry[] = [] 
+    if(!querySnapshot){
+        return [] as Entry[]
     }
     querySnapshot.forEach((doc) => {
         res.push({...doc.data() as Entry, entryId: doc.id})

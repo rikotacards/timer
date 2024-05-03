@@ -4,7 +4,7 @@ import { Category } from '../firebase/types';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 interface CategoryChipsProps {
     entryCategories?: Category[];
-    onChipClick: (categoryName: string) => void;
+    onChipClick: (categoryName: string, categoryId: string) => void;
 }
 export const CategoryChips: React.FC<CategoryChipsProps> = ({onChipClick, entryCategories}) => {
     if(!entryCategories){
@@ -19,7 +19,7 @@ export const CategoryChips: React.FC<CategoryChipsProps> = ({onChipClick, entryC
         color: c.color,
         fontWeight:600,
         background: c.color+"34"
-    }} size='small' key={c.categoryId} onClick={() => onChipClick(c.categoryName)} label={c.categoryName}/>{i < entryCategories.length -1 && <ArrowRightIcon/>}</Box>)
+    }} size='small' key={c.categoryId} onClick={() => onChipClick(c.categoryName, c.categoryId)} label={c.categoryName}/>{i < entryCategories.length -1 && <ArrowRightIcon/>}</Box>)
 
     return(
         <Box sx={{display: 'flex', flexDirection: 'row'}}>{displayed}</Box>
