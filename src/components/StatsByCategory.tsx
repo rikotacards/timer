@@ -11,9 +11,8 @@ import { useLocation, useParams } from "react-router";
 
 import { CustomLines } from "./CustomLines";
 import { CategoryTopAppBar } from "./CategoryTopAppBar";
-import { getEntriesByDateRange, getEntriesByDateRangeAndCategories } from "../firebase/db";
+import {  getEntriesByDateRangeAndCategories } from "../firebase/db";
 import { Entry } from "../firebase/types";
-import { flattenCategories } from "../utils/flattenCategories";
 import { flattenWithChildren } from "../utils/flattenWithChildren";
 const today = new Date();
 today.setHours(23,59,59,99)
