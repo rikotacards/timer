@@ -1,6 +1,6 @@
 import { Alert, Box, Toolbar } from '@mui/material';
 import React from 'react';
-import { NewEntryForm } from '../components/NewEntryForm';
+import { NewEntryForm } from '../components/EntryFormDesktop';
 import { QuickEntries } from '../components/QuickEntries';
 import { BottomAppBar } from '../components/BottomAppBar';
 import { useIsNarrow } from '../utils/isMobile';

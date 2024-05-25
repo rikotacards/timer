@@ -3,26 +3,28 @@ import { Alert, Box, Button, Card, Chip, CircularProgress, IconButton, Popover, 
 import React from 'react';
 import PlayCircleFilledWhiteIcon from '@mui/icons-material/PlayCircleFilledWhite';
 import { CategoryEdit } from './CategoryEdit';
-import { useAppDataContext, useSnackbarContext, useStopwatchContext } from '../Providers/contextHooks';
+import { useAppDataContext, useSnackbarContext } from '../Providers/contextHooks';
 import { AddOpenEntry, addEntry, deleteOpenEntry, updateOpenEntry } from '../firebase/db';
 import { Category, OpenEntry } from '../firebase/types';
 import { NewEntryFormSkeleton } from './NewEntryFormSkeleton';
-import { formatTime } from '../utils/formatTime';
 import StopCircleIcon from '@mui/icons-material/StopCircle';
+import { TimeElapsed } from './TimeElapsed';
 export const BLANK_ENTRY = { desc: '', categories: [], created: { seconds: 0, nanoseconds: 0 }, startTime: { seconds: 0, nanoseconds: 0 }, endTime: null } as OpenEntry
 export const NewEntryForm: React.FC = () => {
-    const { start, pause, totalSeconds } = useStopwatchContext();
     const {isLoadingActiveEntry, setOpenEntry,openEntry} = useAppDataContext()
-   
+  
+    console.log('OPEN', openEntry)
+  
+
     const [desc, setDesc] = React.useState("")
     const s = useSnackbarContext();
     const [isRunning, setIsRunning] = React.useState(false)
+    const hasId = !!openEntry.entryId
    React.useEffect(() => {
-    if(openEntry.entryId){
-        console.log('id', openEntry)
+    if(hasId){
         setIsRunning(true)
     }
-   },[openEntry])
+   },[hasId])
     const addCategory = (category: Category) => {
         console.log('category added to UI', category.categoryName)
 
@@ -40,10 +42,8 @@ export const NewEntryForm: React.FC = () => {
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);
     };
-    
-    const formatted = formatTime(totalSeconds)
+
     const onStart = async () => {
-        start();
         setIsRunning(true)
         s.onSetComponent(<Alert severity='success'>Logging started</Alert>)
         s.toggleOpen();
@@ -64,7 +64,7 @@ export const NewEntryForm: React.FC = () => {
     
     
     const onStop = async () => {
-        pause()
+        
         setIsRunning(false)
         if(!openEntry){
             return;
@@ -109,7 +109,7 @@ export const NewEntryForm: React.FC = () => {
         return <NewEntryFormSkeleton />
     }
    
-    return <Card elevation={4} variant='elevation' sx={{ p: 1 }}>
+    return <Card elevation={4} variant='elevation' sx={{ p: 1, m:1}}>
         <Box alignItems={'center'} display={'flex'}>
             <TextField value={openEntry.desc ||desc} onChange={onChange} size='small' placeholder='What are you doing?' sx={{ mr: 1 }} />
             <IconButton onClick={handleClick} sx={{ ml: 1 }}>
@@ -119,7 +119,7 @@ export const NewEntryForm: React.FC = () => {
             <Box display={'flex'} alignItems={'center'} sx={{ ml: 'auto' }}>
                 {isRunning && <CircularProgress variant='indeterminate' color='success' sx={{ m: 1, height: 20, width: 20 }} size='small' />}
 
-                <Typography sx={{ fontWeight: 'bold' }}>{formatted}</Typography>
+               {isRunning ? <TimeElapsed startTimeSeconds={openEntry?.startTime?.seconds} /> : <Typography fontWeight={'bold'}>00:00:00</Typography>}
 
                 <IconButton onClick={isRunning ? onStop : () => onStart()} size='small' color={isRunning ? 'warning' : 'success'} sx={{ ml: 1 }}>
                    {!isRunning? <PlayCircleFilledWhiteIcon/> : <StopCircleIcon/>}
