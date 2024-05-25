@@ -7,13 +7,12 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
 import React from 'react';
 import { BarChart } from '@mui/x-charts/BarChart';
-import { useLocation, useParams } from "react-router";
+import { useParams } from "react-router";
 
 import { CustomLines } from "./CustomLines";
 import { CategoryTopAppBar } from "./CategoryTopAppBar";
-import {  getEntriesByDateRangeAndCategories } from "../firebase/db";
+import { getEntriesByDateRange } from "../firebase/db";
 import { Entry } from "../firebase/types";
-import { flattenWithChildren } from "../utils/flattenWithChildren";
 const today = new Date();
 today.setHours(23,59,59,99)
 const endOfDay = new Date(today)
@@ -54,7 +53,6 @@ export const StatsByCategory: React.FC = () => {
     const [fetching, setFetching] = React.useState(true);
     const {  categories } = useAppDataContext();
     const params = useParams();
-    const location = useLocation();
     const [entries, setEntries] = React.useState<Entry[]>([] as Entry[])
     const [inputText, setInputText] = React.useState('')
     const [selectedCategory, setSelectedCategory] = React.useState<string>(params?.categoryName || categories[0]?.categoryName || '')
@@ -63,23 +61,15 @@ export const StatsByCategory: React.FC = () => {
         setInputText(e.target.value)
         e.preventDefault()
     }
-    const category = categories.find((c) => c.categoryId === location.state?.categoryId)
-    console.log('category', category)
     React.useEffect(() => {
         console.log('GETTING')
-        if(category){
-            const categoryIds =  flattenWithChildren(category)
-            console.log('wow')
-            console.log(categoryIds)
-            getEntriesByDateRangeAndCategories({start: today, end: rangeMap[range], categoryIds: categoryIds}).then((r) => {
-                console.log('GET ENTRIES BY DATE AND CATS',r)
-                setEntries(r as Entry[]);
-                setFetching(false);
-            }).catch((e) => alert(e))
-        }
         onSetComponent(<CategoryTopAppBar title={params.categoryName} />)
-      
-    }, [onSetComponent, params.categoryName, range, category])
+        getEntriesByDateRange({ start: today, end: rangeMap[range] }).then((e) => {
+            setEntries(e as Entry[])
+            console.log("GOT", e)
+            setFetching(false);
+        }).catch((e) => console.log('error', e))
+    }, [onSetComponent, params.categoryName, range])
     const filteredByCategory = entries.filter((e) => e.categories?.[0]?.categoryName === selectedCategory)
     
     const series = selectedCategory ? totalTimeByCategory(entries, selectedCategory) : []

@@ -152,13 +152,15 @@ export const TodaySummary: React.FC<TodaySummaryProps> = () => {
                         const time = formatTime(totalTimeByCategory[id])
                         return (<Box key={id}>
                             <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', mb: 1 }}>
-                                <Chip sx={{ border: '1px solid transparent',
-        borderColor: c?.color,
-        color: c?.color,
-        fontWeight:600,
-        background: c?.color+"34",  mr: 1 }} label={c?.categoryName || 'NA'} />
+                                <Chip sx={{
+                                    border: '1px solid transparent',
+                                    borderColor: c?.color,
+                                    color: c?.color,
+                                    fontWeight: 600,
+                                    background: c?.color + "34", mr: 1
+                                }} label={c?.categoryName || 'NA'} />
+                                <Typography variant='body1' sx={{ mr: 1}}>{time}</Typography>
                                 <Typography color='GrayText'>{round(((totalTimeByCategory[id] / (24 * 60 * 60)) * 100))}%</Typography>
-                                <Typography sx={{ ml: 'auto' }}>{time}</Typography>
                             </Box>
                             {/* <IOSSlider min={0} max={24} defaultValue={[11.4,12]} track={'normal'}/> */}
                         </Box>)
