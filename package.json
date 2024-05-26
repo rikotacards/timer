@@ -17,6 +17,7 @@
     "@mui/lab": "^5.0.0-alpha.170",
     "@mui/material": "^5.15.14",
     "@mui/x-charts": "^7.1.1",
+    "@mui/x-data-grid": "^6.20.0",
     "date-fns": "^3.6.0",
     "eslint-config-airbnb": "^19.0.4",
     "firebase": "^10.10.0",

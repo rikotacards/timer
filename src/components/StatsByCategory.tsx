@@ -23,7 +23,7 @@ const month = new Date(today)
 month.setDate(today.getDate() - 31)
 const sixMonth = new Date(today)
 sixMonth.setDate(today.getDate() - 180)
-const year = new Date(today)
+export const year = new Date(today)
 year.setDate(today.getDate() - 365);
 
     type RangeType = 'D' | 'W' | 'M' | '6M' | 'Y'

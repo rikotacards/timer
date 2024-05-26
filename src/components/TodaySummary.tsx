@@ -1,4 +1,4 @@
-import { Box, Card, Chip, LinearProgress, Stack, Toolbar, Typography } from '@mui/material';
+import { Box, Card, Chip, IconButton, LinearProgress, Stack, Toolbar, Typography } from '@mui/material';
 import React from 'react';
 import { Entry as EntryType } from '../firebase/types';
 import { useAppDataContext, useTopAppBarContext } from '../Providers/contextHooks';
@@ -8,7 +8,7 @@ import { formatTime } from '../utils/formatTime';
 import { getEntriesByDateRange } from '../firebase/db';
 import { round } from '../utils/round';
 import { PieChart } from '@mui/x-charts/PieChart';
-
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
 // see categories
 // see total time logged
@@ -18,6 +18,7 @@ import { styled } from '@mui/material/styles';
 import { TopAppBar } from './TopAppBar';
 
 import { EntryNarrow } from './EntryNarrow';
+import { useNavigate } from 'react-router';
 // import { IOSSlider } from './PercentSlider';
 // import { Timeline } from './Timeline';
 // import {SingleTimeline} from './SingleTimeline';
@@ -51,7 +52,10 @@ export const TodaySummary: React.FC<TodaySummaryProps> = () => {
     const { categories } = useAppDataContext();
     const [fetching, setFetching] = React.useState(true);
     const { onSetComponent } = useTopAppBarContext();
-
+    const nav = useNavigate();
+    const goToHistory = () => {
+        nav('/history')
+    }
     const [entries, setEntries] = React.useState<EntryType[]>([])
 
     React.useEffect(() => {
@@ -109,11 +113,9 @@ export const TodaySummary: React.FC<TodaySummaryProps> = () => {
 
             </Card>
             <Typography variant='h6' sx={{ mb: 1 }} fontWeight={'bold'}>By Category</Typography>
-            {/* <SingleTimeline entries={entries}/> */}
+
             <Card elevation={ELEVATION} sx={{ borderRadius: 3, p: 2, mb: 1 }}>
                 <Box sx={{ mb: 1 }}>
-
-                    {/* <Timeline entries={entries}/> */}
                 </Box>
                 <Stack textAlign={'center'} direction='row'>
 
@@ -159,7 +161,7 @@ export const TodaySummary: React.FC<TodaySummaryProps> = () => {
                                     fontWeight: 600,
                                     background: c?.color + "34", mr: 1
                                 }} label={c?.categoryName || 'NA'} />
-                                <Typography variant='body1' sx={{ mr: 1}}>{time}</Typography>
+                                <Typography variant='body1' sx={{ mr: 1 }}>{time}</Typography>
                                 <Typography color='GrayText'>{round(((totalTimeByCategory[id] / (24 * 60 * 60)) * 100))}%</Typography>
                             </Box>
                             {/* <IOSSlider min={0} max={24} defaultValue={[11.4,12]} track={'normal'}/> */}
@@ -168,12 +170,18 @@ export const TodaySummary: React.FC<TodaySummaryProps> = () => {
                 }
 
             </Card>
-            <Typography sx={{ mb: 1 }} variant='h6' fontWeight={'bold'}>Acivities today</Typography>
+            <Typography sx={{mb:1}} variant='h6' fontWeight={'bold'}>Activities today</Typography>
 
-            <Card elevation={ELEVATION}>
-                {entries.length === 0 && <Typography variant='body2'>No entries yet.</Typography>}
+            <Card elevation={ELEVATION} sx={{ mb: 1 }}>
+                {entries.length === 0 && <Typography sx={{ p: 1 }} variant='body2'>No entries yet.</Typography>}
                 {entries.map((e) => <EntryNarrow key={e.entryId} hideTimestamp={false} {...e} />)}
             </Card>
+            <Box sx={{ display: 'flex', alignItems: 'center',flexDirection: 'row' }}>
+
+                <Typography variant='h6' fontWeight={'bold'}>History</Typography>
+                <IconButton onClick={goToHistory} size='small' ><ChevronRightIcon />
+                </IconButton>
+            </Box>
             <Toolbar />
             <Toolbar />
         </Box>

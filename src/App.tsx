@@ -16,6 +16,7 @@ import { TopAppBarProvider } from './Providers/TopAppBarProvider';
 import { NewEntryFormNarrow } from './components/NewEntryFormNarrow';
 import { SettingsPage } from './pages/SettingsPage';
 import { TodaySummary } from './components/TodaySummary';
+import { History } from './components/History';
 
 const router = createBrowserRouter([
   {
@@ -42,6 +43,10 @@ const router = createBrowserRouter([
       {
         path: 'app-settings',
         element: <SettingsPage/>
+      },
+      {
+        path: 'history',
+        element: <History/>
       }
     ]
   }
@@ -51,8 +56,8 @@ const darkTheme = createTheme({
   palette: {
     mode: 'dark',
     background: {
-      default: 'black',
-      paper: 'black'
+      default: '#000',
+      paper: '#000'
     }
   },
 });
