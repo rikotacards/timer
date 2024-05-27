@@ -112,7 +112,13 @@ export const TodaySummary: React.FC<TodaySummaryProps> = () => {
 
 
             </Card>
-            <Typography variant='h6' sx={{ mb: 1 }} fontWeight={'bold'}>By Category</Typography>
+            <Box sx={{mb: 1, display: 'flex', alignItems: 'center', flexDirection: 'row'}}>
+
+            <Typography variant='h6' fontWeight={'bold'}>By Category</Typography>
+            <IconButton onClick={() => nav('stats')}>
+                <ChevronRightIcon/>
+            </IconButton>
+            </Box>
 
             <Card elevation={ELEVATION} sx={{ borderRadius: 3, p: 2, mb: 1 }}>
                 <Box sx={{ mb: 1 }}>

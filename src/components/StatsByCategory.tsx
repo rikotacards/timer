@@ -1,10 +1,7 @@
-import { Box, Button, Chip, CircularProgress, Slide, TextField, Typography } from "@mui/material"
+import { Autocomplete, Box, Button, Chip, CircularProgress, Slide, TextField, Typography } from "@mui/material"
 import { useAppDataContext, useTopAppBarContext } from "../Providers/contextHooks"
 import { totalTimeByCategory } from "../utils/totalTimeByCategoty";
-import { IS_OFFLINE } from "../App";
 
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
 import React from 'react';
 import { BarChart } from '@mui/x-charts/BarChart';
 import { useParams } from "react-router";
@@ -54,13 +51,9 @@ export const StatsByCategory: React.FC = () => {
     const {  categories } = useAppDataContext();
     const params = useParams();
     const [entries, setEntries] = React.useState<Entry[]>([] as Entry[])
-    const [inputText, setInputText] = React.useState('')
     const [selectedCategory, setSelectedCategory] = React.useState<string>(params?.categoryName || categories[0]?.categoryName || '')
     const { onSetComponent } = useTopAppBarContext();
-    const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setInputText(e.target.value)
-        e.preventDefault()
-    }
+  
     React.useEffect(() => {
         console.log('GETTING')
         onSetComponent(<CategoryTopAppBar title={params.categoryName} />)
@@ -71,21 +64,45 @@ export const StatsByCategory: React.FC = () => {
         }).catch((e) => console.log('error', e))
     }, [onSetComponent, params.categoryName, range])
     const filteredByCategory = entries.filter((e) => e.categories?.[0]?.categoryName === selectedCategory)
-    
+    console.log('s', selectedCategory)
     const series = selectedCategory ? totalTimeByCategory(entries, selectedCategory) : []
-    const filtered = (IS_OFFLINE ? categories : categories).filter((cat) => cat.categoryName.indexOf(inputText) >= 0)
-
+    console.log(series)
 
     const sum = series.reduce((p, c) => { const total = p + c?.totalTime ||0; return total }, 0)
     const rounded = Math.round(sum * 10) / 10
     console.log('series', series)
+    const options = categories.map((c) => ({label: c.categoryName, id: c.categoryId, color: c.color}))
     return (
         <Slide direction='left' in={true}>
             <Box>
                 <CategoryTopAppBar title='hi' />
                 <Box sx={{ width: '100%', flexDirection: 'row', display: 'flex', justifyContent: 'center' }}>
-                    {ranges.map((r) => <Button key={r.label} onClick={() => onRangeSelect(r.label)} size='small' fullWidth variant={range === r.label ? "contained" : "outlined"}>{r.label}</Button>)}
+                    {ranges.map((r) => <Button sx={{ mb:1}} 
+                    key={r.label} 
+                    onClick={() => onRangeSelect(r.label)} 
+                    size='small' fullWidth 
+                    variant={range === r.label ? "contained" : "outlined"}>{r.label}</Button>)}
                 </Box>
+                <Autocomplete 
+                size='small'
+                getOptionLabel={(option) => option.label}
+            filterSelectedOptions
+                options={options}
+                isOptionEqualToValue={(o, v) => o.id === v.id}
+              
+                renderOption={(props, c) => (<Box component={'li'} {...props}>
+                    <Chip key={c.id} 
+                  
+                    onClick={() => setSelectedCategory(c.label)} label={c.label} sx={{ background: c.color, mr: 1, mb: 1 }} />
+                </Box>)}
+                
+                renderInput={(params) => 
+                {console.log(params); return <TextField 
+ {...params} 
+//  InputProps={{startAdornment: <Chip label={params.inputProps.value}/>}}
+ placeholder="Search or select category"
+ />}
+                }/>
                 <Box sx={{ p: 1 }}>
                     <Typography fontWeight={'bold'}>
                         Total
@@ -109,10 +126,7 @@ export const StatsByCategory: React.FC = () => {
                     </Box>
 
 
-                    <TextField size='small' fullWidth value={inputText} onChange={onChange} />
-                    <Box sx={{ m: 1 }}>
-                        {filtered.map((c) => <Chip key={c.categoryId} icon={selectedCategory === c.categoryName ? <CheckCircleIcon /> : <RadioButtonUncheckedIcon />} onClick={() => setSelectedCategory(c.categoryName)} label={c.categoryName} sx={{ background: c.color, mr: 1, mb: 1 }} />)}
-                    </Box>
+                 
 
                 </Box>
             </Box>
