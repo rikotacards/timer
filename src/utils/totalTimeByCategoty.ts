@@ -12,7 +12,7 @@ export const totalTimeByCategory = (entries: Entry[], categoryName: string) => {
             if(e?.categories?.length === 0){
                 return
             }
-            if(e.categories?.[0].categoryName === categoryName){
+            if(e.categories?.[0].categoryName === categoryName.toLocaleLowerCase()){
                 if(e?.endTime?.seconds && e.startTime.seconds){
                     sum = sum + (e?.endTime?.seconds - e.startTime?.seconds)
                 }

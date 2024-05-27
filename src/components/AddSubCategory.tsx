@@ -57,7 +57,7 @@ export const AddSubCategory: React.FC<AddSubCategoryProps> = ({ resetText, color
                 <ul>
 
         <ListItem onClick={add}><Chip sx={{background: c.color}} label={c.categoryName}/></ListItem>
-        {c.children?.map((c) => <ListItem  key={c}><Chip sx={{ ml:3, background: categoryIdMap[c]?.color}} label={categoryIdMap[c]?.categoryName}/></ListItem>)}
+        {c.children?.map((c, i) => <ListItem  key={c + i}><Chip sx={{ ml:3, background: categoryIdMap[c]?.color}} label={categoryIdMap[c]?.categoryName}/></ListItem>)}
                 </ul>
         </li>
     )

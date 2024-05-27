@@ -1,6 +1,7 @@
 import { Autocomplete, Box, Button, Chip, CircularProgress, Slide, TextField, Typography } from "@mui/material"
 import { useAppDataContext, useTopAppBarContext } from "../Providers/contextHooks"
 import { totalTimeByCategory } from "../utils/totalTimeByCategoty";
+import { ScrollRestoration } from "react-router-dom";
 
 import React from 'react';
 import { BarChart } from '@mui/x-charts/BarChart';
@@ -8,12 +9,12 @@ import { useParams } from "react-router";
 
 import { CustomLines } from "./CustomLines";
 import { CategoryTopAppBar } from "./CategoryTopAppBar";
-import { getEntriesByDateRange } from "../firebase/db";
+import { getEntriesByDateRange, getEntriesByDateRangeAndCategories } from "../firebase/db";
 import { Entry } from "../firebase/types";
 const today = new Date();
-today.setHours(23,59,59,99)
+today.setHours(23, 59, 59, 99)
 const endOfDay = new Date(today)
-endOfDay.setHours(0,0,0,0)
+endOfDay.setHours(0, 0, 0, 0)
 const week = new Date(today)
 week.setDate(today.getDate() - 7)
 const month = new Date(today)
@@ -23,9 +24,9 @@ sixMonth.setDate(today.getDate() - 180)
 export const year = new Date(today)
 year.setDate(today.getDate() - 365);
 
-    type RangeType = 'D' | 'W' | 'M' | '6M' | 'Y'
+type RangeType = 'D' | 'W' | 'M' | '6M' | 'Y'
 
-const ranges:{label: RangeType}[] = [{
+const ranges: { label: RangeType }[] = [{
     label: 'D',
 },
 { label: 'W' },
@@ -48,61 +49,63 @@ export const StatsByCategory: React.FC = () => {
         setRange(range)
     }
     const [fetching, setFetching] = React.useState(true);
-    const {  categories } = useAppDataContext();
+    const { categories } = useAppDataContext();
+    console.log('CAT', categories)
     const params = useParams();
     const [entries, setEntries] = React.useState<Entry[]>([] as Entry[])
     const [selectedCategory, setSelectedCategory] = React.useState<string>(params?.categoryName || categories[0]?.categoryName || '')
     const { onSetComponent } = useTopAppBarContext();
-  
+
     React.useEffect(() => {
         console.log('GETTING')
         onSetComponent(<CategoryTopAppBar title={params.categoryName} />)
         getEntriesByDateRange({ start: today, end: rangeMap[range] }).then((e) => {
             setEntries(e as Entry[])
-            console.log("GOT", e)
             setFetching(false);
         }).catch((e) => console.log('error', e))
     }, [onSetComponent, params.categoryName, range])
     const filteredByCategory = entries.filter((e) => e.categories?.[0]?.categoryName === selectedCategory)
-    console.log('s', selectedCategory)
+    console.log('filteredByCategory', filteredByCategory)
     const series = selectedCategory ? totalTimeByCategory(entries, selectedCategory) : []
-    console.log(series)
 
-    const sum = series.reduce((p, c) => { const total = p + c?.totalTime ||0; return total }, 0)
+    const sum = series.reduce((p, c) => { const total = p + c?.totalTime || 0; return total }, 0)
     const rounded = Math.round(sum * 10) / 10
-    console.log('series', series)
-    const options = categories.map((c) => ({label: c.categoryName, id: c.categoryId, color: c.color}))
+    const options = categories.map((c) => ({ label: c.categoryName, id: c.categoryId, color: c.color }))
     return (
         <Slide direction='left' in={true}>
             <Box>
+                <ScrollRestoration />
                 <CategoryTopAppBar title='hi' />
+
+                <Autocomplete
+                    sx={{ mb: 1 }}
+                    size='small'
+                    options={options}
+                    isOptionEqualToValue={(o, v) => o.id === v.id}
+
+                    renderOption={(props, c) => (
+                    <Box component={'li'} {...props}>
+                        <Chip key={c.id + c.label}
+
+                            onClick={() => setSelectedCategory(c.label.toLocaleLowerCase())} 
+                            label={c.label} sx={{ background: c.color, mr: 1, mb: 1 }} />
+                    </Box>)}
+
+                    renderInput={(params) => {
+                         return <TextField
+                            {...params}
+                            //  InputProps={{startAdornment: <Chip label={params.inputProps.value}/>}}
+                            placeholder="Search or select category"
+                        />
+                    }
+                    } />
                 <Box sx={{ width: '100%', flexDirection: 'row', display: 'flex', justifyContent: 'center' }}>
-                    {ranges.map((r) => <Button sx={{ mb:1}} 
-                    key={r.label} 
-                    onClick={() => onRangeSelect(r.label)} 
-                    size='small' fullWidth 
-                    variant={range === r.label ? "contained" : "outlined"}>{r.label}</Button>)}
+                    {ranges.map((r) => <Button sx={{ mb: 1 }}
+                        key={r.label}
+                        onClick={() => onRangeSelect(r.label)}
+                        size='small' fullWidth
+                        variant={range === r.label ? "contained" : "outlined"}>{r.label}</Button>)}
                 </Box>
-                <Autocomplete 
-                size='small'
-                getOptionLabel={(option) => option.label}
-            filterSelectedOptions
-                options={options}
-                isOptionEqualToValue={(o, v) => o.id === v.id}
-              
-                renderOption={(props, c) => (<Box component={'li'} {...props}>
-                    <Chip key={c.id} 
-                  
-                    onClick={() => setSelectedCategory(c.label)} label={c.label} sx={{ background: c.color, mr: 1, mb: 1 }} />
-                </Box>)}
-                
-                renderInput={(params) => 
-                {console.log(params); return <TextField 
- {...params} 
-//  InputProps={{startAdornment: <Chip label={params.inputProps.value}/>}}
- placeholder="Search or select category"
- />}
-                }/>
                 <Box sx={{ p: 1 }}>
                     <Typography fontWeight={'bold'}>
                         Total
@@ -111,22 +114,22 @@ export const StatsByCategory: React.FC = () => {
                         {rounded}hrs
                     </Typography>
                     <Typography color='GrayText' variant='body1'>{rangeMap[range].toDateString()}-{today.toDateString()}</Typography>
-                   {  <Box sx={{ display: 'flex', height: 300, width: '100%', alignItems: 'center', justifyContent: 'center' }}>
-                        { fetching ? <CircularProgress/> : series.length ?  <BarChart margin={{
+                    <Box sx={{ display: 'flex', height: 300, width: '100%', alignItems: 'center', justifyContent: 'center' }}>
+                        {fetching ? <CircularProgress /> : series.length ? <BarChart margin={{
                             left: 10,
                             right: 10,
                             top: 0,
                             bottom: 30,
                         }} grid={{ vertical: true }}
-                            leftAxis={null} series={[{ dataKey: 'totalTime' }]} dataset={series} xAxis={[{ tickPlacement: 'middle', dataKey: 'date', scaleType: 'band' }]} />: <Typography>No data for today. Try weekly range or more.</Typography>}
+                            leftAxis={null} series={[{ dataKey: 'totalTime' }]} dataset={series} xAxis={[{ tickPlacement: 'middle', dataKey: 'date', scaleType: 'band' }]} /> : <Typography variant='body2'>No data for this range. Try a different range.</Typography>}
 
-                    </Box>}
+                    </Box>
                     <Box sx={{ m: 1 }}>
                         <CustomLines entries={filteredByCategory} />
                     </Box>
 
 
-                 
+
 
                 </Box>
             </Box>

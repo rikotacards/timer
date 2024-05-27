@@ -19,6 +19,8 @@ import { TopAppBar } from './TopAppBar';
 
 import { EntryNarrow } from './EntryNarrow';
 import { useNavigate } from 'react-router';
+import { NewEntryForm } from './EntryFormDesktop';
+import { useIsNarrow } from '../utils/isMobile';
 // import { IOSSlider } from './PercentSlider';
 // import { Timeline } from './Timeline';
 // import {SingleTimeline} from './SingleTimeline';
@@ -52,6 +54,8 @@ export const TodaySummary: React.FC<TodaySummaryProps> = () => {
     const { categories } = useAppDataContext();
     const [fetching, setFetching] = React.useState(true);
     const { onSetComponent } = useTopAppBarContext();
+    const isNarrow = useIsNarrow();
+
     const nav = useNavigate();
     const goToHistory = () => {
         nav('/history')
@@ -65,8 +69,9 @@ export const TodaySummary: React.FC<TodaySummaryProps> = () => {
         getEntriesByDateRange({ start: today, end: endOfDay }).then((e) => {
             setEntries(e as EntryType[])
             setFetching(false);
+            console.log(e)
         }).catch((e) => console.log('error', e))
-    }, [])
+    }, [onSetComponent])
 
     const totalTimeByCategory: { [key: string]: number } = {};
     const entriesByCategoryId = groupEntriesByCategoryId(entries)
@@ -93,6 +98,8 @@ export const TodaySummary: React.FC<TodaySummaryProps> = () => {
     }
     return (
         <Box sx={{ m: 1 }}>
+            {!isNarrow && <NewEntryForm />}
+
             <Typography variant='body2' fontWeight={600} color='GrayText'>{today.toDateString()}</Typography>
             <Typography sx={{ mb: 1 }} variant='h4' fontWeight={'bold'}>
                 {'Summary'}
@@ -112,12 +119,12 @@ export const TodaySummary: React.FC<TodaySummaryProps> = () => {
 
 
             </Card>
-            <Box sx={{mb: 1, display: 'flex', alignItems: 'center', flexDirection: 'row'}}>
+            <Box sx={{ mb: 1, display: 'flex', alignItems: 'center', flexDirection: 'row' }}>
 
-            <Typography variant='h6' fontWeight={'bold'}>By Category</Typography>
-            <IconButton onClick={() => nav('stats')}>
-                <ChevronRightIcon/>
-            </IconButton>
+                <Typography variant='h6' fontWeight={'bold'}>By Category</Typography>
+                <IconButton onClick={() => nav('stats')}>
+                    <ChevronRightIcon />
+                </IconButton>
             </Box>
 
             <Card elevation={ELEVATION} sx={{ borderRadius: 3, p: 2, mb: 1 }}>
@@ -176,13 +183,13 @@ export const TodaySummary: React.FC<TodaySummaryProps> = () => {
                 }
 
             </Card>
-            <Typography sx={{mb:1}} variant='h6' fontWeight={'bold'}>Activities today</Typography>
+            <Typography sx={{ mb: 1 }} variant='h6' fontWeight={'bold'}>Activities today</Typography>
 
             <Card elevation={ELEVATION} sx={{ mb: 1 }}>
                 {entries.length === 0 && <Typography sx={{ p: 1 }} variant='body2'>No entries yet.</Typography>}
                 {entries.map((e) => <EntryNarrow key={e.entryId} hideTimestamp={false} {...e} />)}
             </Card>
-            <Box sx={{ display: 'flex', alignItems: 'center',flexDirection: 'row' }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', flexDirection: 'row' }}>
 
                 <Typography variant='h6' fontWeight={'bold'}>History</Typography>
                 <IconButton onClick={goToHistory} size='small' ><ChevronRightIcon />

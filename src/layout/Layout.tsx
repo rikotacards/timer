@@ -22,7 +22,6 @@ export const Layout: React.FC = () => {
     return (
         <Box margin={1} display={'flex'} flexDirection={'column'}>
             { <Toolbar />}
-            {!isNarrow && <NewEntryForm />}
                   <Outlet/>
             {!isNarrow && <QuickEntries />}
             {isNarrow && <BottomAppBar />}

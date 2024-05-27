@@ -11,10 +11,7 @@ import StopCircleIcon from '@mui/icons-material/StopCircle';
 import { TimeElapsed } from './TimeElapsed';
 export const BLANK_ENTRY = { desc: '', categories: [], created: { seconds: 0, nanoseconds: 0 }, startTime: { seconds: 0, nanoseconds: 0 }, endTime: null } as OpenEntry
 export const NewEntryForm: React.FC = () => {
-    const {isLoadingActiveEntry, setOpenEntry,openEntry} = useAppDataContext()
-  
-    console.log('OPEN', openEntry)
-  
+    const {isLoadingActiveEntry, setOpenEntry,openEntry} = useAppDataContext()  
 
     const [desc, setDesc] = React.useState("")
     const s = useSnackbarContext();
@@ -37,6 +34,7 @@ export const NewEntryForm: React.FC = () => {
     }
     const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        e.preventDefault()
         setDesc(e.target.value);
     }
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -109,7 +107,7 @@ export const NewEntryForm: React.FC = () => {
         return <NewEntryFormSkeleton />
     }
    
-    return <Card elevation={4} variant='elevation' sx={{ p: 1, m:1}}>
+    return <Card elevation={4} variant='elevation' sx={{ p: 1, mb:1}}>
         <Box alignItems={'center'} display={'flex'}>
             <TextField value={openEntry.desc ||desc} onChange={onChange} size='small' placeholder='What are you doing?' sx={{ mr: 1 }} />
             <IconButton onClick={handleClick} sx={{ ml: 1 }}>
