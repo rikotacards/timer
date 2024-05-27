@@ -29,7 +29,7 @@ export const History: React.FC = () => {
        
 
     
-        {entries.map((e) => <EntryNarrow hideTimestamp={false} {...e}/>)}
+        {entries.map((e) => <EntryNarrow key={e.entryId} hideTimestamp={false} {...e}/>)}
         </>
     )
 }

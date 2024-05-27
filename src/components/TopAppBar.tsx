@@ -40,9 +40,9 @@ export const TopAppBar: React.FC<TopAppBarProps> = ({title, enableBack}) => {
     return (
         <AppBar elevation={0} position='fixed'>
             <Toolbar sx={{height:20, overflow:'hidden', display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                { (enableBackButton || enableBack) && <IconButton size='small'>
-                    <ArrowBackIosNewIcon fontSize='small' onClick={() => nav(-1)}/></IconButton>}
-                {!isNarrow && <IconButton onClick={onClick}>
+                { (enableBackButton || enableBack) && <IconButton onClick={() => nav(-1)} size='small'>
+                    <ArrowBackIosNewIcon fontSize='small' /></IconButton>}
+                {!isNarrow && !enableBack && <IconButton onClick={onClick}>
                     <MenuIcon />
                 </IconButton>}
                 <Typography fontWeight={'bold'}>{title ||'Linear'}</Typography>
