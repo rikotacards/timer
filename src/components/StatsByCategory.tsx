@@ -9,7 +9,7 @@ import { useParams } from "react-router";
 
 import { CustomLines } from "./CustomLines";
 import { CategoryTopAppBar } from "./CategoryTopAppBar";
-import { getEntriesByDateRange, getEntriesByDateRangeAndCategories } from "../firebase/db";
+import { getEntriesByDateRange } from "../firebase/db";
 import { Entry } from "../firebase/types";
 const today = new Date();
 today.setHours(23, 59, 59, 99)
@@ -100,7 +100,7 @@ export const StatsByCategory: React.FC = () => {
                     }
                     } />
                 <Box sx={{ width: '100%', flexDirection: 'row', display: 'flex', justifyContent: 'center' }}>
-                    {ranges.map((r) => <Button sx={{ mb: 1 }}
+                    {ranges.map((r) => <Button sx={{ mb: 1, borderRadius:0 }}
                         key={r.label}
                         onClick={() => onRangeSelect(r.label)}
                         size='small' fullWidth
