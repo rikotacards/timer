@@ -9,9 +9,10 @@ import { Category, OpenEntry } from '../firebase/types';
 import { NewEntryFormSkeleton } from './NewEntryFormSkeleton';
 import StopCircleIcon from '@mui/icons-material/StopCircle';
 import { TimeElapsed } from './TimeElapsed';
+import { flattenCategories } from '../utils/flattenCategories';
 export const BLANK_ENTRY = { desc: '', categories: [], created: { seconds: 0, nanoseconds: 0 }, startTime: { seconds: 0, nanoseconds: 0 }, endTime: null } as OpenEntry
-export const NewEntryForm: React.FC = () => {
-    const {isLoadingActiveEntry, setOpenEntry,openEntry} = useAppDataContext()  
+export const AddEntryWide: React.FC = () => {
+    const {isLoadingActiveEntry, setOpenEntry,openEntry, categories} = useAppDataContext()  
 
     const [desc, setDesc] = React.useState("")
     const s = useSnackbarContext();
@@ -24,8 +25,9 @@ export const NewEntryForm: React.FC = () => {
    },[hasId])
     const addCategory = (category: Category) => {
         console.log('category added to UI', category.categoryName)
-
-        setOpenEntry((p) => (p && { ...p, categories: [category] }))
+        const flattened = flattenCategories([category], categories)
+        const categoryIds = flattened.map((c) => c.categoryId)
+        setOpenEntry((p) => (p && { ...p, categories: [category],categoryIds }))
         console.log('after setting', openEntry)
         if (openEntry && openEntry.entryId) {
             console.log(openEntry)

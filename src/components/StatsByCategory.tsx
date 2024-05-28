@@ -1,16 +1,17 @@
-import { Autocomplete, Box, Button, Chip, CircularProgress, Slide, TextField, Typography } from "@mui/material"
+import { Autocomplete, Box, Button, Chip, CircularProgress, MenuItem, Slide, TextField, Toolbar, Typography } from "@mui/material"
 import { useAppDataContext, useTopAppBarContext } from "../Providers/contextHooks"
-import { totalTimeByCategory } from "../utils/totalTimeByCategoty";
+import { totalDurationByDate, totalTimeByCategory } from "../utils/totalTimeByCategoty";
 import { ScrollRestoration } from "react-router-dom";
 
 import React from 'react';
 import { BarChart } from '@mui/x-charts/BarChart';
-import { useParams } from "react-router";
+import { useLocation, useParams } from "react-router";
 
 import { CustomLines } from "./CustomLines";
 import { CategoryTopAppBar } from "./CategoryTopAppBar";
-import { getEntriesByDateRange } from "../firebase/db";
-import { Entry } from "../firebase/types";
+import { getEntriesByDateRange, getEntriesByDateRangeAndCategories } from "../firebase/db";
+import { Category, Entry } from "../firebase/types";
+import { getEntryDurations } from "../utils/getEntryDurations";
 const today = new Date();
 today.setHours(23, 59, 59, 99)
 const endOfDay = new Date(today)
@@ -43,34 +44,40 @@ const rangeMap = {
 }
 
 export const StatsByCategory: React.FC = () => {
-    const [range, setRange] = React.useState<RangeType>("D")
+    const [range, setRange] = React.useState<RangeType>("W")
+    const [fetching, setFetching] = React.useState(false);
+    const [entries, setEntries] = React.useState<Entry[]>([] as Entry[])
+    const { categories } = useAppDataContext();
+    const location = useLocation();
+    console.log('location', location)
+    const categoryIdFromLocation = location.state?.['categoryId'] || ''
+    const category = categories.find((c) => c?.categoryId === categoryIdFromLocation)
+    const params = useParams();
+    const [selectedC, setSelectedC] = React.useState<{label: string, id: string, color: string} | undefined>(category)
+
     const onRangeSelect = (range: RangeType) => {
-        setFetching(true)
         setRange(range)
     }
-    const [fetching, setFetching] = React.useState(true);
-    const { categories } = useAppDataContext();
-    console.log('CAT', categories)
-    const params = useParams();
-    const [entries, setEntries] = React.useState<Entry[]>([] as Entry[])
-    const [selectedCategory, setSelectedCategory] = React.useState<string>(params?.categoryName || categories[0]?.categoryName || '')
-    const { onSetComponent } = useTopAppBarContext();
 
+    const { onSetComponent } = useTopAppBarContext();
+    const selectedCategoryId = selectedC?.id || categoryIdFromLocation
     React.useEffect(() => {
-        console.log('GETTING')
         onSetComponent(<CategoryTopAppBar title={params.categoryName} />)
-        getEntriesByDateRange({ start: today, end: rangeMap[range] }).then((e) => {
+        if(!selectedCategoryId){
+            return;
+        }
+        getEntriesByDateRangeAndCategories({ start: today, end: rangeMap[range], categoryIds: [selectedCategoryId] }).then((e) => {
+            console.log('GETTING ENTRIES',e)
             setEntries(e as Entry[])
             setFetching(false);
-        }).catch((e) => console.log('error', e))
-    }, [onSetComponent, params.categoryName, range])
-    const filteredByCategory = entries.filter((e) => e.categories?.[0]?.categoryName === selectedCategory)
-    console.log('filteredByCategory', filteredByCategory)
-    const series = selectedCategory ? totalTimeByCategory(entries, selectedCategory) : []
+        }).catch((e) => {setFetching(false); console.error('error', e)})
+    }, [onSetComponent, params.categoryName, range, selectedCategoryId])
 
+
+    const series = selectedC ? totalDurationByDate(entries) : []
     const sum = series.reduce((p, c) => { const total = p + c?.totalTime || 0; return total }, 0)
     const rounded = Math.round(sum * 10) / 10
-    const options = categories.map((c) => ({ label: c.categoryName, id: c.categoryId, color: c.color }))
+    const options = categories.map((c) => ({ label: c.categoryName, id: c?.categoryId, color: c.color }))
     return (
         <Slide direction='left' in={true}>
             <Box>
@@ -81,18 +88,25 @@ export const StatsByCategory: React.FC = () => {
                     sx={{ mb: 1 }}
                     size='small'
                     options={options}
-                    isOptionEqualToValue={(o, v) => o.id === v.id}
-
+                    onChange={(_e, newValue: {label: string; id: string;color: string} | null) => {
+                        if(newValue){
+                            console.log('change')
+                            setSelectedC(newValue)
+                        }
+                    }}
+                    isOptionEqualToValue={(o, v) => { return o.id === v.id}}
+                    disableCloseOnSelect={false}
                     renderOption={(props, c) => (
-                    <Box component={'li'} {...props}>
-                        <Chip key={c.id + c.label}
-
-                            onClick={() => setSelectedCategory(c.label.toLocaleLowerCase())} 
-                            label={c.label} sx={{ background: c.color, mr: 1, mb: 1 }} />
-                    </Box>)}
+                        <MenuItem component={'li'} {...props}
+                       
+                        >
+                            <Chip key={c.id + c.label}
+                              
+                                label={c.label} sx={{ background: c.color, mr: 1, mb: 1 }} />
+                        </MenuItem>)}
 
                     renderInput={(params) => {
-                         return <TextField
+                        return <TextField
                             {...params}
                             //  InputProps={{startAdornment: <Chip label={params.inputProps.value}/>}}
                             placeholder="Search or select category"
@@ -100,7 +114,7 @@ export const StatsByCategory: React.FC = () => {
                     }
                     } />
                 <Box sx={{ width: '100%', flexDirection: 'row', display: 'flex', justifyContent: 'center' }}>
-                    {ranges.map((r) => <Button sx={{ mb: 1, borderRadius:0 }}
+                    {ranges.map((r) => <Button sx={{ mb: 1, borderRadius: 0 }}
                         key={r.label}
                         onClick={() => onRangeSelect(r.label)}
                         size='small' fullWidth
@@ -115,23 +129,28 @@ export const StatsByCategory: React.FC = () => {
                     </Typography>
                     <Typography color='GrayText' variant='body1'>{rangeMap[range].toDateString()}-{today.toDateString()}</Typography>
                     <Box sx={{ display: 'flex', height: 300, width: '100%', alignItems: 'center', justifyContent: 'center' }}>
-                        {fetching ? <CircularProgress /> : series.length ? <BarChart margin={{
+                        {fetching ? <CircularProgress /> : 
+                        series.length ? <BarChart margin={{
                             left: 10,
                             right: 10,
                             top: 0,
                             bottom: 30,
                         }} grid={{ vertical: true }}
-                            leftAxis={null} series={[{ dataKey: 'totalTime' }]} dataset={series} xAxis={[{ tickPlacement: 'middle', dataKey: 'date', scaleType: 'band' }]} /> : <Typography variant='body2'>No data for this range. Try a different range.</Typography>}
+                            leftAxis={null} series={[{ dataKey: 'totalTime' }]} dataset={series} xAxis={[{ tickPlacement: 'middle', dataKey: 'date', scaleType: 'band' }]} /> : 
+                            <Typography variant='body2'>No data for this range. Try a different range.</Typography>}
 
                     </Box>
                     <Box sx={{ m: 1 }}>
-                        <CustomLines entries={filteredByCategory} />
+                        <CustomLines entries={entries} />
                     </Box>
 
 
 
 
                 </Box>
+                <Toolbar/>
+                <Toolbar/>
+
             </Box>
         </Slide>
     )

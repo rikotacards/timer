@@ -31,7 +31,7 @@ const mockCategories = [{
     categoryId: '4'
 
 }]
-export const NewEntryFormNarrow: React.FC = () => {
+export const AddEntryNarrow: React.FC = () => {
     const s = useSnackbarContext();
     const [currStep, setCurrStep] = React.useState(0)
 
@@ -74,7 +74,6 @@ export const NewEntryFormNarrow: React.FC = () => {
 
         try {
             toggleOpen();
-            console.log(desc?.current)
             const ref = await AddOpenEntry({ ...openEntry, desc: desc?.current?.value || '' })
             if (ref) {
                 console.log('adding open entry', ref)

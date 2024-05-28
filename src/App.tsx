@@ -13,7 +13,7 @@ import {
 } from "react-router-dom";
 import { StatsByCategory } from './components/StatsByCategory';
 import { TopAppBarProvider } from './Providers/TopAppBarProvider';
-import { NewEntryFormNarrow } from './components/NewEntryFormNarrow';
+import { AddEntryNarrow } from './components/AddEntryNarrow';
 import { SettingsPage } from './pages/SettingsPage';
 import { TodaySummary } from './components/TodaySummary';
 import { History } from './components/History';
@@ -38,7 +38,7 @@ const router = createBrowserRouter([
       }, 
       {
         path: 'add-entry',
-        element: <NewEntryFormNarrow/>
+        element: <AddEntryNarrow/>
       },
       {
         path: 'app-settings',

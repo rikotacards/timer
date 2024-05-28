@@ -19,7 +19,7 @@ import { TopAppBar } from './TopAppBar';
 
 import { EntryNarrow } from './EntryNarrow';
 import { useNavigate } from 'react-router';
-import { NewEntryForm } from './EntryFormDesktop';
+import { AddEntryWide } from './AddEntryWide';
 import { useIsNarrow } from '../utils/isMobile';
 // import { IOSSlider } from './PercentSlider';
 // import { Timeline } from './Timeline';
@@ -98,7 +98,7 @@ export const TodaySummary: React.FC<TodaySummaryProps> = () => {
     }
     return (
         <Box sx={{ m: 1 }}>
-            {!isNarrow && <NewEntryForm />}
+            {!isNarrow && <AddEntryWide />}
 
             <Typography variant='body2' fontWeight={600} color='GrayText'>{today.toDateString()}</Typography>
             <Typography sx={{ mb: 1 }} variant='h4' fontWeight={'bold'}>
@@ -112,8 +112,14 @@ export const TodaySummary: React.FC<TodaySummaryProps> = () => {
                     </div>
                     <Typography variant='body1' fontWeight={'bold'} sx={{ pb: 2, fontWeight: 500 }}> of day logged</Typography>
                 </Box>
-                <LinearProgress sx={{ mb: 1 }} variant='determinate' value={percentOfDayLogged} />
-                <Typography variant='caption' color='GrayText'>{formattedTotalTime} of 24 hours logged</Typography>
+                <LinearProgress sx={{ mb: 1, borderRadius:1 }} variant='determinate' value={percentOfDayLogged} />
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+
+                    <Typography variant='caption' fontWeight={'bold'} sx={{ mr: 0.5 }}>
+                        {formattedTotalTime}
+                    </Typography>
+                    <Typography variant='caption' color='GrayText'> of 24 hours logged</Typography>
+                </Box>
                 <Typography variant='caption' color='GrayText'>Entries: {totalEntries}</Typography>
 
 
@@ -167,15 +173,17 @@ export const TodaySummary: React.FC<TodaySummaryProps> = () => {
                         const time = formatTime(totalTimeByCategory[id])
                         return (<Box key={id}>
                             <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', mb: 1 }}>
-                                <Chip sx={{
-                                    border: '1px solid transparent',
-                                    borderColor: c?.color,
-                                    color: c?.color,
-                                    fontWeight: 600,
-                                    background: c?.color + "34", mr: 1
-                                }} label={c?.categoryName || 'NA'} />
+                                <Chip
+                                    onClick={() => nav(`/stats/${c?.categoryName}`, { state: { categoryId: c?.categoryId } })}
+                                    sx={{
+                                        border: '1px solid transparent',
+                                        borderColor: c?.color,
+                                        color: c?.color,
+                                        fontWeight: 600,
+                                        background: c?.color + "34", mr: 1
+                                    }} label={c?.categoryName || 'NA'} />
                                 <Typography variant='body1' sx={{ mr: 1 }}>{time}</Typography>
-                                <Typography color='GrayText'>{round(((totalTimeByCategory[id] / (24 * 60 * 60)) * 100))}%</Typography>
+                                <Typography sx={{ ml: 'auto' }} color='GrayText'>{round(((totalTimeByCategory[id] / (24 * 60 * 60)) * 100))}%</Typography>
                             </Box>
                             {/* <IOSSlider min={0} max={24} defaultValue={[11.4,12]} track={'normal'}/> */}
                         </Box>)

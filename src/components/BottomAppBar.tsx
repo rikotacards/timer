@@ -2,7 +2,7 @@ import { AppBar, Box, Collapse, Divider, IconButton, Paper, Toolbar } from '@mui
 import React from 'react';
 
 import { useAppDataContext, useDrawerContext } from '../Providers/contextHooks';
-import { NewEntryFormNarrow } from './NewEntryFormNarrow';
+import { AddEntryNarrow } from './AddEntryNarrow';
 import AddIcon from '@mui/icons-material/Add';
 import './button.css'
 import { useLocation, useNavigate } from 'react-router';
@@ -17,7 +17,7 @@ export const BottomAppBar: React.FC = () => {
     const { onSetComponent, toggleOpen, onSetAnchor , onSetPaperProps} = useDrawerContext();
     const { openEntry } = useAppDataContext();
     const onClick = () => {
-        onSetComponent(<NewEntryFormNarrow />)
+        onSetComponent(<AddEntryNarrow />)
         onSetPaperProps({sx:{height: '100%'}})
         onSetAnchor('bottom')
         toggleOpen()

@@ -18,7 +18,7 @@ export const History: React.FC = () => {
         onSetComponent(<TopAppBar enableBack />)
 
         getEntriesByDateRange({ start: today, end: year }).then((e) => {
-            
+            console.log(e)
             setEntries(e.reverse() as any[])
             setFetching(false);
         }).catch((e) => console.log('error', e))
