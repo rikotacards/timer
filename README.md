@@ -76,6 +76,8 @@ users/{uid}/categories/{categoryId}
 
 # Categories
 
+_Opting for fixed definition where the activity has a single category ID_
+
 The main conflict I have is, do we allow users to freely choose parent categories and sub categores. Or should these structures be strictly defined.
 
 ### Freely defined example: 
