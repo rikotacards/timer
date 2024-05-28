@@ -1,4 +1,4 @@
-import { Alert, AppBar, Box, Button, Card, IconButton, Paper, TextField, Toolbar, Typography } from '@mui/material';
+import { Alert, AppBar, Box, Button, Card, Chip, IconButton, Paper, TextField, Toolbar, Typography } from '@mui/material';
 import React from 'react';
 import { useAppDataContext, useDrawerContext, useSnackbarContext } from '../Providers/contextHooks';
 import { AddOpenEntry, updateOpenEntry } from '../firebase/db';
@@ -59,8 +59,8 @@ export const NewEntryFormNarrow: React.FC = () => {
         setCategoryText('')
     }
     const [selectedCategory, setSelectedCategory] = React.useState<string | undefined>()
-    const desc = React.useRef<HTMLInputElement>(null) 
-    
+    const desc = React.useRef<HTMLInputElement>(null)
+
     const selectCategory = (categoryName: string) => {
         setSelectedCategory(categoryName)
     }
@@ -91,14 +91,17 @@ export const NewEntryFormNarrow: React.FC = () => {
         const flattened = flattenCategories([category], categories)
         const categoryIds = flattened.map((c) => c.categoryId)
         setOpenEntry((p) => ({ ...p, categories: flattened, categoryIds }))
-       
+
         if (openEntry && openEntry.entryId) {
             console.log('setting', openEntry)
             updateOpenEntry({ ...openEntry, categories: flattened, categoryIds })
         }
     }
 
-    const addNewEntryForm = (<Box sx={{ p: 1, display: 'flex', flexDirection: 'column', height: '100%' }}>
+    const addNewEntryForm = (<Box sx={{ p: 1, display: 'flex', flexDirection: 'column', height: '100%', overflowX: 'hidden' }}>
+        <Box sx={{ display: 'flex', flexDirection: 'row', overflowX:'scroll' }}>
+            {categories.map((c) => <Chip sx={{ mr: 1, backgroundColor: c.color }} label={c.categoryName} />)}
+        </Box>
         <TextField
             value={categoryText}
             onChange={onCatChange}
@@ -117,17 +120,17 @@ export const NewEntryFormNarrow: React.FC = () => {
             </Box>}
 
         <Box sx={{ overflow: 'hidden', overflowY: 'scroll', alignItems: 'flex-start', m: 1, display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
-            <CategoryList selectedCategory={selectedCategory} 
-            categoryInput={categoryText} 
-            addCategory={addCategory} 
-            categories={filtered} />
+            <CategoryList selectedCategory={selectedCategory}
+                categoryInput={categoryText}
+                addCategory={addCategory}
+                categories={filtered} />
         </Box>
 
         <Box sx={{ position: 'sticky', bottom: '0', p: 1, width: '100%' }}>
             <Paper sx={{ p: 0.5 }} elevation={10}>
 
 
-                <TextField inputRef={desc}  size='small' margin='dense' fullWidth placeholder='What are you working on?' />
+                <TextField inputRef={desc} size='small' margin='dense' fullWidth placeholder='What are you working on?' />
                 <Button color='success' size='large' onClick={onStart} variant='contained' sx={{ mt: 1 }} fullWidth>Start</Button>
             </Paper>
         </Box>
@@ -140,16 +143,12 @@ export const NewEntryFormNarrow: React.FC = () => {
 
     return <Box sx={{ height: '100%', flexDirection: 'column' }}>
         <AppBar>
-
             <Toolbar>
                 {currStep !== 0 && <IconButton onClick={back} size='small'><ArrowBackIosNewIcon /></IconButton>}
-                <Typography fontWeight={'bold'}>Add Entry</Typography><IconButton sx={{ ml: 'auto' }} onClick={toggleOpen}><KeyboardArrowDownIcon /></IconButton>
+                <Typography fontWeight={'bold'}>Add Activity</Typography><IconButton sx={{ ml: 'auto' }} onClick={toggleOpen}><KeyboardArrowDownIcon /></IconButton>
             </Toolbar>
-
         </AppBar>
         <Toolbar />
-
-
         {steps[currStep]}
 
     </Box>
