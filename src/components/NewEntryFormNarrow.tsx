@@ -99,9 +99,7 @@ export const NewEntryFormNarrow: React.FC = () => {
     }
 
     const addNewEntryForm = (<Box sx={{ p: 1, display: 'flex', flexDirection: 'column', height: '100%', overflowX: 'hidden' }}>
-        <Box sx={{ display: 'flex', flexDirection: 'row', overflowX:'scroll' }}>
-            {categories.map((c) => <Chip sx={{ mr: 1, backgroundColor: c.color }} label={c.categoryName} />)}
-        </Box>
+
         <TextField
             value={categoryText}
             onChange={onCatChange}
@@ -119,7 +117,7 @@ export const NewEntryFormNarrow: React.FC = () => {
                 </Card>
             </Box>}
 
-        <Box sx={{ overflow: 'hidden', overflowY: 'scroll', alignItems: 'flex-start', m: 1, display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
+        <Box sx={{ overflow: 'hidden', overflowY: 'scroll', width: '100%', alignItems: 'flex-start', m: 1, display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
             <CategoryList selectedCategory={selectedCategory}
                 categoryInput={categoryText}
                 addCategory={addCategory}
