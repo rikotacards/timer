@@ -1,4 +1,4 @@
-import { Alert, Box, Button, Chip, Input, Typography } from '@mui/material';
+import { Alert, Box, Button, Chip, Input} from '@mui/material';
 import React from 'react';
 import { ColorPicker } from './ColorPicker';
 import { addCategory } from '../firebase/db';
@@ -11,10 +11,12 @@ interface CreateNewCategoryProps {
 export const CreateNewCategory: React.FC<CreateNewCategoryProps> = ({categoryName, onCancel, onHandleClose}) => {
     const [text, setText] = React.useState(categoryName || '')
     const snackbar = useSnackbarContext();
-    const {triggerRefetch} = useAppDataContext();
+    const {triggerRefetch, categories} = useAppDataContext();
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setText(e.target.value)
     }
+    const categoryNames = categories.map((c) => c.categoryName.toLowerCase())
+    const categoryExists = categoryNames.includes(text.toLowerCase())
     const onAddCategory = async() => {
         await addCategory({categoryName:text, color})
         triggerRefetch()
@@ -28,17 +30,20 @@ export const CreateNewCategory: React.FC<CreateNewCategoryProps> = ({categoryNam
     return (
         <Box sx={{ maxWidth:400, m: 1, display: 'flex', flexDirection: 'column' }}>
 
-            <Typography sx={{ p: 1 }} fontWeight={'bold'}>Create new category</Typography>
-            <div>
-                <Chip sx={{ background: color, alignItems: 'center', justifyContent: 'center' }} label={<div><Input
+                <Chip sx={{
+        border: '1px solid transparent',
+        borderColor: color,
+        color: color,
+        fontWeight:600,
+        background: color+"34"
+    }} label={<div><Input
                     inputProps={{ size: text?.length || 5 }}
                     autoFocus placeholder='name' margin='dense' size='small'
                     disableUnderline
                     onChange={onChange}
                     value={text}
-                    sx={{ background: 'transparent', size: 1 }} /></div>} />
+                    sx={{color:color, background: 'transparent', size: 1 }} /></div>} />
 
-            </div>
             <div>
 
 
@@ -47,11 +52,12 @@ export const CreateNewCategory: React.FC<CreateNewCategoryProps> = ({categoryNam
 
             </div >
 
+            {categoryExists &&   <Alert sx={{m:1}} severity='error'>Category exists</Alert>}
 
             <div>
                 <ColorPicker color={color} selectColor={setColor} />
             </div>
-            <Button onClick={onAddCategory}>Done</Button>
+            <Button disabled={categoryExists || text.length === 0} onClick={onAddCategory}>Add</Button>
             <Button onClick={onCancel}>Cancel</Button>
 
         </Box>

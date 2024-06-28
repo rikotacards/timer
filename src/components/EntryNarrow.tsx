@@ -1,4 +1,4 @@
-import { Alert, Box, Button, Card, Divider, IconButton, Popover, TextField, Tooltip, Typography } from '@mui/material';
+import { Alert, Box, Button, Card, CardActionArea, Divider, IconButton, Popover, TextField, Tooltip, Typography } from '@mui/material';
 import React from 'react';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import { MoreVertOutlined } from '@mui/icons-material';
@@ -73,26 +73,28 @@ export const EntryNarrow: React.FC<OpenEntry & { hideTimestamp: boolean }> = ({
 
             <Card sx={{mb:1, width: '100%', p: 2, display: 'flex', flexDirection: 'column', justifyContent: 'left' }}>
 
+                
                 <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-start' }}>
 
-                    <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                    <Box sx={{  display: 'flex', flexDirection: 'column' }}>
                         
-                        <div  onClick={() => setIsEdit(true)} style={{ display: 'flex', flexDirection: 'row', alignItems: 'left' }}>
 
                             <TextField 
+                            fullWidth
+                            onClick={() => setIsEdit(true)}
                             inputProps={{
                                 style: {
                                     padding: 0,
                                     fontWeight:600
                                 }
                             }}
-                              sx={{p:0, m:0,border: isEdit?undefined :'none', "& fieldset": {m:0, p:0, border: isEdit?undefined : 'none' },}}
+                              sx={{ display:'flex',p:0, m:0,border: isEdit?undefined :'none', "& fieldset": {m:0, p:0, border: isEdit?undefined : 'none' },}}
                                 
                             
-                            value={desc} onBlur={() => setIsEdit(false)} 
+                            value={desc} 
+                            onBlur={() => setIsEdit(false)} 
                             size='small' variant='outlined' /> 
                                
-                        </div>
                         {!hideTimestamp && <Box sx={{ display: 'flex', alignItems: 'center' }}>
 
                             <Typography color='GrayText' variant='caption'>{startDate} -</Typography>
@@ -118,7 +120,6 @@ export const EntryNarrow: React.FC<OpenEntry & { hideTimestamp: boolean }> = ({
                         </IconButton>
                     </Tooltip>}
                 </Box>
-
 
             </Card>
 

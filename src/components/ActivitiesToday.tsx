@@ -9,7 +9,6 @@ import { EntryNarrow } from './EntryNarrow';
 const today = new Date();
 const endOfDay = new Date(today)
 endOfDay.setHours(0, 0, 0, 0)
-const ELEVATION = 2;
 
 export const ActivitiesToday: React.FC = () => {
     const [entries, setEntries] = React.useState<EntryType[]>([])
@@ -26,7 +25,7 @@ export const ActivitiesToday: React.FC = () => {
 
             setEntries(e as NewType[])
             console.log(e)
-        }).catch((e) => console.log('error', e))
+        }).catch((e) => alert( e))
     }, [])
     return (
         <>

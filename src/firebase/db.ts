@@ -103,7 +103,7 @@ export const getEntries = async() => {
 // sevenDaysAgo = new Date(today); sevenDaysAgo.setDate(today.getDate()-7)
 export const getEntriesByDateRange = async({start, end}: {start: Date, end: Date}) => {
     const collRef = collection(db, "users", UID, "entries")
-    const q =  query(collRef, where("created", "<=", start ), where("created", '>=', end))
+    const q =  query(collRef, where("created", "<=", start ), where("created", '>=', end), orderBy('created', 'desc'))
     const querySnapshot = await getDocs(q);
     const res: Entry[] = [] 
     if(!querySnapshot){
@@ -163,7 +163,6 @@ export const editCategory = async(categoryId: string,arg: Partial<AddCategoryReq
 }
 export const deleteCategory = async(categoryId: string) => {
     try {
-
         await deleteDoc(doc(db, "users", UID, "categories", categoryId))
     } catch(e) {
         alert(e)
