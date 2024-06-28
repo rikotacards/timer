@@ -31,7 +31,7 @@ export const SnackbarProvider: React.FC<SnackbarProvider> = ({ children }) => {
 
     return <SnackbarContext.Provider value={value}>
         <Snackbar anchorOrigin={{vertical: 'top', horizontal: 'right'}} autoHideDuration={4000} open={open} onClose={toggleOpen}>
-            <Box sx={{width: isNarrow ? '100%': null}}>
+            <Box sx={{width: isNarrow ? '100%': '100%'}}>
                 {component}
             </Box>
         </Snackbar>

@@ -1,6 +1,6 @@
 import { Autocomplete, Box, Button, Chip, CircularProgress, MenuItem, Slide, TextField, Toolbar, Typography } from "@mui/material"
 import { useAppDataContext, useTopAppBarContext } from "../Providers/contextHooks"
-import { totalDurationByDate, totalTimeByCategory } from "../utils/totalTimeByCategoty";
+import { totalDurationByDate } from "../utils/totalTimeByCategoty";
 import { ScrollRestoration } from "react-router-dom";
 
 import React from 'react';
@@ -9,9 +9,8 @@ import { useLocation, useParams } from "react-router";
 
 import { CustomLines } from "./CustomLines";
 import { CategoryTopAppBar } from "./CategoryTopAppBar";
-import { getEntriesByDateRange, getEntriesByDateRangeAndCategories } from "../firebase/db";
-import { Category, Entry } from "../firebase/types";
-import { getEntryDurations } from "../utils/getEntryDurations";
+import {  getEntriesByDateRangeAndCategories } from "../firebase/db";
+import {  Entry } from "../firebase/types";
 const today = new Date();
 today.setHours(23, 59, 59, 99)
 const endOfDay = new Date(today)
@@ -49,11 +48,10 @@ export const StatsByCategory: React.FC = () => {
     const [entries, setEntries] = React.useState<Entry[]>([] as Entry[])
     const { categories } = useAppDataContext();
     const location = useLocation();
-    console.log('location', location)
     const categoryIdFromLocation = location.state?.['categoryId'] || ''
-    const category = categories.find((c) => c?.categoryId === categoryIdFromLocation)
+    // const category = categories.find((c) => c?.categoryId === categoryIdFromLocation)
     const params = useParams();
-    const [selectedC, setSelectedC] = React.useState<{label: string, id: string, color: string} | undefined>(category)
+    const [selectedC, setSelectedC] = React.useState<{label: string, id: string, color: string} | undefined>()
 
     const onRangeSelect = (range: RangeType) => {
         setRange(range)

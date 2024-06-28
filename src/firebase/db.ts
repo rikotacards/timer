@@ -30,7 +30,7 @@ export const updateOpenEntry = async (args: OpenEntry) => {
     console.log('update')
     try {
         const docRef = doc(db, "users", UID, "openEntry", args.entryId);
-        await updateDoc(docRef, {categories: args.categories})
+        await updateDoc(docRef, {categories: args.categories, desc: args.desc})
         
         }
        

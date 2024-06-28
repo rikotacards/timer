@@ -1,4 +1,4 @@
-import {  Box, Button, Chip, List, ListItemButton, TextField, Typography } from '@mui/material';
+import { Box, Button, Chip, List, ListItemButton, Paper, TextField, Typography } from '@mui/material';
 import React from 'react';
 import { Category } from '../firebase/types';
 import { CreateNewCategory } from './CreateNewCategory';
@@ -13,7 +13,7 @@ interface CategoryEdit {
   addCategory: (category: Category) => void;
 }
 export const CategoryEdit: React.FC<CategoryEdit> = ({ onHandleClose, addCategory }) => {
-  const {categories} = useAppDataContext();
+  const { categories } = useAppDataContext();
 
   const [inputText, setInputText] = React.useState('')
   const filtered = categories.filter((cat) => cat.categoryName.indexOf(inputText) >= 0)
@@ -32,14 +32,22 @@ export const CategoryEdit: React.FC<CategoryEdit> = ({ onHandleClose, addCategor
     return <CreateNewCategory onHandleClose={onHandleClose} onCancel={toggleOpenCreateNew} categoryName={inputText} />
   }
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', p: 1, maxWidth: 400 }}>
+    <Box sx={{ position: 'relative', display: 'flex', flexDirection: 'column', p: 1, maxWidth: 400, height: '300px' }}>
+      <Paper
+                sx={{zIndex:4, position: 'sticky', top:0 }}
 
-      <Typography sx={{ p: 1, fontWeight: 'bold' }}>Add a category</Typography>
-      <TextField autoFocus onChange={onChange} size='small' placeholder='Add/create category' />
+      >
 
-      <List>
+        <TextField
+          autoFocus={true}
+          onChange={onChange}
+          size='small'
+          placeholder='Search category' />
+      </Paper>
 
-        {filtered.map((c) => <ListItemButton key={c.categoryId} onClick={() => { addCategory(c) }} ><Chip onClick={() => { addCategory(c) }} key={c.categoryId} sx={{ background: c.color, mb: 1 }} label={c.categoryName} /></ListItemButton>)}
+      <List sx={{display: 'flex', flexDirection: 'column'}}>
+
+        {filtered.map((c) => <ListItemButton key={c.categoryId} onClick={() => { addCategory(c); onHandleClose() }} ><Chip key={c.categoryId} sx={{ background: c.color, mb: 1 }} label={c.categoryName} /></ListItemButton>)}
       </List>
 
       {

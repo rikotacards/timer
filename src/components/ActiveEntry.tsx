@@ -3,9 +3,9 @@ import React from 'react';
 import { useAppDataContext, useSnackbarContext } from '../Providers/contextHooks';
 import { formatTime } from '../utils/formatTime';
 import { addEntry } from '../firebase/db';
-import { BLANK_ENTRY } from './AddEntryWide';
 import { useStopwatch } from 'react-timer-hook';
 import StopCircleIcon from '@mui/icons-material/StopCircle';
+ const BLANK_ENTRY = { desc: '', categories: [], created: { seconds: 0, nanoseconds: 0 }, startTime: { seconds: 0, nanoseconds: 0 }, endTime: null } as OpenEntry
 
 export const ActiveEntry: React.FC = () => {
     const s = useSnackbarContext();

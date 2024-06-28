@@ -1,4 +1,4 @@
-import { Alert, AppBar, Box, Button, Card, Chip, IconButton, Paper, TextField, Toolbar, Typography } from '@mui/material';
+import { Alert, AppBar, Box, Button, Card, IconButton, Paper, TextField, Toolbar, Typography } from '@mui/material';
 import React from 'react';
 import { useAppDataContext, useDrawerContext, useSnackbarContext } from '../Providers/contextHooks';
 import { AddOpenEntry, updateOpenEntry } from '../firebase/db';
@@ -48,7 +48,6 @@ export const AddEntryNarrow: React.FC = () => {
 
     const { toggleOpen } = useDrawerContext();
     const { openEntry, setOpenEntry, categories } = useAppDataContext();
-    console.log(categories)
     const [categoryText, setCategoryText] = React.useState('');
     const [color, setColor] = React.useState('')
     const onCatChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -103,6 +102,7 @@ export const AddEntryNarrow: React.FC = () => {
             value={categoryText}
             onChange={onCatChange}
             size='small'
+            autoFocus
             fullWidth
             placeholder='Search categories' />
         {(categoryText.length === 0 ? categories : filtered).length === 0 &&

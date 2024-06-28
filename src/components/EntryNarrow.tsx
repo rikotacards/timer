@@ -67,9 +67,7 @@ export const EntryNarrow: React.FC<OpenEntry & { hideTimestamp: boolean }> = ({
     const endDate = endTime && new Date(endTime.seconds * 1000).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', hour12: true })
 
     return <div >
-        {/* <Box mr={1}>
-            <Typography variant='caption'>2:34pm</Typography>
-        </Box> */}
+
 
 
         <Card elevation={0} sx={{ background: 'transparent', width: '100%', display: 'flex', mt: 0, mb: 1, p: 1, flexDirection: 'row' }}>
