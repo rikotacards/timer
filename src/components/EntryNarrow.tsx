@@ -46,7 +46,7 @@ export const EntryNarrow: React.FC<OpenEntry & { hideTimestamp: boolean }> = ({
     }
     const onChipClick = React.useCallback((categoryName: string, categoryId: string) => {
         onSetComponent(<CategoryTopAppBar />)
-        nav(`/stats/${categoryName}`, {state: {categoryId: categoryId}})
+        nav(`/stats/${categoryName}`, { state: { categoryId: categoryId } })
     }, [nav, onSetComponent])
 
 
@@ -70,18 +70,28 @@ export const EntryNarrow: React.FC<OpenEntry & { hideTimestamp: boolean }> = ({
 
 
 
-        <Card elevation={0} sx={{ background: 'transparent', width: '100%', display: 'flex', mt: 0, mb: 1, p: 1, flexDirection: 'row' }}>
 
-            <Box sx={{ width: '100%', p: 1, display: 'flex', flexDirection: 'column', justifyContent: 'left' }}>
+            <Card sx={{mb:1, width: '100%', p: 2, display: 'flex', flexDirection: 'column', justifyContent: 'left' }}>
 
                 <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-start' }}>
+
                     <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                        
+                        <div  onClick={() => setIsEdit(true)} style={{ display: 'flex', flexDirection: 'row', alignItems: 'left' }}>
 
-                        <div onClick={() => setIsEdit(true)} style={{ display: 'flex', flexDirection: 'row', alignItems: 'left' }}>
-
-                            {isEdit ? <TextField size='small' variant='outlined' value={desc} /> :
-                                <Typography variant='body1' sx={{ textTransform: 'capitalize', fontWeight: '600' }} >{desc}</Typography>}
-
+                            <TextField 
+                            inputProps={{
+                                style: {
+                                    padding: 0,
+                                    fontWeight:600
+                                }
+                            }}
+                              sx={{p:0, m:0,border: isEdit?undefined :'none', "& fieldset": {m:0, p:0, border: isEdit?undefined : 'none' },}}
+                                
+                            
+                            value={desc} onBlur={() => setIsEdit(false)} 
+                            size='small' variant='outlined' /> 
+                               
                         </div>
                         {!hideTimestamp && <Box sx={{ display: 'flex', alignItems: 'center' }}>
 
@@ -92,7 +102,10 @@ export const EntryNarrow: React.FC<OpenEntry & { hideTimestamp: boolean }> = ({
                     </Box>
                     <Box flexDirection={'row'} display='flex' sx={{ ml: 'auto' }}>
                         <Typography fontWeight={'bold'} variant='body1' sx={{ mr: 1 }}>{formattedDuration}</Typography>
-                        <MoreVertOutlined onClick={onMoreClick} />
+                        <IconButton>
+
+                            <MoreVertOutlined onClick={onMoreClick} />
+                        </IconButton>
                     </Box>
 
 
@@ -105,11 +118,13 @@ export const EntryNarrow: React.FC<OpenEntry & { hideTimestamp: boolean }> = ({
                         </IconButton>
                     </Tooltip>}
                 </Box>
-            </Box>
 
 
-        </Card>
-        <Divider sx={{ width: '100%' }} />
+            </Card>
+
+
+   
+        {/* <Divider sx={{ width: '100%' }} /> */}
         <Popover id={id}
             anchorEl={anchorEl}
             open={open}

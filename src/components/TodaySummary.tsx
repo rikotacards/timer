@@ -21,6 +21,7 @@ import { EntryNarrow } from './EntryNarrow';
 import { useNavigate } from 'react-router';
 import { AddEntryWide } from './AddEntryWide';
 import { useIsNarrow } from '../utils/isMobile';
+import { ActivitiesToday } from './ActivitiesToday';
 // import { IOSSlider } from './PercentSlider';
 // import { Timeline } from './Timeline';
 // import {SingleTimeline} from './SingleTimeline';
@@ -47,7 +48,7 @@ function PieCenterLabel({ children }: { children: React.ReactNode }) {
     );
 }
 
-
+const DISABLE_CHART = true;
 // Considered doing a version where you just pass in the dates
 // here we assume we pass in a group of dates belonging to the same day
 export const TodaySummary: React.FC<TodaySummaryProps> = () => {
@@ -112,7 +113,7 @@ export const TodaySummary: React.FC<TodaySummaryProps> = () => {
                     </div>
                     <Typography variant='body1' fontWeight={'bold'} sx={{ pb: 2, fontWeight: 500 }}> of day logged</Typography>
                 </Box>
-                <LinearProgress sx={{ mb: 1, borderRadius:1 }} variant='determinate' value={percentOfDayLogged} />
+                <LinearProgress sx={{ mb: 1, borderRadius: 1 }} variant='determinate' value={percentOfDayLogged} />
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
 
                     <Typography variant='caption' fontWeight={'bold'} sx={{ mr: 0.5 }}>
@@ -125,8 +126,7 @@ export const TodaySummary: React.FC<TodaySummaryProps> = () => {
 
 
             </Card>
-            <Box sx={{ mb: 1, display: 'flex', alignItems: 'center', flexDirection: 'row' }}>
-
+            {DISABLE_CHART ? null : <><Box sx={{ mb: 1, display: 'flex', alignItems: 'center', flexDirection: 'row' }}>
                 <Typography variant='h6' fontWeight={'bold'}>By Category</Typography>
                 <IconButton onClick={() => nav('stats')}>
                     <ChevronRightIcon />
@@ -190,19 +190,8 @@ export const TodaySummary: React.FC<TodaySummaryProps> = () => {
                     })
                 }
 
-            </Card>
-            <Typography sx={{ mb: 1 }} variant='h6' fontWeight={'bold'}>Activities today</Typography>
-
-            <Card elevation={ELEVATION} sx={{ mb: 1 }}>
-                {entries.length === 0 && <Typography sx={{ p: 1 }} variant='body2'>No entries yet.</Typography>}
-                {entries.map((e) => <EntryNarrow key={e.entryId} hideTimestamp={false} {...e} />)}
-            </Card>
-            <Box sx={{ display: 'flex', alignItems: 'center', flexDirection: 'row' }}>
-
-                <Typography variant='h6' fontWeight={'bold'}>History</Typography>
-                <IconButton onClick={goToHistory} size='small' ><ChevronRightIcon />
-                </IconButton>
-            </Box>
+            </Card></>}
+            <ActivitiesToday/>
             <Toolbar />
             <Toolbar />
         </Box>
