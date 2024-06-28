@@ -1,4 +1,4 @@
-import { AddCircleOutline, MoreVertOutlined } from '@mui/icons-material';
+import { AddCircleOutline } from '@mui/icons-material';
 import { Alert, Box, Button, Card, Chip, CircularProgress, IconButton, Popover, TextField, Typography } from '@mui/material';
 import React from 'react';
 import PlayCircleFilledWhiteIcon from '@mui/icons-material/PlayCircleFilledWhite';
@@ -98,6 +98,7 @@ export const AddEntryWide: React.FC = () => {
             }
             await addEntry({ ...openEntry, entryId: openEntry.entryId })
             setOpenEntry({ categories: [], desc: '', entryId: '', endTime: { nanoseconds: 0, seconds: 0 }, startTime: { nanoseconds: 0, seconds: 0 }, created: { nanoseconds: 0, seconds: 0 } })
+            setDesc('')
             s.onSetComponent(<Alert severity='success'>New item logged!</Alert>)
             s.toggleOpen();
         }
@@ -119,6 +120,9 @@ export const AddEntryWide: React.FC = () => {
     const handleClose = () => {
         setAnchorEl(null);
     };
+    const onStartStop = () => {
+        isRunning ? onStop() : onStart()
+    }
     const component = {
         'simple-popover': <CategoryEdit addCategory={addCategory} onHandleClose={handleClose} />
         ,
@@ -146,13 +150,24 @@ export const AddEntryWide: React.FC = () => {
                 startIcon={<AddCircleOutline />}>
                 <Typography sx={{ textTransform: 'capitalize' }} variant='body2'>Add category</Typography>
             </Button>}
-            {openEntry.categories?.map((c) => <Chip component={'button'} onClick={handleClick} key={c.categoryId} label={c.categoryName} sx={{ background: c.color }} />)}
+            {openEntry.categories?.map((c) => <Chip component={'button'} onClick={handleClick} key={c.categoryId} label={c.categoryName} sx={{
+        border: '1px solid transparent',
+        borderColor: c.color,
+        color: c.color,
+        fontWeight:600,
+        background: c.color+"34",
+        mr:1
+    }} />)}
             <Box display={'flex'} alignItems={'center'} sx={{ ml: 'auto' }}>
                 {isRunning && <CircularProgress variant='indeterminate' color='success' sx={{ m: 1, height: 20, width: 20 }} size='small' />}
 
                 {isRunning ? <TimeElapsed startTimeSeconds={openEntry?.startTime?.seconds} /> : <Typography fontWeight={'bold'}>00:00:00</Typography>}
 
-                <IconButton onClick={isRunning ? onStop : () => onStart()} size='small' color={isRunning ? 'warning' : 'success'} sx={{ ml: 1 }}>
+                <IconButton onClick={onStartStop} 
+                disabled={desc.length == 0}
+                size='small' 
+                color={isRunning ? 'warning' : 'success'} 
+                sx={{ ml: 1 }}>
                     {!isRunning ? <PlayCircleFilledWhiteIcon /> : <StopCircleIcon />}
                 </IconButton>
 

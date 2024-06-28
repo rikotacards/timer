@@ -32,9 +32,16 @@ export const CategoryEdit: React.FC<CategoryEdit> = ({ onHandleClose, addCategor
     return <CreateNewCategory onHandleClose={onHandleClose} onCancel={toggleOpenCreateNew} categoryName={inputText} />
   }
   return (
-    <Box sx={{ position: 'relative', display: 'flex', flexDirection: 'column', p: 1, maxWidth: 400, height: '300px' }}>
+    <Box sx={{ position: 
+    'relative', display: 'flex',
+     flexDirection: 'column', 
+     p: 0, maxWidth: 400, 
+     height: '300px',
+     overflow: 'scroll'
+     }}>
       <Paper
-                sx={{zIndex:4, position: 'sticky', top:0 }}
+      elevation={5}
+        sx={{p:1, zIndex: 10, position: 'sticky', top: 0 }}
 
       >
 
@@ -45,9 +52,22 @@ export const CategoryEdit: React.FC<CategoryEdit> = ({ onHandleClose, addCategor
           placeholder='Search category' />
       </Paper>
 
-      <List sx={{display: 'flex', flexDirection: 'column'}}>
+      <List sx={{p:1, display: 'flex', 
+        flexDirection: 'column', 
 
-        {filtered.map((c) => <ListItemButton key={c.categoryId} onClick={() => { addCategory(c); onHandleClose() }} ><Chip key={c.categoryId} sx={{ background: c.color, mb: 1 }} label={c.categoryName} /></ListItemButton>)}
+        }}>
+
+        {filtered.map((c) => <ListItemButton
+          key={c.categoryId}
+          onClick={() => { addCategory(c); onHandleClose() }} >
+          <Chip key={c.categoryId} sx={{
+        border: '1px solid transparent',
+        borderColor: c.color,
+        color: c.color,
+        fontWeight:600,
+        background: c.color+"34",
+        mr:1
+    }} label={c.categoryName} /></ListItemButton>)}
       </List>
 
       {

@@ -5,6 +5,7 @@ import { formatTime } from '../utils/formatTime';
 import { addEntry } from '../firebase/db';
 import { useStopwatch } from 'react-timer-hook';
 import StopCircleIcon from '@mui/icons-material/StopCircle';
+import { OpenEntry } from '../firebase/types';
  const BLANK_ENTRY = { desc: '', categories: [], created: { seconds: 0, nanoseconds: 0 }, startTime: { seconds: 0, nanoseconds: 0 }, endTime: null } as OpenEntry
 
 export const ActiveEntry: React.FC = () => {
