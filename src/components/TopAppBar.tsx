@@ -8,12 +8,16 @@ import { useIsNarrow } from '../utils/isMobile';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import { useNavigate } from 'react-router';
 const sidebarItems = [
-    { icon: <AccessTimeIcon />, label: 'Home' }, 
-    { icon: <DashboardIcon />, label: 'Dashboard' },
+    { icon: <AccessTimeIcon />, label: 'Home', to: '/' }, 
+    { icon: <DashboardIcon />, label: 'Dashboard', to:'dashboard' },
 ]
 
 const SidebarList: React.FC = () => {
-    const items = sidebarItems.map((item) => <ListItem key={item.label} disablePadding><ListItemButton><ListItemIcon>{item.icon}</ListItemIcon><ListItemText primary={item.label} /></ListItemButton></ListItem>)
+    const nav = useNavigate();
+    const onClick = (path:string) => {
+        nav(path)
+    }
+    const items = sidebarItems.map((item) => <ListItem onClick={() => onClick(item.to)} key={item.label} disablePadding><ListItemButton><ListItemIcon>{item.icon}</ListItemIcon><ListItemText primary={item.label} /></ListItemButton></ListItem>)
     return (
         <Box>
             <List>

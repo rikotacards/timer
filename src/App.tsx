@@ -17,36 +17,47 @@ import { AddEntryNarrow } from './components/AddEntryNarrow';
 import { SettingsPage } from './pages/SettingsPage';
 import { TodaySummary } from './components/TodaySummary';
 import { History } from './components/History';
+import { DashboardPage } from './pages/DashboardPage';
 
 const router = createBrowserRouter([
   {
-    path:'/',
-    element: <TopAppBarProvider><Layout/></TopAppBarProvider>,
+    path: '/',
+    element:
+      <DrawerProvider>
+        <TopAppBarProvider>
+
+          <Layout />
+        </TopAppBarProvider>
+      </DrawerProvider>,
     children: [
       {
         path: '',
-        element: <TodaySummary/>
+        element: <TodaySummary />
 
       },
       {
         path: 'stats/:categoryName',
-        element: <StatsByCategory/>
+        element: <StatsByCategory />
       },
       {
         path: 'stats',
-        element: <StatsByCategory/>
-      }, 
+        element: <StatsByCategory />
+      },
       {
         path: 'add-entry',
-        element: <AddEntryNarrow/>
+        element: <AddEntryNarrow />
       },
       {
         path: 'app-settings',
-        element: <SettingsPage/>
+        element: <SettingsPage />
       },
       {
         path: 'history',
-        element: <History/>
+        element: <History />
+      },
+      {
+        path: 'dashboard',
+        element: <DashboardPage />
       }
     ]
   }
@@ -65,18 +76,16 @@ function App() {
   return (
 
     <ThemeProvider theme={darkTheme}>
-        <CssBaseline />
-        <AppDataProvider>
-          <StopwatchProvider>
-            <SnackbarProvider>
-              <DrawerProvider>
-                <ModalProvider>
-                  <RouterProvider router={router}/>
-                </ModalProvider>
-              </DrawerProvider>
-            </SnackbarProvider>
-          </StopwatchProvider>
-        </AppDataProvider>
+      <CssBaseline />
+      <AppDataProvider>
+        <StopwatchProvider>
+          <SnackbarProvider>
+            <ModalProvider>
+              <RouterProvider router={router} />
+            </ModalProvider>
+          </SnackbarProvider>
+        </StopwatchProvider>
+      </AppDataProvider>
 
     </ThemeProvider>
 

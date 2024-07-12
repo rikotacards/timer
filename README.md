@@ -349,3 +349,7 @@ Should delete all children
 
 
 * Stats per day, break down of what is recorded per day
+
+## Stats per week
+* bar chart / histogram
+* get all activities, sort them by day

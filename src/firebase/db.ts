@@ -1,6 +1,6 @@
 import { setDoc, updateDoc, deleteDoc, getDocs, doc, addDoc, collection, serverTimestamp, onSnapshot, query, orderBy, where, arrayUnion } from "firebase/firestore";
 import { UID, db } from "./firebaseConfig";
-import { OpenEntry , Category, AddCategoryRequestBody} from "./types";
+import { OpenEntry , Category, AddCategoryRequestBody, Entry as IEntry} from "./types";
 
 export interface Entry {
     desc: string;
@@ -78,7 +78,7 @@ export const addEntry = async (args: Entry) => {
 
 
 export const updateEntry = () => {
-
+    
 }
 
 export const deleteEntry = async(args: {entryId: string}) => {
@@ -105,12 +105,12 @@ export const getEntriesByDateRange = async({start, end}: {start: Date, end: Date
     const collRef = collection(db, "users", UID, "entries")
     const q =  query(collRef, where("created", "<=", start ), where("created", '>=', end), orderBy('created', 'desc'))
     const querySnapshot = await getDocs(q);
-    const res: Entry[] = [] 
+    const res: IEntry[] = [] 
     if(!querySnapshot){
         return []
     }
     querySnapshot.forEach((doc) => {
-        res.push({...doc.data() as Entry, entryId: doc.id})
+        res.push({...doc.data() as IEntry, entryId: doc.id})
     })
     return res;
 }
@@ -207,7 +207,5 @@ export const addSubCategory = async(arg: addSubCategoryArgs) => {
 
 }
 
-export const updateCategory = () => {
 
-}
 
