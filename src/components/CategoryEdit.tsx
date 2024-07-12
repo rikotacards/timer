@@ -17,7 +17,7 @@ export const CategoryEdit: React.FC<CategoryEdit> = ({ onHandleClose, addCategor
   const { categories } = useAppDataContext();
 
   const [inputText, setInputText] = React.useState('')
-  const filtered = categories.filter((cat) => cat.categoryName.indexOf(inputText) >= 0)
+  const filtered = categories.filter((cat) => cat.categoryName.toLowerCase().indexOf(inputText.toLowerCase()) >= 0)
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputText(e.target.value);
   }
