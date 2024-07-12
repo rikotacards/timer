@@ -30,7 +30,7 @@ export const StackedBarChart: React.FC<StackedBarChartProps> = ({categoryIds, da
           sum = d[key] + sum
         }
         console.log('sum', sum )
-        return sum
+        return sum 
       }
       const tooltip = d3.select("body").append("div")
       .attr("class", "tooltip")

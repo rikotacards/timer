@@ -49,7 +49,7 @@ const flattenEntriesByCategores = (entires: Entry[]) => {
         }
         let sum = 0; 
         categories[categoryKey].forEach(e => {
-            const duration = e.endTime.seconds - e.startTime.seconds;
+            const duration = (e.endTime.seconds - e.startTime.seconds) /60 /60;
             sum = sum + duration;
         })
         categoriesWithDuration[categoryKey] = sum
