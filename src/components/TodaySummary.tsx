@@ -9,15 +9,13 @@ import { getEntriesByDateRange } from '../firebase/db';
 import { round } from '../utils/round';
 import { PieChart } from '@mui/x-charts/PieChart';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-
-// see categories
+import EqualizerRoundedIcon from '@mui/icons-material/EqualizerRounded';// see categories
 // see total time logged
 // see number of entries
 import { useDrawingArea } from '@mui/x-charts/hooks';
 import { styled } from '@mui/material/styles';
 import { TopAppBar } from './TopAppBar';
 
-import { EntryNarrow } from './EntryNarrow';
 import { useNavigate } from 'react-router';
 import { AddEntryWide } from './AddEntryWide';
 import { useIsNarrow } from '../utils/isMobile';
@@ -58,16 +56,15 @@ export const TodaySummary: React.FC<TodaySummaryProps> = () => {
     const isNarrow = useIsNarrow();
 
     const nav = useNavigate();
-    const goToHistory = () => {
-        nav('/history')
-    }
+    const goToDashboards = React.useCallback(() => {
+        nav('/dashboard')
+    }, [nav])
     const [entries, setEntries] = React.useState<EntryType[]>([])
 
     React.useEffect(() => {
-        console.log('GETTING');
         onSetComponent(<TopAppBar />)
 
-        getEntriesByDateRange({ start: today, end: endOfDay }).then((e) => {
+        getEntriesByDateRange({ start: endOfDay, end: today }).then((e) => {
             setEntries(e as EntryType[])
             setFetching(false);
             console.log(e)
@@ -95,17 +92,20 @@ export const TodaySummary: React.FC<TodaySummaryProps> = () => {
     })
 
     if (fetching) {
-        return <LinearProgress />
+        return <LinearProgress sx={{mt:-1}} />
     }
     return (
         <Box sx={{ m: 1 }}>
             {!isNarrow && <AddEntryWide />}
 
             <Typography variant='body2' fontWeight={600} color='GrayText'>{today.toDateString()}</Typography>
+            <Box sx={{display: 'flex', alignItems: 'center'}}>
+
             <Typography sx={{ mb: 1 }} variant='h4' fontWeight={'bold'}>
                 {'Summary'}
             </Typography>
-
+            <IconButton onClick={goToDashboards} sx={{mb:1}}><EqualizerRoundedIcon/></IconButton>
+            </Box>
             <Card elevation={ELEVATION} sx={{ borderRadius: 3, p: 2, mb: 2, display: 'flex', flexDirection: 'column' }}>
                 <Box sx={{ display: 'flex', flexDirection: 'row', textAlign: 'left', width: '100%' }}>
                     <div>

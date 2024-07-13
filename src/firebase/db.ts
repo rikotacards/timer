@@ -103,7 +103,7 @@ export const getEntries = async() => {
 // sevenDaysAgo = new Date(today); sevenDaysAgo.setDate(today.getDate()-7)
 export const getEntriesByDateRange = async({start, end}: {start: Date, end: Date}) => {
     const collRef = collection(db, "users", UID, "entries")
-    const q =  query(collRef, where("created", "<=", start ), where("created", '>=', end), orderBy('created', 'desc'))
+    const q =  query(collRef, where("created", "<=", end ), where("created", '>=', start), orderBy('created', 'desc'))
     const querySnapshot = await getDocs(q);
     const res: IEntry[] = [] 
     if(!querySnapshot){

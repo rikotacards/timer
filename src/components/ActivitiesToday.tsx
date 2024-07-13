@@ -20,7 +20,7 @@ export const ActivitiesToday: React.FC = () => {
     React.useEffect(() => {
         console.log('GETTING');
 
-        getEntriesByDateRange({ start: today, end: endOfDay }).then((e) => {
+        getEntriesByDateRange({ start: endOfDay, end: today }).then((e) => {
             type NewType = EntryType;
 
             setEntries(e as NewType[])

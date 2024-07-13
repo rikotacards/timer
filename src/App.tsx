@@ -86,7 +86,6 @@ function App() {
           </SnackbarProvider>
         </StopwatchProvider>
       </AppDataProvider>
-
     </ThemeProvider>
 
 

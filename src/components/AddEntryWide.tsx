@@ -91,7 +91,6 @@ export const AddEntryWide: React.FC = () => {
             return;
         }
         try {
-            console.log('stopping', openEntry)
             if (!openEntry.entryId) {
                 alert('no entryId')
                 return;
