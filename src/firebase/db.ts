@@ -98,6 +98,17 @@ export const getEntries = async() => {
     });
     return res
 }
+export const getEntriesRealTime = (setData: (data: IEntry[]) => void, start: Date) => {
+    const q = query(collection(db, "users", UID, "entries"),  where("created", ">=", start), orderBy('created', 'desc'))
+    const initSnapshot = onSnapshot(q, (querySnapshot) => {
+        const entries: IEntry[] = []; 
+        querySnapshot.forEach((s) => {
+            entries.push(s.data() as IEntry)
+        })
+        setData(entries)
+    })
+    return initSnapshot
+}
 
 // today = new Date();
 // sevenDaysAgo = new Date(today); sevenDaysAgo.setDate(today.getDate()-7)

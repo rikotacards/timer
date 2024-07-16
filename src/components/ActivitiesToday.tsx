@@ -2,7 +2,7 @@ import { Box, Card, IconButton, Typography } from '@mui/material';
 import React from 'react';
 import { Entry as EntryType } from '../firebase/types';
 
-import { getEntriesByDateRange } from '../firebase/db';
+import {  getEntriesRealTime } from '../firebase/db';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { useNavigate } from 'react-router';
 import { EntryNarrow } from './EntryNarrow';
@@ -17,15 +17,13 @@ export const ActivitiesToday: React.FC = () => {
     const goToHistory = () => {
         nav('/history')
     }
+    const setEntryData = (entries: EntryType[]) => {
+        setEntries(entries)
+    }
     React.useEffect(() => {
-        console.log('GETTING');
-
-        getEntriesByDateRange({ start: endOfDay, end: today }).then((e) => {
-            type NewType = EntryType;
-
-            setEntries(e as NewType[])
-            console.log(e)
-        }).catch((e) => alert( e))
+        const unsub = getEntriesRealTime(setEntryData, endOfDay)
+        
+        return () => unsub()
     }, [])
     return (
         <>
