@@ -1,5 +1,5 @@
 import React from 'react';
-import { getCategories, getEntries, getOpenEntries } from '../firebase/db';
+import { getCategories, getEntries, getOpenEntries, getOpenEntriesRealTime } from '../firebase/db';
 import { Category, OpenEntry } from '../firebase/types';
 import { IS_OFFLINE } from '../App';
 import { mockEntries } from '../mocks/mockEntries';
@@ -51,18 +51,20 @@ export const AppDataProvider: React.FC<AppDataProviderProps> = ({ children }) =>
             setIsLoadingEntries(false)
             return
         }
-        getEntries().then((r) => {
-            if (r.length) {
-                setIsLoadingEntries(true)
-                setEntries(r)
-            }
-        }).finally(() => { setIsLoadingEntries(false) })
-        getOpenEntries().then((r) => {
-            if (r.length) {
-                setIsRunning(true)
-                setOpenEntry(r[0])
-            }
-        }).finally(() => { setLoadingActiveEntry(false) })
+        // getEntries().then((r) => {
+        //     if (r.length) {
+        //         setIsLoadingEntries(true)
+        //         setEntries(r)
+        //     }
+        // }).finally(() => { setIsLoadingEntries(false) })
+        // getOpenEntries().then((r) => {
+        //     if (r.length) {
+                // setIsRunning(true)
+        //         setOpenEntry(r[0])
+        //     }
+        // }).finally(() => { setLoadingActiveEntry(false) })
+       const unsub = getOpenEntriesRealTime(setOpenEntry, setIsRunning)
+       return () => unsub()
     }, [])
      React.useEffect(() => {
 

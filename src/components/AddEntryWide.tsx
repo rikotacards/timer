@@ -6,22 +6,25 @@ import { CategoryEdit } from './CategoryEdit';
 import { useAppDataContext, useSnackbarContext } from '../Providers/contextHooks';
 import { AddOpenEntry, addEntry, deleteOpenEntry, updateOpenEntry } from '../firebase/db';
 import { Category, OpenEntry } from '../firebase/types';
-import { NewEntryFormSkeleton } from './NewEntryFormSkeleton';
 import StopCircleIcon from '@mui/icons-material/StopCircle';
 import { TimeElapsed } from './TimeElapsed';
 import { flattenCategories } from '../utils/flattenCategories';
 export const AddEntryWide: React.FC = () => {
-    const { isLoadingActiveEntry, setOpenEntry, openEntry, categories } = useAppDataContext()
-
+    const {  setOpenEntry, openEntry, categories } = useAppDataContext()
     const [desc, setDesc] = React.useState(openEntry.desc || "")
     const s = useSnackbarContext();
     const [isRunning, setIsRunning] = React.useState(false)
     const hasId = !!openEntry.entryId
     React.useEffect(() => {
         if (hasId) {
-            setIsRunning(true)
+            setIsRunning(true);
+            setDesc(openEntry.desc)
+
+        } else {
+            setIsRunning(false);
+            setDesc('')
         }
-    }, [hasId])
+    }, [hasId, openEntry.desc])
     const addCategory = (category: Category) => {
         console.log('category added to UI', category.categoryName)
         const flattened = flattenCategories([category], categories)
@@ -129,14 +132,18 @@ export const AddEntryWide: React.FC = () => {
     }
     const open = Boolean(anchorEl);
     const id = open ? anchorEl?.id === 'more' ? 'more' : 'simple-popover' : undefined;
-    if (isLoadingActiveEntry) {
-        return <NewEntryFormSkeleton />
-    }
+ 
 
     return <Card elevation={4} variant='elevation' sx={{ p: 1, mb: 1 }}>
         <Box alignItems={'center'} display={'flex'}>
             <TextField
                 onBlur={() => updateDesc(desc)}
+                onKeyDown={(e) => {
+                    if(e.key == 'Enter'){
+                        updateDesc(desc)
+        
+                    }
+                }}
                 value={desc}
                 onChange={onChange}
                 size='small'

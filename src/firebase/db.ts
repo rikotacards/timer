@@ -39,7 +39,25 @@ export const updateOpenEntry = async (args: OpenEntry) => {
     }
 }
 
-
+export const getOpenEntriesRealTime =  (setData: (data:OpenEntry) => void, setIsRunning: (isRunning: boolean) => void) => {
+    const q = query(collection(db, "users", UID, "openEntry"))
+    const initSnapshot = onSnapshot(q, (querySnapshot) => {
+        const entries: OpenEntry[] = []; 
+        querySnapshot.forEach((s) => {
+            entries.push({...s.data(), entryId: s.id} as OpenEntry)
+        })
+        console.log('whatver', entries)
+        if(entries.length){
+            setData(entries[0]);
+            setIsRunning(true)
+        } else {
+            setData([{desc: '', entryId: ''}])
+            setIsRunning(false);
+        }
+    })
+   
+    return initSnapshot
+}
 
 export const getOpenEntries = async () => {
     const querySnapshot = await getDocs(collection(db, "users", UID, "openEntry"));
@@ -77,8 +95,19 @@ export const addEntry = async (args: Entry) => {
 }
 
 
-export const updateEntry = () => {
-    
+export const updateEntry = async(args: {desc: string, entryId: string}) => {
+    if(!args.entryId){
+        throw new Error('No entry ID')
+    }
+    try {
+        const docRef = doc(db, "users", UID, "entries", args.entryId);
+        await updateDoc(docRef, {desc: args.desc})
+        
+        }
+       
+     catch (e) {
+        alert(e)
+    }
 }
 
 export const deleteEntry = async(args: {entryId: string}) => {
@@ -105,7 +134,7 @@ export const getEntriesRealTime = (setData: (data: IEntry[]) => void, start: Dat
         querySnapshot.forEach((s) => {
             entries.push(s.data() as IEntry)
         })
-        setData(entries)
+        setData(entries);
     })
     return initSnapshot
 }

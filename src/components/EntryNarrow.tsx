@@ -4,7 +4,7 @@ import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import { MoreVertOutlined } from '@mui/icons-material';
 import { CategoryEdit } from './CategoryEdit';
 import { OpenEntry } from '../firebase/types';
-import { deleteEntry } from '../firebase/db';
+import { deleteEntry, updateEntry } from '../firebase/db';
 import { formatTime } from '../utils/formatTime';
 import { useDrawerContext, useSnackbarContext, useTopAppBarContext } from '../Providers/contextHooks';
 import { MoreMenuNarrow } from './MoreMenuNarrow';
@@ -31,6 +31,30 @@ export const EntryNarrow: React.FC<OpenEntry & { hideTimestamp: boolean }> = ({
     const handleClose = () => {
         setAnchorEl(null);
     };
+
+    const [newText, setNewNext] = React.useState(desc);
+
+
+    const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setNewNext(e.target.value);
+    }
+
+    const onUpdate = async (args: { desc: string, entryId: string, categories?: string[] }) => {
+        setIsEdit(false);
+        try {
+            if (args.desc !== desc) {
+                await updateEntry(args)
+                snackbar.onSetComponent(<Alert severity='success'>Updated</Alert>)
+                snackbar.toggleOpen()
+            }
+        } catch (e) {
+            alert(e)
+            snackbar.onSetComponent(<Alert severity='error'>Error updating</Alert>)
+            snackbar.toggleOpen()
+
+        }
+    }
+
 
     const onDelete = async () => {
         entryId && await deleteEntry({ entryId })
@@ -71,60 +95,65 @@ export const EntryNarrow: React.FC<OpenEntry & { hideTimestamp: boolean }> = ({
 
 
 
-            <Card sx={{mb:1, width: '100%', p: 2, display: 'flex', flexDirection: 'column', justifyContent: 'left' }}>
-
-                
-                <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-start' }}>
-
-                    <Box sx={{  display: 'flex', flexDirection: 'column' }}>
-                        
-
-                            <TextField 
-                            fullWidth
-                            onClick={() => setIsEdit(true)}
-                            inputProps={{
-                                style: {
-                                    padding: 0,
-                                    fontWeight:600
-                                }
-                            }}
-                              sx={{ display:'flex',p:0, m:0,border: isEdit?undefined :'none', "& fieldset": {m:0, p:0, border: isEdit?undefined : 'none' },}}
-                                
-                            
-                            value={desc} 
-                            onBlur={() => setIsEdit(false)} 
-                            size='small' variant='outlined' /> 
-                               
-                        {!hideTimestamp && <Box sx={{ display: 'flex', alignItems: 'center' }}>
-
-                            <Typography color='GrayText' variant='caption'>{startDate} -</Typography>
-                            <Typography color='GrayText' variant='caption'>{endDate}</Typography>
-
-                        </Box>}
-                    </Box>
-                    <Box flexDirection={'row'} display='flex' sx={{ ml: 'auto' }}>
-                        <Typography fontWeight={'bold'} variant='body1' sx={{ mr: 1 }}>{formattedDuration}</Typography>
-                        <IconButton>
-
-                            <MoreVertOutlined onClick={onMoreClick} />
-                        </IconButton>
-                    </Box>
+        <Card sx={{ mb: 1, width: '100%', p: 2, display: 'flex', flexDirection: 'column', justifyContent: 'left' }}>
 
 
+            <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-start' }}>
+
+                <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+
+                    {!isEdit ? <div onClick={() => setIsEdit(true)}>{<Typography fontWeight={'bold'}>{newText}</Typography>}</div>:
+                    <TextField
+                        fullWidth
+                        autoFocus
+                        inputProps={{
+                            style: {
+                                padding: 0,
+                                fontWeight: 600
+                            }
+                        }}
+                        sx={{ display: 'flex', p: 0, m: 0, border: isEdit ? undefined : 'none', "& fieldset": { m: 0, p: 0 }, }}
+                        onKeyDown={e => {
+                            if(e.key === 'Enter'){
+                                entryId && onUpdate({desc: newText, entryId})
+                            }
+                        }}
+
+                        value={newText}
+                        onChange={onChange}
+
+                        onBlur={() => entryId && onUpdate({ desc: newText, entryId })}
+                        size='small' variant='outlined' />}
+                    {!hideTimestamp && <Box sx={{ display: 'flex', alignItems: 'center' }}>
+
+                        <Typography color='GrayText' variant='caption'>{startDate} -</Typography>
+                        <Typography color='GrayText' variant='caption'>{endDate}</Typography>
+
+                    </Box>}
                 </Box>
-                <Box sx={{ mt: 1, ml: 0, alignContent: 'center' }}>
-                    <CategoryChips onChipClick={onChipClick} entryCategories={categories} />
-                    {false && <Tooltip title='Add category'>
-                        <IconButton onClick={handleClick} id={id} size='small'>
-                            <AddCircleOutlineIcon color='action' fontSize='small' />
-                        </IconButton>
-                    </Tooltip>}
+                <Box flexDirection={'row'} display='flex' sx={{ ml: 'auto' }}>
+                    <Typography fontWeight={'bold'} variant='body1' sx={{ mr: 1 }}>{formattedDuration}</Typography>
+                   
+
+                        <MoreVertOutlined onClick={onMoreClick} />
+                  
                 </Box>
 
-            </Card>
+
+            </Box>
+            <Box sx={{ mt: 1, ml: 0, alignContent: 'center' }}>
+                <CategoryChips onChipClick={onChipClick} entryCategories={categories} />
+                {false && <Tooltip title='Add category'>
+                    <IconButton onClick={handleClick} id={id} size='small'>
+                        <AddCircleOutlineIcon color='action' fontSize='small' />
+                    </IconButton>
+                </Tooltip>}
+            </Box>
+
+        </Card>
 
 
-   
+
         {/* <Divider sx={{ width: '100%' }} /> */}
         <Popover id={id}
             anchorEl={anchorEl}
