@@ -83,7 +83,9 @@ export const EntryNarrow: React.FC<OpenEntry & { hideTimestamp: boolean }> = ({
         return null
     }
 
-    const formattedDuration = endTime?.seconds ? formatTime(endTime?.seconds - startTime?.seconds) : 0
+    const formattedDuration = endTime?.seconds ? formatTime(endTime?.seconds - startTime?.seconds) : '00:00:00'
+    const splitFormattedDuration = formattedDuration.split(':')
+
     const open = Boolean(anchorEl);
     const id = open ? anchorEl?.id === 'more' ? 'more' : 'simple-popover' : undefined;
 
@@ -132,7 +134,11 @@ export const EntryNarrow: React.FC<OpenEntry & { hideTimestamp: boolean }> = ({
                     </Box>}
                 </Box>
                 <Box flexDirection={'row'} display='flex' sx={{ ml: 'auto' }}>
-                    <Typography fontWeight={'bold'} variant='body1' sx={{ mr: 1 }}>{formattedDuration}</Typography>
+                    {splitFormattedDuration.map((time,i) => {
+                        
+                        return <Typography fontWeight={'bold'} variant='body1' sx={{ mr: 0 }}>{time+ (i == 2 ? '' :':')}</Typography>
+
+                    })}
                    
 
                         <MoreVertOutlined onClick={onMoreClick} />

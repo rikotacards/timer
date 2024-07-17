@@ -20,6 +20,7 @@ import { useNavigate } from 'react-router';
 import { AddEntryWide } from './AddEntryWide';
 import { useIsNarrow } from '../utils/isMobile';
 import { ActivitiesToday } from './ActivitiesToday';
+import { PastActivities } from './PastActivities';
 // import { IOSSlider } from './PercentSlider';
 // import { Timeline } from './Timeline';
 // import {SingleTimeline} from './SingleTimeline';
@@ -192,6 +193,7 @@ export const TodaySummary: React.FC<TodaySummaryProps> = () => {
 
             </Card></>}
             <ActivitiesToday/>
+            <PastActivities/>
             <Toolbar />
             <Toolbar />
         </Box>
