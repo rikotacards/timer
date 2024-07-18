@@ -37,12 +37,11 @@ export const PastActivities: React.FC = () => {
         fetchItems(lastVisible)
     },[])
     const grouped = groupByDate(items);
-    console.log(grouped)
     const dateKeys = Object.keys(grouped)
     return (
         <div>
          
-            {loading ? <Skeleton variant='rectangular'/> : null}
+            {loading ? <Skeleton height={110} variant='rectangular'/> : null}
            <List
              sx={{
                 width: '100%',
