@@ -1,4 +1,4 @@
-import { Alert, Box } from "@mui/material"
+import { Alert, Box, Card } from "@mui/material"
 import React from 'react';
 import { deleteCategory, getCategories } from "../firebase/db";
 import { Category } from "../firebase/types";
@@ -28,6 +28,13 @@ export const EditCategoriesPage: React.FC = () => {
          <EditCategoryRow onDelete={onDelete} category={c}/>
         )
     })
+    if(categories.length === 0){
+        return <Box>
+            <Card sx={{p:1}}>
+               You have no categories.
+            </Card>
+        </Box>
+    }
     return (
         <Box>
                 {displayed}
