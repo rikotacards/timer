@@ -1,4 +1,4 @@
-import { Alert, Box, Button, Card, CardActionArea, Divider, IconButton, Popover, TextField, Tooltip, Typography } from '@mui/material';
+import { Alert, Box, Button, Card, IconButton, Popover, TextField, Tooltip, Typography } from '@mui/material';
 import React from 'react';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import { MoreVertOutlined } from '@mui/icons-material';
@@ -11,6 +11,8 @@ import { MoreMenuNarrow } from './MoreMenuNarrow';
 import { useNavigate } from 'react-router';
 import { CategoryTopAppBar } from './CategoryTopAppBar';
 import { CategoryChips } from './CategoryChips';
+import { useIsNarrow } from '../utils/isMobile';
+import { StartTimeEndTime } from './StartTimeEndTime';
 export const EntryNarrow: React.FC<OpenEntry & { hideTimestamp: boolean }> = ({
     hideTimestamp,
     desc,
@@ -21,6 +23,10 @@ export const EntryNarrow: React.FC<OpenEntry & { hideTimestamp: boolean }> = ({
 }) => {
     const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
     const snackbar = useSnackbarContext();
+    const isNarrow = useIsNarrow();
+    const [newStartTime, setNewStartTime] = React.useState(startTime)
+
+    const timeTextVariant = isNarrow ? 'caption' : 'body2'
     const [isEdit, setIsEdit] = React.useState(false);
     const drawerContext = useDrawerContext()
     const { onSetComponent } = useTopAppBarContext();
@@ -44,7 +50,7 @@ export const EntryNarrow: React.FC<OpenEntry & { hideTimestamp: boolean }> = ({
         try {
             if (args.desc !== desc) {
                 await updateEntry(args)
-                snackbar.onSetComponent(<Alert severity='success'>Updated</Alert>)
+                snackbar.onSetComponent(<Alert variant='filled' severity='success'>Updated</Alert>)
                 snackbar.toggleOpen()
             }
         } catch (e) {
@@ -126,12 +132,7 @@ export const EntryNarrow: React.FC<OpenEntry & { hideTimestamp: boolean }> = ({
 
                         onBlur={() => entryId && onUpdate({ desc: newText, entryId })}
                         size='small' variant='outlined' />}
-                    {!hideTimestamp && <Box sx={{ display: 'flex', alignItems: 'center' }}>
-
-                        <Typography color='GrayText' variant='caption'>{startDate} -</Typography>
-                        <Typography color='GrayText' variant='caption'>{endDate}</Typography>
-
-                    </Box>}
+                    {!hideTimestamp && entryId && <StartTimeEndTime startTime={startTime} endTime={endTime} entryId={entryId}/>}
                 </Box>
                 <Box flexDirection={'row'} display='flex' sx={{ ml: 'auto' }}>
                     {splitFormattedDuration.map((time,i) => {

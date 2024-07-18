@@ -1,4 +1,4 @@
-interface FirebaseTimeStamp {
+export interface FirebaseTimeStamp {
     nanoseconds: number;
     seconds: number;
 }
