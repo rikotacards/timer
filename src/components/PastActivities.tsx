@@ -1,13 +1,12 @@
 import React from 'react';
 import { db, UID } from '../firebase/firebaseConfig';
 import { collection, DocumentData, getDocs, limit, orderBy, query, QueryDocumentSnapshot, startAfter, where } from 'firebase/firestore';
-import { Button, Card, CircularProgress, List, Skeleton, Typography } from '@mui/material';
+import { Button, Card, List, Skeleton, Typography } from '@mui/material';
 import { EntryNarrow } from './EntryNarrow';
 import { groupByDate } from '../utils/groupByDate';
 import { Entry } from '../firebase/types';
 const LIMIT = 10;
 export const PastActivities: React.FC = () => {
-    console.log('PAST ACTIVIES COMP')
     const today = new Date()
     today.setHours(0,0,0,0)
     const [items, setItems] = React.useState<Entry[]>([]);
@@ -35,11 +34,9 @@ export const PastActivities: React.FC = () => {
   };
 
     React.useEffect(() => {
-        console.log('GETTING PAST')
         fetchItems(lastVisible)
     },[])
     const grouped = groupByDate(items);
-    console.log(grouped)
     const dateKeys = Object.keys(grouped)
     return (
         <div>
@@ -62,7 +59,7 @@ export const PastActivities: React.FC = () => {
                             <Card elevation={0} sx={{mb:1}}><Typography variant='h6' fontWeight={'bold'}>{grouped[dateKey].date.toDateString()}</Typography></Card>
                             {grouped[dateKey].entries.map((e) => {
                                 return (
-                                    <EntryNarrow hideTimestamp={false} {...e}/>
+                                    <EntryNarrow key={e.entryId} hideTimestamp={false} {...e}/>
                                 )
                             })}
                         </ul>

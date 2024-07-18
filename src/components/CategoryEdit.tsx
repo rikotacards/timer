@@ -11,6 +11,7 @@ import { MoreVert } from '@mui/icons-material';
 
 interface CategoryEdit {
   onHandleClose: () => void;
+  entryId: string;
   addCategory: (category: Category) => void;
 }
 export const CategoryEdit: React.FC<CategoryEdit> = ({ onHandleClose, addCategory }) => {

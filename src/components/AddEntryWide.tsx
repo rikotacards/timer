@@ -149,13 +149,15 @@ export const AddEntryWide: React.FC = () => {
                 size='small'
                 placeholder='What are you working on?'
                 sx={{ mr: 1, display: 'flex', flexGrow: '1' }} />
-            {openEntry.categories?.length ? null : <Button
+            {openEntry.categories?.length ? null : 
+            <Button
                 color='primary'
                 sx={{ mr: 1, p: 1 }}
                 onClick={handleClick}
                 startIcon={<AddCircleOutline />}>
                 <Typography sx={{ textTransform: 'capitalize' }} variant='body2'>Add category</Typography>
-            </Button>}
+            </Button>
+            }
             {openEntry.categories?.map((c) => <Chip component={'button'} onClick={handleClick} key={c.categoryId} label={c.categoryName} sx={{
         border: '1px solid transparent',
         borderColor: c.color,

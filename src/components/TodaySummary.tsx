@@ -68,7 +68,6 @@ export const TodaySummary: React.FC<TodaySummaryProps> = () => {
         getEntriesByDateRange({ start: endOfDay, end: today }).then((e) => {
             setEntries(e as EntryType[])
             setFetching(false);
-            console.log(e)
         }).catch((e) => console.log('error', e))
     }, [onSetComponent])
 

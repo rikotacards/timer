@@ -1,6 +1,7 @@
 import { setDoc, updateDoc, deleteDoc, getDocs, doc, addDoc, collection, serverTimestamp, onSnapshot, query, orderBy, where, arrayUnion } from "firebase/firestore";
 import { UID, db } from "./firebaseConfig";
 import { OpenEntry , Category, AddCategoryRequestBody, Entry as IEntry} from "./types";
+import { Category } from "@mui/icons-material";
 
 export interface Entry {
     desc: string;
@@ -46,7 +47,6 @@ export const getOpenEntriesRealTime =  (setData: (data:OpenEntry) => void, setIs
         querySnapshot.forEach((s) => {
             entries.push({...s.data(), entryId: s.id} as OpenEntry)
         })
-        console.log('whatver', entries)
         if(entries.length){
             setData(entries[0]);
             setIsRunning(true)
@@ -102,13 +102,25 @@ export const updateEntry = async(args: {desc: string, entryId: string}) => {
     try {
         const docRef = doc(db, "users", UID, "entries", args.entryId);
         await updateDoc(docRef, {desc: args.desc})
-        
-        }
-       
+        }    
      catch (e) {
         alert(e)
     }
 }
+export const updateEntryCategory = async(args: {category: Category, entryId: string}) => {
+    if(!args.entryId){
+        throw new Error('No entry ID')
+    }
+    console.log('adding', args.category)
+    try {
+        const docRef = doc(db, "users", UID, "entries", args.entryId);
+        await updateDoc(docRef, {categories: [args.category]})
+        }    
+     catch (e) {
+        alert(e)
+    }
+}
+
 
 export const deleteEntry = async(args: {entryId: string}) => {
     try {

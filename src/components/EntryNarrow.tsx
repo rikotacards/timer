@@ -65,7 +65,7 @@ export const EntryNarrow: React.FC<OpenEntry & { hideTimestamp: boolean }> = ({
 
     }
     const component = {
-        'simple-popover': <CategoryEdit addCategory={() => { }} onHandleClose={handleClose} />,
+        'simple-popover': <CategoryEdit entryId={entryId || ''} addCategory={() => { }} onHandleClose={handleClose} />,
         'more': <Button color='error' size='small' onClick={onDelete} >Delete</Button>
     }
     const onChipClick = React.useCallback((categoryName: string, categoryId: string) => {
@@ -136,7 +136,7 @@ export const EntryNarrow: React.FC<OpenEntry & { hideTimestamp: boolean }> = ({
                 <Box flexDirection={'row'} display='flex' sx={{ ml: 'auto' }}>
                     {splitFormattedDuration.map((time,i) => {
                         
-                        return <Typography fontWeight={'bold'} variant='body1' sx={{ mr: 0 }}>{time+ (i == 2 ? '' :':')}</Typography>
+                        return <Typography key={time+i} fontWeight={'bold'} variant='body1' sx={{ mr: 0 }}>{time+ (i == 2 ? '' :':')}</Typography>
 
                     })}
                    
@@ -148,7 +148,7 @@ export const EntryNarrow: React.FC<OpenEntry & { hideTimestamp: boolean }> = ({
 
             </Box>
             <Box sx={{ mt: 1, ml: 0, alignContent: 'center' }}>
-                <CategoryChips onChipClick={onChipClick} entryCategories={categories} />
+              {entryId &&  <CategoryChips entryId={entryId} onChipClick={onChipClick} entryCategories={categories} />}
                 {false && <Tooltip title='Add category'>
                     <IconButton onClick={handleClick} id={id} size='small'>
                         <AddCircleOutlineIcon color='action' fontSize='small' />

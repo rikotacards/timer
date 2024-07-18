@@ -1,10 +1,9 @@
-import { Box, Card, IconButton, Typography } from '@mui/material';
+import { Card, Typography } from '@mui/material';
 import React from 'react';
 import { Entry as EntryType } from '../firebase/types';
 
 import { getEntriesRealTime } from '../firebase/db';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import { useNavigate } from 'react-router';
+
 import { EntryNarrow } from './EntryNarrow';
 const today = new Date();
 const endOfDay = new Date(today)
@@ -12,11 +11,6 @@ endOfDay.setHours(0, 0, 0, 0)
 
 export const ActivitiesToday: React.FC = () => {
     const [entries, setEntries] = React.useState<EntryType[]>([])
-    const nav = useNavigate();
-
-    const goToHistory = () => {
-        nav('/history')
-    }
     const setEntryData = (entries: EntryType[]) => {
         setEntries(entries)
     }
