@@ -12,6 +12,7 @@ import { useNavigate } from 'react-router';
 import { CategoryTopAppBar } from './CategoryTopAppBar';
 import { CategoryChips } from './CategoryChips';
 import { StartTimeEndTime } from './StartTimeEndTime';
+import { useIsNarrow } from '../utils/isMobile';
 export const EntryNarrow: React.FC<OpenEntry & { hideTimestamp: boolean }> = ({
     hideTimestamp,
     desc,
@@ -22,7 +23,7 @@ export const EntryNarrow: React.FC<OpenEntry & { hideTimestamp: boolean }> = ({
 }) => {
     const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
     const snackbar = useSnackbarContext();
-
+    const isNarrow = useIsNarrow();
     const [isEdit, setIsEdit] = React.useState(false);
     const drawerContext = useDrawerContext()
     const { onSetComponent } = useTopAppBarContext();
@@ -83,7 +84,6 @@ export const EntryNarrow: React.FC<OpenEntry & { hideTimestamp: boolean }> = ({
     if (!endTime?.seconds || !startTime?.seconds) {
         return null
     }
-    console.log(endTime, desc)
     const formattedDuration = endTime?.seconds ? formatTime(endTime?.seconds - startTime?.seconds) : '00:00:00'
     const splitFormattedDuration = formattedDuration.split(':')
 
@@ -104,7 +104,9 @@ export const EntryNarrow: React.FC<OpenEntry & { hideTimestamp: boolean }> = ({
 
                 <Box sx={{ display: 'flex', flexDirection: 'column' }}>
 
-                    {!isEdit ? <div onClick={() => setIsEdit(true)}>{<Typography fontWeight={'bold'}>{newText}</Typography>}</div> :
+                    {!isEdit ? 
+                    <div onClick={() => setIsEdit(true)}>{
+                        <Typography variant={isNarrow? 'body2' : 'body1'} fontWeight={isNarrow ? undefined : 'bold'}>{newText}</Typography>}</div> :
                         <TextField
                             fullWidth
                             autoFocus

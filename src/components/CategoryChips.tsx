@@ -16,7 +16,6 @@ export const CategoryChips: React.FC<CategoryChipsProps> = ({ onChipClick, entry
     const s = useSnackbarContext();
     const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-        console.log('click')
         setAnchorEl(event.currentTarget);
     };
     const open = Boolean(anchorEl);
@@ -65,6 +64,7 @@ export const CategoryChips: React.FC<CategoryChipsProps> = ({ onChipClick, entry
     const displayed = entryCategories.map((c, i) =>
         <Box key={c.categoryId} sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
             <Chip sx={{
+                textTransform: 'capitalize',
                 border: '1px solid transparent',
                 borderColor: c.color,
                 color: c.color,
