@@ -137,6 +137,23 @@ export const updateEntryStartTime = async(args: {startTime: number, entryId: str
         alert(e)
     }
 }
+export const updateEntryEndTime = async(args: {endTime: number, entryId: string}) => {
+    console.log('update', args.endTime)
+    if(isNaN(args.endTime)){
+        throw new Error('new time must be number')
+    }
+    if(!args.entryId){
+        throw new Error('No entry ID')
+    }
+    console.log('adding', args.endTime)
+    try {
+        const docRef = doc(db, "users", UID, "entries", args.entryId);
+        await updateDoc(docRef, {endTime: {seconds: args.endTime}})
+        }    
+     catch (e) {
+        alert(e)
+    }
+}
 
 
 export const deleteEntry = async(args: {entryId: string}) => {

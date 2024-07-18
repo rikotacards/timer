@@ -61,7 +61,6 @@ export const EntryNarrow: React.FC<OpenEntry & { hideTimestamp: boolean }> = ({
     const onDelete = async () => {
         entryId && await deleteEntry({ entryId })
         handleClose()
-        console.log('closed')
         snackbar.onSetComponent(<Alert variant='filled' severity='success'>Deleted entry</Alert>)
         snackbar.toggleOpen();
 
@@ -84,7 +83,7 @@ export const EntryNarrow: React.FC<OpenEntry & { hideTimestamp: boolean }> = ({
     if (!endTime?.seconds || !startTime?.seconds) {
         return null
     }
-
+    console.log(endTime, desc)
     const formattedDuration = endTime?.seconds ? formatTime(endTime?.seconds - startTime?.seconds) : '00:00:00'
     const splitFormattedDuration = formattedDuration.split(':')
 
