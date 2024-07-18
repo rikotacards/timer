@@ -57,6 +57,6 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({categoryId, isUpdate, s
         }
     }
     return <Box>
-        {defaultColors.map((c, i) => <ColorSelection key={c.dark} isSelected={color === c.dark} key={c.dark + i} color={c.dark} onClick={isUpdate ? () => onColorPick(categoryId, c.dark) : selectColor}/>)}
+        {defaultColors.map((c, i) => <ColorSelection key={c.dark + i} isSelected={color === c.dark} key={c.dark + i} color={c.dark} onClick={isUpdate ? () => onColorPick(categoryId, c.dark) : selectColor}/>)}
     </Box>
 }
