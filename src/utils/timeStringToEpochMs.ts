@@ -1,7 +1,7 @@
-export const timeStringToEpochMs =(timeStr: string) => {
-    const now = new Date();
-    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0);
-
+export const timeStringToEpochMs =(timeStr: string, originalEpoch: number) => {
+    // Create a date object from the original epoch time
+    const originalDate = new Date(originalEpoch);
+    
     // Remove non-alphanumeric characters
     timeStr = timeStr.replace(/[^a-zA-Z0-9]/g, '');
 
@@ -49,10 +49,10 @@ export const timeStringToEpochMs =(timeStr: string) => {
         }
     }
 
-    // Set the hours and minutes to today's date
-    today.setHours(hours);
-    today.setMinutes(minutes);
+    // Set the hours and minutes to the original date
+    originalDate.setHours(hours);
+    originalDate.setMinutes(minutes);
 
-    // Return the time in epoch milliseconds
-    return today.getTime();
+    // Return the updated time in epoch milliseconds
+    return originalDate.getTime();
 }

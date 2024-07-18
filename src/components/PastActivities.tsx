@@ -37,6 +37,7 @@ export const PastActivities: React.FC = () => {
         fetchItems(lastVisible)
     },[])
     const grouped = groupByDate(items);
+    console.log(grouped)
     const dateKeys = Object.keys(grouped)
     return (
         <div>

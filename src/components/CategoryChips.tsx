@@ -28,7 +28,6 @@ export const CategoryChips: React.FC<CategoryChipsProps> = ({ onChipClick, entry
     };
     const addCategory = async (category: Category) => {
         try {
-            console.log('updating', category)
             await updateEntryCategory({ category, entryId })
             s.onSetComponent(<Alert variant='filled' severity='success'>Category updated</Alert>)
             s.toggleOpen()
@@ -38,9 +37,7 @@ export const CategoryChips: React.FC<CategoryChipsProps> = ({ onChipClick, entry
         }
 
     }
-    console.log('entryC', entryCategories)
     if (!entryCategories) {
-        console.log('id', entryId)
         return (
             <>
                 <Button

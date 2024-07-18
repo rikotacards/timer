@@ -11,7 +11,6 @@ import { MoreMenuNarrow } from './MoreMenuNarrow';
 import { useNavigate } from 'react-router';
 import { CategoryTopAppBar } from './CategoryTopAppBar';
 import { CategoryChips } from './CategoryChips';
-import { useIsNarrow } from '../utils/isMobile';
 import { StartTimeEndTime } from './StartTimeEndTime';
 export const EntryNarrow: React.FC<OpenEntry & { hideTimestamp: boolean }> = ({
     hideTimestamp,
@@ -23,10 +22,7 @@ export const EntryNarrow: React.FC<OpenEntry & { hideTimestamp: boolean }> = ({
 }) => {
     const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
     const snackbar = useSnackbarContext();
-    const isNarrow = useIsNarrow();
-    const [newStartTime, setNewStartTime] = React.useState(startTime)
 
-    const timeTextVariant = isNarrow ? 'caption' : 'body2'
     const [isEdit, setIsEdit] = React.useState(false);
     const drawerContext = useDrawerContext()
     const { onSetComponent } = useTopAppBarContext();
@@ -95,61 +91,60 @@ export const EntryNarrow: React.FC<OpenEntry & { hideTimestamp: boolean }> = ({
     const open = Boolean(anchorEl);
     const id = open ? anchorEl?.id === 'more' ? 'more' : 'simple-popover' : undefined;
 
-    const startDate = new Date(startTime.seconds * 1000).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', hour12: true })
-    const endDate = endTime && new Date(endTime.seconds * 1000).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', hour12: true })
+
 
     return <div >
 
 
 
 
-        <Card sx={{ mb: 1, width: '100%', p: 2, display: 'flex', flexDirection: 'column', justifyContent: 'left' }}>
+        <Card elevation={2} sx={{ mb: 1, width: '100%', p: 2, display: 'flex', flexDirection: 'column', justifyContent: 'left' }}>
 
 
             <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-start' }}>
 
                 <Box sx={{ display: 'flex', flexDirection: 'column' }}>
 
-                    {!isEdit ? <div onClick={() => setIsEdit(true)}>{<Typography fontWeight={'bold'}>{newText}</Typography>}</div>:
-                    <TextField
-                        fullWidth
-                        autoFocus
-                        inputProps={{
-                            style: {
-                                padding: 0,
-                                fontWeight: 600
-                            }
-                        }}
-                        sx={{ display: 'flex', p: 0, m: 0, border: isEdit ? undefined : 'none', "& fieldset": { m: 0, p: 0 }, }}
-                        onKeyDown={e => {
-                            if(e.key === 'Enter'){
-                                entryId && onUpdate({desc: newText, entryId})
-                            }
-                        }}
+                    {!isEdit ? <div onClick={() => setIsEdit(true)}>{<Typography fontWeight={'bold'}>{newText}</Typography>}</div> :
+                        <TextField
+                            fullWidth
+                            autoFocus
+                            inputProps={{
+                                style: {
+                                    padding: 0,
+                                    fontWeight: 600
+                                }
+                            }}
+                            sx={{ display: 'flex', p: 0, m: 0, border: isEdit ? undefined : 'none', "& fieldset": { m: 0, p: 0 }, }}
+                            onKeyDown={e => {
+                                if (e.key === 'Enter') {
+                                    entryId && onUpdate({ desc: newText, entryId })
+                                }
+                            }}
 
-                        value={newText}
-                        onChange={onChange}
+                            value={newText}
+                            onChange={onChange}
 
-                        onBlur={() => entryId && onUpdate({ desc: newText, entryId })}
-                        size='small' variant='outlined' />}
-                    {!hideTimestamp && entryId && <StartTimeEndTime startTime={startTime} endTime={endTime} entryId={entryId}/>}
+                            onBlur={() => entryId && onUpdate({ desc: newText, entryId })}
+                            size='small' variant='outlined' />}
+                    {!hideTimestamp && entryId && <StartTimeEndTime startTime={startTime.seconds} endTime={endTime.seconds} entryId={entryId} />}
                 </Box>
                 <Box flexDirection={'row'} display='flex' sx={{ ml: 'auto' }}>
-                    {splitFormattedDuration.map((time,i) => {
-                        
-                        return <Typography key={time+i} fontWeight={'bold'} variant='body1' sx={{ mr: 0 }}>{time+ (i == 2 ? '' :':')}</Typography>
+                    {splitFormattedDuration.map((time, i) => {
+
+                        return <Typography key={time + i} fontWeight={'bold'} variant='body1' sx={{ mr: 0 }}>{time + (i == 2 ? '' : ':')}</Typography>
 
                     })}
-                   
 
-                        <MoreVertOutlined onClick={onMoreClick} />
-                  
+
+                    <MoreVertOutlined onClick={onMoreClick} />
+
                 </Box>
 
 
             </Box>
             <Box sx={{ mt: 1, ml: 0, alignContent: 'center' }}>
-              {entryId &&  <CategoryChips entryId={entryId} onChipClick={onChipClick} entryCategories={categories} />}
+                {entryId && <CategoryChips entryId={entryId} onChipClick={onChipClick} entryCategories={categories} />}
                 {false && <Tooltip title='Add category'>
                     <IconButton onClick={handleClick} id={id} size='small'>
                         <AddCircleOutlineIcon color='action' fontSize='small' />

@@ -120,6 +120,23 @@ export const updateEntryCategory = async(args: {category: Category, entryId: str
         alert(e)
     }
 }
+export const updateEntryStartTime = async(args: {startTime: number, entryId: string}) => {
+    console.log('update', args.startTime)
+    if(isNaN(args.startTime)){
+        throw new Error('new time must be number')
+    }
+    if(!args.entryId){
+        throw new Error('No entry ID')
+    }
+    console.log('adding', args.startTime)
+    try {
+        const docRef = doc(db, "users", UID, "entries", args.entryId);
+        await updateDoc(docRef, {startTime: {seconds: args.startTime}})
+        }    
+     catch (e) {
+        alert(e)
+    }
+}
 
 
 export const deleteEntry = async(args: {entryId: string}) => {
