@@ -36,7 +36,9 @@ export const StartTimeEndTime: React.FC<StartTimeEndTimeProps> = React.memo(({ s
             setIsEditStartTime(false);
             s.toggleOpen();
         } catch (e) {
-            alert(e)
+            s.onSetComponent(<Alert severity='error' variant='filled'>Invalid time</Alert>)
+            s.toggleOpen();
+
             setIsEditStartTime(false);
             setDraftStartDate(newStartDate)
         }

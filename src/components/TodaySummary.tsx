@@ -116,12 +116,12 @@ export const TodaySummary: React.FC<TodaySummaryProps> = () => {
                 <LinearProgress sx={{ mb: 1, borderRadius: 1 }} variant='determinate' value={percentOfDayLogged} />
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
 
-                    <Typography variant='caption' fontWeight={'bold'} sx={{ mr: 0.5 }}>
+                    <Typography variant={isNarrow ? 'caption': 'body2'} fontWeight={'bold'} sx={{ mr: 0.5 }}>
                         {formattedTotalTime}
                     </Typography>
-                    <Typography variant='caption' color='GrayText'> of 24 hours logged</Typography>
+                    <Typography variant={isNarrow ? 'caption': 'body2'} color='GrayText'> of 24 hours logged</Typography>
                 </Box>
-                <Typography variant='caption' color='GrayText'>Entries: {totalEntries}</Typography>
+                <Typography variant={isNarrow ? 'caption': 'body2'} color='GrayText'>Entries: {totalEntries}</Typography>
 
 
 
