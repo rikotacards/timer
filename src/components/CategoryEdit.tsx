@@ -4,6 +4,7 @@ import { Category } from '../firebase/types';
 import { CreateNewCategory } from './CreateNewCategory';
 import { useAppDataContext } from '../Providers/contextHooks';
 import { MoreVert } from '@mui/icons-material';
+import { useIsNarrow } from '../utils/isMobile';
 
 
 
@@ -16,7 +17,7 @@ interface CategoryEdit {
 }
 export const CategoryEdit: React.FC<CategoryEdit> = ({ onHandleClose, addCategory }) => {
   const { categories } = useAppDataContext();
-
+  const isNarrow = useIsNarrow();
   const [inputText, setInputText] = React.useState('')
   const filtered = categories.filter((cat) => cat.categoryName.toLowerCase().indexOf(inputText.toLowerCase()) >= 0)
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -49,7 +50,7 @@ export const CategoryEdit: React.FC<CategoryEdit> = ({ onHandleClose, addCategor
       >
 
         <TextField
-          autoFocus={true}
+          autoFocus={!isNarrow}
           onChange={onChange}
           size='small'
           placeholder='Search category' />
