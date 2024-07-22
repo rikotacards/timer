@@ -138,7 +138,7 @@ export const EntryNarrow: React.FC<OpenEntry & { hideTimestamp: boolean }> = ({
                     })}
 
 
-                    <MoreVertOutlined onClick={onMoreClick} />
+                    <MoreVertOutlined sx={{cursor: 'pointer'}} onClick={onMoreClick} />
 
                 </Box>
 
