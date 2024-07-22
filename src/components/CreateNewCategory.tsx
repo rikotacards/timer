@@ -7,9 +7,11 @@ interface CreateNewCategoryProps {
     categoryName?: string
     onCancel: () => void;
     onHandleClose: () => void
+    isEditing: boolean;
+    editingCategoryId?: string;
 }
-export const CreateNewCategory: React.FC<CreateNewCategoryProps> = ({categoryName, onCancel, onHandleClose}) => {
-    const [text, setText] = React.useState(categoryName || '')
+export const CreateNewCategory: React.FC<CreateNewCategoryProps> = ({categoryName, onCancel, onHandleClose, isEditing, editingCategoryId}) => {
+    const [text, setText] = React.useState(editingCategoryId || '')
     const snackbar = useSnackbarContext();
     const {triggerRefetch, categories} = useAppDataContext();
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {

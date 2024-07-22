@@ -1,5 +1,5 @@
 import React from 'react';
-import { getCategories, getEntries, getOpenEntries, getOpenEntriesRealTime } from '../firebase/db';
+import { getCategories, getOpenEntriesRealTime } from '../firebase/db';
 import { Category, OpenEntry } from '../firebase/types';
 import { IS_OFFLINE } from '../App';
 import { mockEntries } from '../mocks/mockEntries';
@@ -8,7 +8,6 @@ interface Value {
     setOpenEntry: React.Dispatch<React.SetStateAction<OpenEntry>>;
     categories: Category[];
     setCategories: React.Dispatch<React.SetStateAction<Category[]>>;
-    isLoadingActiveEntry: boolean;
     isLoadingCategories: boolean;
     isRunning: boolean;
     entries: OpenEntry[];
@@ -26,7 +25,6 @@ interface AppDataProviderProps {
 
 
 export const AppDataProvider: React.FC<AppDataProviderProps> = ({ children }) => {
-    const [isLoadingActiveEntry, setLoadingActiveEntry] = React.useState(true);
     const [isLoadingCategories, setLoadingCategories] = React.useState(true);
     const [categories, setCategories] = React.useState<Category[]>([]);
     const [isRunning, setIsRunning] = React.useState(false);
@@ -86,7 +84,6 @@ export const AppDataProvider: React.FC<AppDataProviderProps> = ({ children }) =>
         setOpenEntry, 
         categories, 
         setCategories, 
-        isLoadingActiveEntry, 
         isLoadingCategories,
         isRunning,
         entries,

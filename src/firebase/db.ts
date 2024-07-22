@@ -1,7 +1,6 @@
 import { setDoc, updateDoc, deleteDoc, getDocs, doc, addDoc, collection, serverTimestamp, onSnapshot, query, orderBy, where, arrayUnion } from "firebase/firestore";
 import { UID, db } from "./firebaseConfig";
 import { OpenEntry , Category, AddCategoryRequestBody, Entry as IEntry} from "./types";
-import { Category } from "@mui/icons-material";
 
 export interface Entry {
     desc: string;
@@ -9,13 +8,13 @@ export interface Entry {
 }
 // Current entry should only be 1 existing.
 export const AddOpenEntry = async (args: OpenEntry) => {
-    console.log('db, addopen', args)
     const created = serverTimestamp();
     const entry = {
         ...args, 
         created,
         startTime: created
     }
+    console.log('adding open entry', entry)
     try {
         const docRef = await addDoc(collection(db, "users", UID, "openEntry"), entry)
         return {...entry, entryId: docRef.id}

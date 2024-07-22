@@ -7,6 +7,7 @@ import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import { CategoryEdit } from './CategoryEdit';
 import { updateEntryCategory } from '../firebase/db';
 import { useSnackbarContext } from '../Providers/contextHooks';
+import { useIsNarrow } from '../utils/isMobile';
 interface CategoryChipsProps {
     entryId: string;
     entryCategories?: Category[];
@@ -14,6 +15,7 @@ interface CategoryChipsProps {
 }
 export const CategoryChips: React.FC<CategoryChipsProps> = ({ onChipClick, entryCategories, entryId }) => {
     const s = useSnackbarContext();
+    const isNarrow = useIsNarrow();
     const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);
@@ -36,7 +38,7 @@ export const CategoryChips: React.FC<CategoryChipsProps> = ({ onChipClick, entry
         }
 
     }
-    if (!entryCategories) {
+    if (!entryCategories?.length) {
         return (
             <>
                 <Button
@@ -68,7 +70,7 @@ export const CategoryChips: React.FC<CategoryChipsProps> = ({ onChipClick, entry
                 border: '1px solid transparent',
                 borderColor: c.color,
                 color: c.color,
-                fontWeight: 600,
+                fontWeight: isNarrow ? undefined : 600,
                 background: c.color + "34"
             }} size='small' key={c.categoryId} onClick={() => onChipClick(c.categoryName, c.categoryId)} label={c.categoryName} />{i < entryCategories.length - 1 && <ArrowRightIcon />}</Box>)
 

@@ -18,6 +18,11 @@ interface CategoryEdit {
 export const CategoryEdit: React.FC<CategoryEdit> = ({ onHandleClose, addCategory }) => {
   const { categories } = useAppDataContext();
   const isNarrow = useIsNarrow();
+  const [isEditing, setIsEditing] = React.useState(false)
+  const onMore = () => {
+    setIsEditing(true)
+  }
+  const [editingCategoryId, setEditingCategoryId] = React.useState('') 
   const [inputText, setInputText] = React.useState('')
   const filtered = categories.filter((cat) => cat.categoryName.toLowerCase().indexOf(inputText.toLowerCase()) >= 0)
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -32,7 +37,7 @@ export const CategoryEdit: React.FC<CategoryEdit> = ({ onHandleClose, addCategor
   }
 
   if (openCreateNew) {
-    return <CreateNewCategory onHandleClose={onHandleClose} onCancel={toggleOpenCreateNew} categoryName={inputText} />
+    return <CreateNewCategory editingCategoryId={editingCategoryId} isEditing={isEditing}  onHandleClose={() => {onHandleClose() ; setIsEditing(false)}} onCancel={toggleOpenCreateNew} categoryName={inputText} />
   }
   return (
     <Box sx={{
@@ -65,29 +70,29 @@ export const CategoryEdit: React.FC<CategoryEdit> = ({ onHandleClose, addCategor
         {filtered.map((c) => <ListItemButton
           key={c.categoryId}
           onClick={() => { addCategory(c); onHandleClose() }} >
-          <Chip 
-          key={c.categoryId} 
-          sx={{
-            border: '1px solid transparent',
-            borderColor: c.color,
-            color: c.color,
-            fontWeight: 600,
-            background: c.color + "34",
-            mr: 1
-          }} label={c.categoryName} />
-          <IconButton onClick={e => e.stopPropagation()} sx={{ml:'auto'}}>
-            <MoreVert/>
+          <Chip
+            key={c.categoryId}
+            sx={{
+              border: '1px solid transparent',
+              borderColor: c.color,
+              color: c.color,
+              fontWeight: 600,
+              background: c.color + "34",
+              mr: 1
+            }} label={c.categoryName} />
+          <IconButton onClick={e => { e.stopPropagation(); toggleOpenCreateNew(); setEditingCategoryId(c.categoryId); onMore() }} sx={{ ml: 'auto' }}>
+            <MoreVert />
           </IconButton>
-          </ListItemButton>)}
+        </ListItemButton>)}
       </List>
 
 
       <Box
         sx={{ position: 'sticky', bottom: 0, display: 'flex', width: '100%' }}>
-            <Paper elevation={5} sx={{display: 'flex', width: '100%', zIndex:10}}>
+        <Paper elevation={5} sx={{ display: 'flex', width: '100%', zIndex: 10 }}>
 
-        <Button fullWidth onClick={toggleOpenCreateNew} sx={{ textTransform: 'capitalize' }}>Create category</Button>
-            </Paper>
+          <Button fullWidth onClick={toggleOpenCreateNew} sx={{ textTransform: 'capitalize' }}>Create category</Button>
+        </Paper>
       </Box>
     </Box >
 

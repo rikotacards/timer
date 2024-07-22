@@ -1,3 +1,5 @@
+
+import CheckIcon from '@mui/icons-material/Check';
 import { AddCircleOutline } from '@mui/icons-material';
 import { Alert, Box, Button, Card, Chip, CircularProgress, IconButton, Popover, TextField, Typography } from '@mui/material';
 import React from 'react';
@@ -13,6 +15,7 @@ export const AddEntryWide: React.FC = () => {
     const {  setOpenEntry, openEntry, categories } = useAppDataContext()
     const [desc, setDesc] = React.useState(openEntry.desc || "")
     const s = useSnackbarContext();
+    const [isSaving, setIsSaving] = React.useState(false);
     const [isRunning, setIsRunning] = React.useState(false)
     const hasId = !!openEntry.entryId
     React.useEffect(() => {
@@ -69,16 +72,14 @@ export const AddEntryWide: React.FC = () => {
 
     const onStart = async () => {
         setIsRunning(true)
-        s.onSetComponent(<Alert severity='success'>Logging started</Alert>)
+        s.onSetComponent(<Alert icon={<CheckIcon/>} severity='success'>Logging started</Alert>)
         s.toggleOpen();
         if (!openEntry) {
             return;
         }
         try {
-
             const ref = await AddOpenEntry({ ...openEntry, desc })
             if (ref) {
-                console.log('adding open entry', ref)
                 setOpenEntry(ref as unknown as OpenEntry)
             }
         } catch (e) {
@@ -93,19 +94,24 @@ export const AddEntryWide: React.FC = () => {
         if (!openEntry) {
             return;
         }
+        setIsSaving(true)
         try {
             if (!openEntry.entryId) {
                 alert('no entryId')
                 return;
             }
             await addEntry({ ...openEntry, entryId: openEntry.entryId })
-            setOpenEntry({ categories: [], desc: '', entryId: '', endTime: { nanoseconds: 0, seconds: 0 }, startTime: { nanoseconds: 0, seconds: 0 }, created: { nanoseconds: 0, seconds: 0 } })
+            setIsSaving(false);
             setDesc('')
+
             s.onSetComponent(<Alert severity='success'>New item logged!</Alert>)
             s.toggleOpen();
+            setOpenEntry({ categories: [], desc: '', entryId: '', endTime: { nanoseconds: 0, seconds: 0 }, startTime: { nanoseconds: 0, seconds: 0 }, created: { nanoseconds: 0, seconds: 0 } })
         }
         catch (e) {
             alert(e)
+            setIsSaving(false);
+            
         }
 
     }
@@ -147,6 +153,7 @@ export const AddEntryWide: React.FC = () => {
                 value={desc}
                 onChange={onChange}
                 size='small'
+                disabled={isSaving}
                 placeholder='What are you working on?'
                 sx={{ mr: 1, display: 'flex', flexGrow: '1' }} />
             {openEntry.categories?.length ? null : 
@@ -169,7 +176,7 @@ export const AddEntryWide: React.FC = () => {
             <Box display={'flex'} alignItems={'center'} sx={{ ml: 'auto' }}>
                 {isRunning && <CircularProgress variant='indeterminate' color='success' sx={{ m: 1, height: 20, width: 20 }} size='small' />}
 
-                {isRunning ? <TimeElapsed startTimeSeconds={openEntry?.startTime?.seconds} /> : <Typography fontWeight={'bold'}>00:00:00</Typography>}
+                {isRunning && openEntry?.startTime?.seconds ? <TimeElapsed startTimeSeconds={openEntry?.startTime?.seconds} /> : <Typography fontWeight={'bold'}>00:00:00</Typography>}
 
                 <IconButton onClick={onStartStop} 
                 disabled={desc.length == 0}
