@@ -6,11 +6,11 @@ interface TimeElapsedProps {
     startTimeSeconds: number
 }
 export const TimeElapsed: React.FC<TimeElapsedProps> = ({ startTimeSeconds }) => {
-    console.log('TIME', startTimeSeconds)
+ 
     const { totalSeconds } = useGetTimeElapsed(startTimeSeconds)
-    console.log('TOTAL SECONDS"', totalSeconds)
+
     const formatted = formatTime(totalSeconds)
-    console.log('formatted', formatted)
+  
     return <Typography sx={{ fontWeight: 'bold' }}>{formatted}</Typography>
 
 }
