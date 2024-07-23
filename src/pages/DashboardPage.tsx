@@ -1,7 +1,7 @@
 import { Box, Button, CircularProgress, Typography } from '@mui/material';
 import React from 'react';
 import { getEntriesByDateRange } from '../firebase/db';
-import { StackedBarChart } from '../components/StackedBarChar';
+import { StackedBarChart } from '../components/StackedBarChart';
 import { Entry } from '../firebase/types';
 import { TopAppBar } from '../components/TopAppBar';
 import { useTopAppBarContext } from '../Providers/contextHooks';

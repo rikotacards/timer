@@ -2,16 +2,20 @@ import React from 'react';
 
 import * as d3 from 'd3'
 import './StackedBarChar.css'
+import { useAppDataContext } from '../Providers/contextHooks';
 
 interface DataPoint {
-  [key:string]: number
+  [key:string]: number | string
 }
 interface StackedBarChartProps  {
   data: DataPoint[]
   categoryIds: string[]
 }
+const legend = `<div></div>`
 export const StackedBarChart: React.FC<StackedBarChartProps> = ({categoryIds, data}) => {
   const chartRef = React.useRef();
+  const {categories} = useAppDataContext();
+
   // {date: july1, timer: 40, 45}
   React.useEffect(() => {
     console.log('incoming', data)
@@ -20,21 +24,31 @@ export const StackedBarChart: React.FC<StackedBarChartProps> = ({categoryIds, da
       const margin = { top: 20, right: 20, bottom: 30, left: 40 };
       const width = 800 - margin.left - margin.right;
       const height = 500 - margin.top - margin.bottom;
+      const keys = categoryIds
+
+      console.log('KEYS', keys)
+      const getColor = (categoryId: string) => {
+        console.log(categoryId)
+        const color = categories.find((c) => c.categoryId === categoryId)?.color
+        return color
+      } 
       const getMax = (d) => {
         let sum = 0;
-        for(let key in d){
+        for(const key in d){
           if(key === 'date'){
             sum = sum + 0;
             continue;
           }
           sum = d[key] + sum
         }
-        console.log('sum', sum )
+        console.log('sum', sum)
         return sum 
       }
-      const tooltip = d3.select("body").append("div")
+      const tooltip = d3.select("body")
+      .append("div")
       .attr("class", "tooltip")
       .style("opacity", 0);
+
       const x = d3.scaleBand()
           .domain(data.map(d => d.date))
           .range([0, width])
@@ -46,13 +60,13 @@ export const StackedBarChart: React.FC<StackedBarChartProps> = ({categoryIds, da
           .range([height, 0]);
       
       const color = d3.scaleOrdinal()
-          .domain(categoryIds)
+          .domain(keys)
           .range([ '#ff0000', '#9F00FF', '#ff1493', '#619eff', '#faa501']);
 
       const stack = d3.stack()
-          .keys(categoryIds);
-
-      const series = stack(data);
+          .keys(keys)(data)
+      console.log('STACK', stack)
+   
       svg.selectAll("*").remove(); // Clear the SVG content before adding new elements
 
       const g = svg.append("g")
@@ -67,11 +81,12 @@ export const StackedBarChart: React.FC<StackedBarChartProps> = ({categoryIds, da
           .attr("class", "axis axis--y")
           .call(d3.axisLeft(y).ticks(10, "s"));
 
+      // pass in the color here
       const layer = g.selectAll(".layer")
-          .data(series)
+          .data(stack)
           .enter().append("g")
           .attr("class", "layer")
-          .attr("fill", d => color(d.key));
+          .attr('fill', d => getColor(d.key) || 'gray')
 
       layer.selectAll("rect")
           .data(d => d)
@@ -85,7 +100,8 @@ export const StackedBarChart: React.FC<StackedBarChartProps> = ({categoryIds, da
             tooltip.transition()
                 .duration(200)
                 .style("opacity", .9);
-            tooltip.html(`Date: ${d.data.date}<br>Value: ${d[1] - d[0]}`)
+            tooltip.html(`<div>
+              Date: ${d.data.date}<br>Value: ${d[1] - d[0]}</div>`)
                 .style("left", (event.pageX + 5) + "px")
                 .style("top", (event.pageY - 28) + "px");
         })
