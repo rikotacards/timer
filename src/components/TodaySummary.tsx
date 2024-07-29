@@ -21,6 +21,7 @@ import { AddEntryWide } from './AddEntryWide';
 import { useIsNarrow } from '../utils/isMobile';
 import { ActivitiesToday } from './ActivitiesToday';
 import { PastActivities } from './PastActivities';
+import {  useQuery } from 'react-query';
 // import { IOSSlider } from './PercentSlider';
 // import { Timeline } from './Timeline';
 // import {SingleTimeline} from './SingleTimeline';
@@ -52,29 +53,25 @@ const DISABLE_CHART = true;
 // here we assume we pass in a group of dates belonging to the same day
 export const TodaySummary: React.FC<TodaySummaryProps> = () => {
     const { categories } = useAppDataContext();
-    const [fetching, setFetching] = React.useState(true);
     const { onSetComponent } = useTopAppBarContext();
+    const {data, isLoading} = useQuery(['summaryToday', endOfDay, today], () => getEntriesByDateRange({start: endOfDay, end: today}))
     const isNarrow = useIsNarrow();
-
+    const entries = data || []
     const nav = useNavigate();
     const goToDashboards = React.useCallback(() => {
         nav('/dashboard')
     }, [nav])
-    const [entries, setEntries] = React.useState<EntryType[]>([])
 
     React.useEffect(() => {
         onSetComponent(<TopAppBar />)
 
-        getEntriesByDateRange({ start: endOfDay, end: today }).then((e) => {
-            setEntries(e as EntryType[])
-            setFetching(false);
-        }).catch((e) => console.log('error', e))
+  
     }, [onSetComponent])
 
     const totalTimeByCategory: { [key: string]: number } = {};
-    const entriesByCategoryId = groupEntriesByCategoryId(entries)
-    const totalEntries = entries.length;
-    const totalTime = totalTimeInSeconds(entries)
+    const entriesByCategoryId = groupEntriesByCategoryId(data || [])
+    const totalEntries = entries?.length || 0;
+    const totalTime = totalTimeInSeconds(entries || [])
     const formattedTotalTime = formatTime(totalTime);
     const percentOfDayLogged = round((totalTime / (24 * 60 * 60)) * 100)
     const categoryIds = Object.keys(entriesByCategoryId)
@@ -91,7 +88,7 @@ export const TodaySummary: React.FC<TodaySummaryProps> = () => {
         return ({ label: c?.categoryName, color: c?.color || 'grey', value: round(time / (24 * 60 * 60) * 100) })
     })
 
-    if (fetching) {
+    if (isLoading) {
         return <LinearProgress sx={{mt:-1}} />
     }
     return (

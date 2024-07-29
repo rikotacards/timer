@@ -18,6 +18,7 @@ import { SettingsPage } from './pages/SettingsPage';
 import { TodaySummary } from './components/TodaySummary';
 import { History } from './components/History';
 import { DashboardPage } from './pages/DashboardPage';
+import { QueryClient, QueryClientProvider } from 'react-query';
 
 const router = createBrowserRouter([
   {
@@ -73,9 +74,13 @@ const darkTheme = createTheme({
   },
 });
 function App() {
+  const queryClient = new QueryClient();
+
   return (
 
     <ThemeProvider theme={darkTheme}>
+        <QueryClientProvider client={queryClient}>
+
       <CssBaseline />
       <AppDataProvider>
         <StopwatchProvider>
@@ -86,6 +91,7 @@ function App() {
           </SnackbarProvider>
         </StopwatchProvider>
       </AppDataProvider>
+      </QueryClientProvider>
     </ThemeProvider>
 
 

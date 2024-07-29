@@ -11,7 +11,10 @@ import { Category, OpenEntry } from '../firebase/types';
 import StopCircleIcon from '@mui/icons-material/StopCircle';
 import { TimeElapsed } from './TimeElapsed';
 import { flattenCategories } from '../utils/flattenCategories';
+import { useQueryClient } from 'react-query';
+
 export const AddEntryWide: React.FC = () => {
+    const queryClient = useQueryClient();
     const {  setOpenEntry, openEntry, categories } = useAppDataContext()
     const [desc, setDesc] = React.useState(openEntry.desc || "")
     const s = useSnackbarContext();
@@ -107,6 +110,7 @@ export const AddEntryWide: React.FC = () => {
             s.onSetComponent(<Alert severity='success'>New item logged!</Alert>)
             s.toggleOpen();
             setOpenEntry({ categories: [], desc: '', entryId: '', endTime: { nanoseconds: 0, seconds: 0 }, startTime: { nanoseconds: 0, seconds: 0 }, created: { nanoseconds: 0, seconds: 0 } })
+            queryClient.invalidateQueries('summaryToday')
         }
         catch (e) {
             alert(e)

@@ -32,7 +32,7 @@ export const ActivitiesToday: React.FC = () => {
    for(const key in entriesByCategory){
     entiresByCategoryAndDuration.push([key, totalTimeInSeconds(entriesByCategory[key])])
    }
-   console.log(entiresByCategoryAndDuration)
+
    const displayed = entiresByCategoryAndDuration.map((item) => {
     const category = categories.find((i) => i.categoryId === item[0])
     
